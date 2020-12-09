@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.helloworld.goodpoint.R;
 
@@ -16,8 +17,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
     }
-    protected void Intent(View v)
+    public void IntentB(View v)
     {
+        Toast.makeText(this, "HI", Toast.LENGTH_SHORT).show();
         Intent I  = new Intent(this , LostObjectDetailsActivity.class);
         startActivity(I);
     }
