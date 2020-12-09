@@ -31,7 +31,8 @@
 
         <activity android:name=".ui.ForgetPasswordActivity" />
         <activity android:name=".ui.FoundObjectActivity" />
-        <activity android:name=".ui.LostObjectDetailsActivity" />
+        <activity android:name=".ui.LostObjectDetailsActivity"
+            android:label="@string/LostItemDetails"/>
         <activity android:name=".ui.ActionActivity" />
         <activity android:name=".ui.HomeActivity" />
         <activity android:name=".ui.SignupActivity" />
