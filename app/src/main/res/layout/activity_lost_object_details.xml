@@ -12,18 +12,15 @@
         android:orientation="vertical"
         tools:context=".ui.LostObjectDetailsActivity">
         <TextView
-            android:id="@string/ItemMissing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/_25sdp"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/_25ssp"
+            android:textSize="@dimen/_20ssp"
             android:textStyle="bold"
             android:text="@string/ItemMissing" />
         <com.google.android.material.textfield.TextInputLayout
-
-            android:id="@string/City"
             android:layout_width="@dimen/_248sdp"
             android:layout_height="@dimen/_50sdp"
             android:layout_gravity="center"
@@ -52,7 +49,6 @@
             >
 
             <TextView
-                android:id="@+id/DateOfMissing"
                 android:layout_width="@dimen/_186sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginRight="@dimen/_5sdp"
@@ -75,6 +71,41 @@
                 android:background="#66B1BABA"/>
 
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_25sdp"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/_20ssp"
+            android:textStyle="bold"
+            android:text="@string/TypeOfTheItem" />
 
+        <LinearLayout
+            android:layout_width="@dimen/_200sdp"
+            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/Person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Person" />
+            <Button
+                android:id="@+id/Object"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Object" />
+        </LinearLayout>
+        <fragment
+            android:id="@+id/FragmentID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_20sdp"
+            android:name="com.helloworld.goodpoint.ui.PersonFragment"
+            />
     </LinearLayout>
 </ScrollView>

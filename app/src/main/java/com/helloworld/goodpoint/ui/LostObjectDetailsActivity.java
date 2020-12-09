@@ -1,12 +1,18 @@
 package com.helloworld.goodpoint.ui;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Toast;
 import android.os.Bundle;
 import android.view.View;
@@ -19,11 +25,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class LostObjectDetailsActivity extends AppCompatActivity {
-    private TextView DateT;
+public class LostObjectDetailsActivity extends AppCompatActivity implements View.OnClickListener{
+    private TextView DateT ;
+    private Button Person , Object;
+    private Fragment PersonF,ObjectF;
     private DatePickerDialog.OnDateSetListener DateSet;
     private AutoCompleteTextView autoCom;
     private int year, month, Day;
+
     List<String> list;
 
     @Override
@@ -92,11 +101,35 @@ public class LostObjectDetailsActivity extends AppCompatActivity {
         list.add(getString(R.string.Arish));
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onClick(View view) {
+        FragmentManager FM = getFragmentManager();
+        FragmentTransaction FT= FM.beginTransaction();
+        if(view == Person)
+        {
 
+            FT.replace(R.id.FragmentID,PersonF);
+            FT.commitNow();
+        }
+        else if(view == Object)
+        {
+            FT.replace(R.id.FragmentID,ObjectF);
+            FT.commitNow();
+        }
+        FT.commit();
+
+    }
     protected void inti() {
 
         DateT = findViewById(R.id.Date);
         autoCom = findViewById(R.id.auto);
+        Person = findViewById(R.id.Person);
+        Object = findViewById(R.id.Object);
+        Person.setOnClickListener(this);
+        Object.setOnClickListener(this);
+        PersonF = new PersonFragment();
+        ObjectF = new ObjectFragment();
         Calendar cal = Calendar.getInstance();//To get today's date
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
@@ -109,4 +142,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity {
         autoCom.setAdapter(adapter);
 
     }
+
+
 }

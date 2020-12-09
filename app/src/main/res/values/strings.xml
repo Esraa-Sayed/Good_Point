@@ -30,4 +30,10 @@
     <string name="Banha">Banha</string>
     <string name="Arish">Arish</string>
     <string name="LostItemDetails">Lost item details</string>
+    <string name="TypeOfTheItem">Type of the item</string>
+    <string name="Person">Person</string>
+    <string name="Object">Object</string>
+    <string name="AddImageOfPerson">Add image of person</string>
+    <string name="AddObjectDetails">Add object details</string>
+    <string name="SerialID">Serial ID</string>
 </resources>
