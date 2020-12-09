@@ -36,4 +36,19 @@
     <string name="AddImageOfPerson">Add image of person</string>
     <string name="AddObjectDetails">Add object details</string>
     <string name="SerialID">Serial ID</string>
+    <string name="Match">Match</string>
+    <string-array name="Types">
+        <item>Type</item>
+        <item>Phone</item>
+        <item>Labtob</item>
+        <item>Wallet</item>
+        <item>Bag</item>
+        <item>Watch</item>
+        <item>Money</item>
+        <item>Keys</item>
+        <item>Glasses or sunglasses</item>
+        <item>Books</item>
+        <item>Others</item>
+    </string-array>
+
 </resources>

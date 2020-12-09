@@ -29,6 +29,8 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private TextView DateT ;
     private Button Person , Object;
     private Fragment PersonF,ObjectF;
+    FragmentManager FM ;
+    FragmentTransaction FT;
     private DatePickerDialog.OnDateSetListener DateSet;
     private AutoCompleteTextView autoCom;
     private int year, month, Day;
@@ -101,21 +103,17 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         list.add(getString(R.string.Arish));
 
     }
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onClick(View view) {
-        FragmentManager FM = getFragmentManager();
-        FragmentTransaction FT= FM.beginTransaction();
+         FM = getFragmentManager();
+         FT= FM.beginTransaction();
         if(view == Person)
         {
-
-            FT.replace(R.id.FragmentID,PersonF);
-            FT.commitNow();
+            FT.replace(R.id.FragmentID,PersonF,null);
         }
         else if(view == Object)
         {
-            FT.replace(R.id.FragmentID,ObjectF);
-            FT.commitNow();
+            FT.replace(R.id.FragmentID,ObjectF,null);
         }
         FT.commit();
 

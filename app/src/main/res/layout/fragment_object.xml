@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.PersonFragment">
-
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +28,7 @@
         android:textSize="@dimen/_15ssp"
         app:boxCornerRadiusBottomStart="5dp"
         >
-        <TextView
+        <EditText
             android:id="@+id/Serial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
