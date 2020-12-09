@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/drawer_share"
+            android:title="Share the app"
+            android:icon="@drawable/ic_baseline_share_24" />
+        <item android:id="@+id/drawer_rate"
+            android:title="Rate"
+            android:icon="@drawable/ic_baseline_star_rate_24" />
+        <item android:id="@+id/drawer_feedback"
+            android:title="Feedback"
+            android:icon="@drawable/ic_baseline_feedback_24" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/drawer_setting"
+            android:title="Share the app"
+            android:icon="@drawable/ic_baseline_settings_24" />
+        <item android:id="@+id/drawer_logout"
+            android:title="Logout"
+            android:icon="@android:drawable/ic_menu_set_as" />
+    </group>
 </menu>
