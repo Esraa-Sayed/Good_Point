@@ -61,7 +61,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 m++;
-                if (y > year || m > month || d > Day) {
+                if (y > year || (m > month && y >= year)|| (d > Day && m >= month && y >= year)) {
                     Toast.makeText(LostObjectDetailsActivity.this, "Unknown date", Toast.LENGTH_LONG).show();
                     String todayDate = year + "/" + (month + 1) + "/" + Day;
                     DateT.setText(todayDate);

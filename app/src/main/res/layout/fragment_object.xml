@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/_300sdp"
     android:orientation="vertical"
-    tools:context=".ui.PersonFragment">
+    tools:context=".ui.PersonFragment"
+    >
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,5 +41,23 @@
             android:inputType="number"
             />
     </com.google.android.material.textfield.TextInputLayout>
-
+        <EditText
+            android:id="@+id/textArea_information"
+            android:layout_width="@dimen/_248sdp"
+            android:layout_height="@dimen/_130sdp"
+            android:hint="@string/Description"
+            android:textColorHighlight="#CC888585"
+            android:background="#EAD3AD"
+            android:gravity="top|left"
+            android:layout_gravity="center"
+            android:textColorHint="@color/cardview_dark_background"
+            android:inputType="textMultiLine"
+            android:overScrollMode="always"
+            android:scrollbarSize="@dimen/_5sdp"
+            android:scrollbars="vertical"
+            android:lines="6"
+            android:padding="@dimen/_10sdp"
+            android:textSize="@dimen/_15ssp"
+            android:scrollHorizontally="false"
+            style="@style/Widget.AppCompat.EditText"/>
 </LinearLayout>
