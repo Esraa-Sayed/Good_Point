@@ -17,10 +17,4 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
     }
-    public void IntentB(View v)
-    {
-        Toast.makeText(this, "HI", Toast.LENGTH_SHORT).show();
-        Intent I  = new Intent(this , LostObjectDetailsActivity.class);
-        startActivity(I);
-    }
 }
