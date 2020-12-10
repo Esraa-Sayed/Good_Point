@@ -19,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +27,7 @@ import com.helloworld.goodpoint.R;
 
 public class MapFragment extends Fragment {
 
+    private static final int MAP_CODE = 1;
     SupportMapFragment mapFragment;
     FusedLocationProviderClient client;
     Location curLocation;
@@ -43,10 +45,13 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             LatLng curLatLng = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
+            LatLng neighbourLatLng = new LatLng(curLocation.getLatitude()+0.1, curLocation.getLongitude()+0.1);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLatLng,15));
             googleMap.addMarker(new MarkerOptions().position(curLatLng).title("My location"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(curLatLng));
+            googleMap.addMarker(new MarkerOptions().position(neighbourLatLng));
         }
     };
+    String []permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
     @Nullable
     @Override
@@ -62,12 +67,13 @@ public class MapFragment extends Fragment {
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         client = LocationServices.getFusedLocationProviderClient(getContext());
         if (ActivityCompat.checkSelfPermission(
-                getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                getContext(), permissions[0]) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(
-                    getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    getContext(), permissions[1]) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
+            ActivityCompat.requestPermissions(getActivity(), permissions, MAP_CODE);
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
@@ -82,5 +88,27 @@ public class MapFragment extends Fragment {
                 }
             }
         });
+    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        switch(requestCode){
+            case MAP_CODE:
+                if (ActivityCompat.checkSelfPermission(
+                        getContext(), permissions[0]) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(
+                                getContext(), permissions[1]) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(getActivity(), permissions, MAP_CODE);
+                    return;
+                }
+                client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        curLocation = location;
+                        if (mapFragment != null) {
+                            mapFragment.getMapAsync(callback);
+                        }
+                    }
+                });
+                break;
+        }
     }
 }
