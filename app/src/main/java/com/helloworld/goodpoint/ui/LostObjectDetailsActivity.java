@@ -92,18 +92,20 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     public void onClick(View view) {
          FM = getFragmentManager();
          FT= FM.beginTransaction();
-        if(view == Person)
-        {
+       switch (view.getId() )
+        { case R.id.Person:
             FT.replace(R.id.FragmentID,PersonF,null);
             FT.commit();
-        }
-        else if(view == Object)
-        {
+            break;
+
+            case R.id.Object:
+
             FT.replace(R.id.FragmentID,ObjectF,null);
             FT.commit();
-        }
-        else if(view == DateT)
-        {
+            break;
+
+            case  R.id.Date:
+
             DatePickerDialog dialog = new DatePickerDialog(
                     LostObjectDetailsActivity.this,
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,
@@ -112,7 +114,9 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             );
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
+                break;
         }
+
 
 
     }
