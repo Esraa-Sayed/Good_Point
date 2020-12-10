@@ -67,7 +67,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     DateT.setText(todayDate);
                 } else {
 
-                    String Date = y + "/" + m + "/" + d;
+                    String Date = d + "/" + m + "/" + y;
                     DateT.setText(Date);
                 }
             }
@@ -132,7 +132,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
         Day = cal.get(Calendar.DAY_OF_MONTH);
-        String todayDate = year + "/" + (month + 1) + "/" + Day;
+        String todayDate = Day + "/" + (month + 1) + "/" + year;
         DateT.setText(todayDate);
         prepareList();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
