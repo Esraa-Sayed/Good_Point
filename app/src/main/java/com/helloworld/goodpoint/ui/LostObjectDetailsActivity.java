@@ -95,17 +95,19 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
        switch (view.getId() )
         { case R.id.Person:
             FT.replace(R.id.FragmentID,PersonF,null);
+            Person.setTextColor(0xFFF38E3A);
+            Object.setTextColor(Color.BLACK);
+
             FT.commit();
             break;
-
             case R.id.Object:
-
             FT.replace(R.id.FragmentID,ObjectF,null);
+            Object.setTextColor(0xFFF38E3A);
+            Person.setTextColor(Color.BLACK);
+
             FT.commit();
             break;
-
             case  R.id.Date:
-
             DatePickerDialog dialog = new DatePickerDialog(
                     LostObjectDetailsActivity.this,
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,
