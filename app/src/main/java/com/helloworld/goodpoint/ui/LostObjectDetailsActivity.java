@@ -42,21 +42,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lost_object_details);
         inti();
-        DateT.setOnClickListener(new View.OnClickListener() {
-            // @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                DatePickerDialog dialog = new DatePickerDialog(
-                        LostObjectDetailsActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        DateSet,
-                        year, month, Day
-                );
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-
-        });
         DateSet = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
@@ -110,12 +95,25 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         if(view == Person)
         {
             FT.replace(R.id.FragmentID,PersonF,null);
+            FT.commit();
         }
         else if(view == Object)
         {
             FT.replace(R.id.FragmentID,ObjectF,null);
+            FT.commit();
         }
-        FT.commit();
+        else if(view == DateT)
+        {
+            DatePickerDialog dialog = new DatePickerDialog(
+                    LostObjectDetailsActivity.this,
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    DateSet,
+                    year, month, Day
+            );
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
+        }
+
 
     }
     protected void inti() {
@@ -126,6 +124,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         Object = findViewById(R.id.Object);
         Person.setOnClickListener(this);
         Object.setOnClickListener(this);
+        DateT.setOnClickListener(this);
         PersonF = new PersonFragment();
         ObjectF = new ObjectFragment();
         Calendar cal = Calendar.getInstance();//To get today's date
