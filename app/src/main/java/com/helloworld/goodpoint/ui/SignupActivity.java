@@ -33,7 +33,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DatePickerDialog dialog = new DatePickerDialog(
-                        LostObjectDetailsActivity.this,
+                        SignupActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         DateSet,
                         year, month, Day
@@ -62,14 +62,13 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     protected void inti() {
-
         DateT = findViewById(R.id.Date);
         Calendar cal = Calendar.getInstance();//To get today's date
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
         Day = cal.get(Calendar.DAY_OF_MONTH);
-        String todayDate = year + "/" + (month + 1) + "/" + Day;
-        DateT.setText(todayDate);
+        String TodayDate =  Day+ "/" + (month + 1) + "/" + year;
+        DateT.setText(TodayDate);
 
     }
 }
