@@ -32,6 +32,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
-        android:textSize="@dimen/_15ssp" android:text="goodpoint0123456789@sci.asu.edu.eg"
+        android:textSize="@dimen/_15ssp" android:text="goodpoint@sci.asu.edu.eg"
         android:textColor="@android:color/white" />
 </LinearLayout>
