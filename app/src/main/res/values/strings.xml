@@ -4,6 +4,28 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ObjectMissing">Object Missing</string>
     <string name="dateOfMissing">Date of missing</string>
+    <string name="LostItemDetails">Lost object details</string>
+    <string name="TypeOfTheObject">Type of the object</string>
+    <string name="Person">Person</string>
+    <string name="Item">Item</string>
+    <string name="AddImageOfPerson">Add image of person</string>
+    <string name="AddItemDetails">Add item details</string>
+    <string name="SerialID">Serial ID</string>
+    <string name="Match">Match</string>
+    <string name="Description">Description</string>
+    <string name="ColorOfObject">Color</string>
+    <string-array name="Types">
+        <item>Type</item>
+        <item>Phone</item>
+        <item>Labtob</item>
+        <item>Wallet</item>
+        <item>Bag</item>
+        <item>Watch</item>
+        <item>Money</item>
+        <item>Glasses or sunglasses</item>
+        <item>Books</item>
+        <item>Others</item>
+    </string-array>
     <string name="City">City</string>
     <string name="Cairo">Cairo</string>
     <string name="Alexandria">Alexandria</string>
@@ -29,26 +51,23 @@
     <string name="ShibinElKom">Shibin El Kom</string>
     <string name="Banha">Banha</string>
     <string name="Arish">Arish</string>
-    <string name="LostItemDetails">Lost object details</string>
-    <string name="TypeOfTheObject">Type of the object</string>
-    <string name="Person">Person</string>
-    <string name="Item">Item</string>
-    <string name="AddImageOfPerson">Add image of person</string>
-    <string name="AddItemDetails">Add item details</string>
-    <string name="SerialID">Serial ID</string>
-    <string name="Match">Match</string>
-    <string name="Description">Description</string>
-    <string-array name="Types">
-        <item>Type</item>
-        <item>Phone</item>
-        <item>Labtob</item>
-        <item>Wallet</item>
-        <item>Bag</item>
-        <item>Watch</item>
-        <item>Money</item>
-        <item>Glasses or sunglasses</item>
-        <item>Books</item>
-        <item>Others</item>
-    </string-array>
+    <string name="Red"> Red</string>
+    <string name="Yellow">Yellow</string>
+    <string name="Blue">Blue</string>
+    <string name="Orange">Orange</string>
+    <string name="Green">Green</string>
+    <string name="Violet">Violet</string>
+    <string name="Brown">Brown</string>
+    <string name="Magenta">Magenta</string>
+    <string name="Tan">Tan</string>
+    <string name="Cyan">Cyan</string>
+    <string name="Olive">Olive</string>
+    <string name="Pink">Pink</string>
+    <string name="Black">Black</string>
+    <string name="White">White</string>
+    <string name="Gray">Gray</string>
+    <string name="Purple">Purple</string>
+    <string name="TheBrand">The brand</string>
+
 
 </resources>

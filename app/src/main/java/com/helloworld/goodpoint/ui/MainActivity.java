@@ -4,10 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.lostObject.LostObjectDetailsActivity;
 
 public class MainActivity extends AppCompatActivity {
 

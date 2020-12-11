@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_200sdp"
     android:orientation="vertical"
-    tools:context=".ui.PersonFragment"
+    tools:context=".ui.lostObject.PersonFragment"
     >
 
     <!-- TODO: Update blank fragment layout -->
@@ -19,11 +19,14 @@
         android:gravity="center"
         android:text="@string/AddImageOfPerson" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/imageView"
+        style="@android:style/Widget.ImageButton"
         android:layout_width="@dimen/_150sdp"
+        android:background="#FFFFFF"
         android:layout_height="@dimen/_150sdp"
         android:layout_gravity="center"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_baseline_add_a_photo_24" />
 
 

@@ -1,6 +1,5 @@
-package com.helloworld.goodpoint.ui;
+package com.helloworld.goodpoint.ui.lostObject;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -9,7 +8,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -34,7 +32,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private DatePickerDialog.OnDateSetListener DateSet;
     private AutoCompleteTextView autoCom;
     private int year, month, Day;
-
     List<String> list;
 
     @Override

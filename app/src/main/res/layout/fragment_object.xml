@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_300sdp"
+    android:layout_height="@dimen/_400sdp"
     android:orientation="vertical"
-    tools:context=".ui.PersonFragment"
+    tools:context=".ui.lostObject.PersonFragment"
     >
     <TextView
         android:layout_width="match_parent"
@@ -41,6 +41,47 @@
             android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="@dimen/_248sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_17sdp"
+        android:textSize="@dimen/_15ssp"
+        app:boxCornerRadiusBottomStart="5dp"
+        >
+        <EditText
+            android:id="@+id/brand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="@dimen/_15ssp"
+            android:hint="@string/TheBrand"
+            android:autofillHints="@string/City"
+            android:inputType="text"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="@dimen/_248sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_17sdp"
+        android:textSize="@dimen/_15ssp"
+        app:boxCornerRadiusBottomStart="5dp"
+        >
+        <AutoCompleteTextView
+            android:id="@+id/ColorOfObject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="@dimen/_15ssp"
+            android:hint="@string/ColorOfObject"
+            android:autofillHints="@string/City"
+            android:inputType="text"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
         <EditText
             android:id="@+id/textArea_information"
             android:layout_width="@dimen/_248sdp"
