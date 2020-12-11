@@ -11,7 +11,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.PopupMenu;
@@ -23,21 +26,37 @@ import java.io.IOException;
 import static android.app.Activity.RESULT_OK;
 
 public class PersonFragment extends Fragment implements View.OnClickListener {
- ImageButton imageView;
-    Bitmap bitmap;
-    Uri photoFromGallery;
+    private ImageButton imageView;
+    private ImageView imageView2;
+    private  Bitmap bitmap;
+    private Uri photoFromGallery;
+    private LinearLayout linearLayout;
+    LayoutInflater inflater2;
+    View rootView;
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_person, container, false);
-        imageView = v.findViewById(R.id.imageView);
+        rootView = inflater.inflate(R.layout.fragment_person, container, false);
+        imageView = rootView.findViewById(R.id.imageView);
         imageView.setOnClickListener(this);
-        return v;
+        return rootView;
+
+    }
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        linearLayout = (LinearLayout) rootView.findViewById(R.id.Gallery2);
+        inflater2 = LayoutInflater.from(getActivity());
+    }
+    public void addPlaces() {
+
+
+
+
 
     }
     @Override
@@ -88,6 +107,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     try {
                         bitmap= MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery);
                         imageView.setImageBitmap(bitmap);
+                        View view = inflater2.inflate(R.layout.images,linearLayout,false);
+                        imageView2 = (ImageView)view.findViewById(R.id.imageView2);
+                        imageView2.setImageBitmap(bitmap);
+                        linearLayout.addView(view);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
