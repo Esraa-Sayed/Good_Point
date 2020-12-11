@@ -4,6 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:foregroundTint="#7C1010"
     tools:context=".ui.HomeActivity">
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="148dp"
+        android:layout_height="58dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Skip "
+        android:textAlignment="center"
+        android:textColor="#456191"
+        android:textSize="50sp"
+        tools:layout_editor_absoluteX="87dp"
+        tools:layout_editor_absoluteY="1474dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="378dp"
+        android:layout_height="90dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Good Point"
+        android:textAlignment="center"
+        android:textColor="#6D7B95"
+        android:textSize="75sp"
+        tools:layout_editor_absoluteX="299dp"
+        tools:layout_editor_absoluteY="919dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="148dp"
+        android:layout_height="58dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Next "
+        android:textAlignment="center"
+        android:textColor="#456191"
+        android:textSize="50sp"
+        tools:layout_editor_absoluteX="692dp"
+        tools:layout_editor_absoluteY="1474dp" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="686dp"
+        android:layout_height="558dp"
+        app:srcCompat="@drawable/ic_baseline_location_on_24"
+        tools:layout_editor_absoluteX="122dp"
+        tools:layout_editor_absoluteY="72dp" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="91dp"
+        android:layout_height="68dp"
+        app:srcCompat="@drawable/ic_baseline_navigate_next_24"
+        tools:layout_editor_absoluteX="808dp"
+        tools:layout_editor_absoluteY="1474dp" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="269dp"
+        android:layout_height="283dp"
+        app:srcCompat="@drawable/ic_baseline_search_24"
+        tools:layout_editor_absoluteX="353dp"
+        tools:layout_editor_absoluteY="163dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
