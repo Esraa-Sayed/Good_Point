@@ -66,37 +66,38 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     }
     @Override
     public void onClick(View view) {
-        PopupMenu popupMenu = new PopupMenu(getActivity(),view);
-        popupMenu.getMenuInflater().inflate(R.menu.choose_photo, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()) {
-                    case R.id.TakePhoto:
-                        Intent i=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if(i.resolveActivity(getActivity().getPackageManager())!=null)
-                        {
-                            startActivityForResult(i,10);
-                        }
-                        else Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-                        break;
-                    case R.id.Gallery:
-                        Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT,
-                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
-                        pickPhoto.setType("image/*");//accept any type of images
-                        if(pickPhoto.resolveActivity(getActivity().getPackageManager())!=null) {
-                            startActivityForResult(pickPhoto, 1);
-                        }
-                        else Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+        if(view == imageView) {
+            PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+            popupMenu.getMenuInflater().inflate(R.menu.choose_photo, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.TakePhoto:
+                            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if (i.resolveActivity(getActivity().getPackageManager()) != null) {
+                                startActivityForResult(i, 10);
+                            } else
+                                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                            break;
+                        case R.id.Gallery:
+                            Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT,
+                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                            pickPhoto.setType("image/*");//accept any type of images
+                            if (pickPhoto.resolveActivity(getActivity().getPackageManager()) != null) {
+                                startActivityForResult(pickPhoto, 1);
+                            } else
+                                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
 
-                        break;
+                            break;
 
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
-        popupMenu.show();
+            });
+            popupMenu.show();
+        }
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -137,7 +138,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     imageView2 = (ImageView) view.findViewById(R.id.imageView2);
                     imageView2.setImageBitmap(bitmap.get(i));
                     linearLayout.addView(view);
-
                 }
             }
             else
@@ -151,6 +151,28 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 }
             }
         }
+        setOnClickListeners();
+    }
+    private void setOnClickListeners() {
+      linearLayout.setOnClickListener(new View.OnClickListener() {
 
+            public void onClick(View v) {
+                onImageClick(v ,0);
+            }
+        });
+        for (int index = 0; index < linearLayout.getChildCount(); index++) {
+            View view = linearLayout.getChildAt(index);
+            final int finalIndex = index;
+            view.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    onImageClick(v , finalIndex);
+                }
+            });
+        }
+    }
+    protected void onImageClick(View v , int i) {
+        imageView2 = v.findViewById(R.id.imageView2);
+        imageView.setImageDrawable(imageView2.getDrawable());
     }
 }
