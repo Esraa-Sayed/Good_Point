@@ -2,26 +2,29 @@ package com.helloworld.goodpoint.pojo;
 
 import android.graphics.Bitmap;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class NotificationItem {
     String title;
-    Date date;
+    Calendar date;
     String description;
     Bitmap image;
+    boolean read;
 
-    public NotificationItem(String title, Date date, String description, Bitmap image) {
+    public NotificationItem(String title, Calendar date, String description, Bitmap image) {
         this.title = title;
         this.date = date;
         this.description = description;
         this.image = image;
+        this.read = false;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
@@ -31,5 +34,13 @@ public class NotificationItem {
 
     public Bitmap getImage() {
         return image;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }

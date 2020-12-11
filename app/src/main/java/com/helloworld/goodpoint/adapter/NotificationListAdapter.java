@@ -1,11 +1,13 @@
 package com.helloworld.goodpoint.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +33,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View notificationItem = convertView;
         ViewHolder viewHolder;
         if(notificationItem == null){
@@ -42,10 +44,41 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         }else
             viewHolder = (ViewHolder) notificationItem.getTag();
 
+        if(!list.get(position).isRead()){
+            viewHolder.getRead().setVisibility(View.VISIBLE);
+            viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+            viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
+            viewHolder.getRead().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
+
+            viewHolder.getRead().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    list.get(position).setRead(true);
+                    notifyDataSetChanged();
+                }
+            });
+        }else {
+            viewHolder.getRead().setVisibility(View.GONE);
+            viewHolder.getLayout().setBackgroundColor(Color.WHITE);
+            viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button2));
+
+        }
+
+        viewHolder.getArchive().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                list.remove(position);
+                notifyDataSetChanged();
+            }
+        });
+
         viewHolder.getTitle().setText(list.get(position).getTitle());
-        viewHolder.getDate().setText(list.get(position).getDate().toString());
+        //viewHolder.getDate().setText(list.get(position).getDate().toString());
         viewHolder.getDescription().setText(list.get(position).getDescription());
-        viewHolder.getImageView().setImageBitmap(list.get(position).getImage());
+        if(list.get(position).getImage() != null)
+            viewHolder.getImageView().setImageBitmap(list.get(position).getImage());
+
+
 
         return notificationItem;
     }
@@ -55,6 +88,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         private TextView title, date, description;
         private Button archive, read;
         private CircleImageView imageView;
+        private LinearLayout layout;
 
         public ViewHolder(View view) {
             this.convertView = view;
@@ -92,6 +126,12 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
 
         public CircleImageView getImageView() {
             return imageView;
+        }
+
+        public LinearLayout getLayout() {
+            if(layout == null)
+                layout = convertView.findViewById(R.id.notification_layout);
+            return layout;
         }
     }
 }
