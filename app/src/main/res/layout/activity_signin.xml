@@ -7,18 +7,24 @@
     tools:context=".ui.SigninActivity"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:layout_margin="20dp">
+    android:background="@drawable/ic_home_background"
+   >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/_34sdp"
+        android:layout_marginTop="@dimen/_70sdp"
+        android:layout_marginLeft="@dimen/_125sdp"
+        android:text="Good Point"/>
 
-        <ImageButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_baseline_account_circle_150"
-            android:background="#ffffff"
-            android:layout_gravity="center"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_100sdp"
+            android:layout_marginLeft="@dimen/_15sdp">
             <ImageView
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
@@ -30,37 +36,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
+                    android:layout_marginRight="@dimen/_20sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/UserName"
-                    android:inputType="text"
-                    android:background="#ffffff"/>
+                    android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_email_24"/>
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/Email"
-                    android:background="#ffffff"/>
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_15sdp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_marginTop="20dp"
@@ -74,72 +62,75 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_20sdp"
                     android:hint="@string/Password"
-                    android:background="#ffffff"/>
+                    android:inputType="textWebPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+    <Button
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_width="@dimen/_180sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:textSize="@dimen/_15sdp"
+        android:text="@string/SignIn"
+        android:background="@drawable/oval"
+        android:textColor="#ffffff"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp">
+        <CheckBox android:id="@+id/checkbox_meat"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_phone_android_24"/>
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/PhoneNumber"
-                    android:background="#ffffff"/>
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:text="@string/RememberMe"
+            android:layout_marginLeft="@dimen/_10sdp"/>
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_room_24"/>
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:ignore="MissingClass">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/Country"
-                    android:background="#ffffff"/>
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/BirthOfDate"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/CreateAccount"/>
-        </LinearLayout>
-
-
+            android:text="@string/ForgetPassword"
+            android:textColor="#F49C3B"
+            android:layout_marginLeft="@dimen/_80sdp"
+            android:textSize="@dimen/_15sdp"
+            android:autoLink="web" android:id="@+id/infoTxtCredits"
+            android:layout_centerInParent="true"
+            android:linksClickable="true"/>
     </LinearLayout>
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       android:layout_marginTop="@dimen/_10sdp">
+       <view
+           android:layout_width="@dimen/_95sdp"
+           android:layout_height="@dimen/_2sdp"
+           android:layout_marginTop="@dimen/_9sdp"
+           android:layout_marginRight="@dimen/_20sdp"
+           android:layout_marginLeft="@dimen/_15sdp"
+           />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="@dimen/_13sdp"
+           android:layout_gravity="center"
+           android:layout_marginLeft="@dimen/_15sdp"
+           android:text="@string/or"/>
+       <view
+           android:layout_width="@dimen/_100sdp"
+           android:layout_height="@dimen/_2sdp"
+           android:layout_marginLeft="@dimen/_50sdp"
+           android:layout_marginTop="@dimen/_9sdp"
+           android:layout_marginRight="@dimen/_20sdp"/>
+
+   </LinearLayout>
+        <Button
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_width="@dimen/_180sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:textSize="@dimen/_15sdp"
+            android:text="@string/CreateNewAccount"
+            android:background="@drawable/custom_button"
+            android:textColor="#ffffff"/>
+
+</LinearLayout>
