@@ -51,4 +51,13 @@
         <item>Others</item>
     </string-array>
 
+=======
+    <string name="UserName"> User Name</string>
+    <string name="Email"> Email</string>
+    <string name="Password"> Password</string>
+    <string name="PhoneNumber"> Phone Number</string>
+    <string name="Country"> Country</string>
+    <string name="BirthOfDate"> Birth of date </string>
+    <string name="CreateAccount">Create Account</string>
+>>>>>>> signin
 </resources>
