@@ -68,6 +68,9 @@
     <string name="Gray">Gray</string>
     <string name="Purple">Purple</string>
     <string name="TheBrand">The brand</string>
+    <string name="ObjectFound">Object found</string>
+    <string name="dateOfFound">Date of found</string>
+    <string name="ObjectLocation">Object location</string>
 
 
 </resources>

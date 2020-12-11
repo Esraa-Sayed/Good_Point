@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,8 +40,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private List<Bitmap> bitmap  = new ArrayList<>();
     private Uri photoFromGallery;
     private LinearLayout linearLayout;
-    LayoutInflater inflater2;
-    View rootView;
+    private LayoutInflater inflater2;
+    private View rootView;
+   private Button Close;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -136,6 +138,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 for (int i = 0; i < bitmap.size(); i++) {
                     View view = inflater2.inflate(R.layout.images, linearLayout, false);
                     imageView2 = (ImageView) view.findViewById(R.id.imageView2);
+                    Close =  (Button)view.findViewById(R.id.Close);
                     imageView2.setImageBitmap(bitmap.get(i));
                     linearLayout.addView(view);
                 }
@@ -145,6 +148,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 for (int i = linearLayout.getChildCount(); i < bitmap.size(); i++) {
                     View view = inflater2.inflate(R.layout.images, linearLayout, false);
                     imageView2 = view.findViewById(R.id.imageView2);
+                    Close =   (Button)view.findViewById(R.id.Close);
                     imageView2.setImageBitmap(bitmap.get(i));
                     linearLayout.addView(view);
 
@@ -155,7 +159,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     }
     private void setOnClickListeners() {
       linearLayout.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View v) {
                 onImageClick(v ,0);
             }
@@ -166,13 +169,24 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             view.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
+                    Log.e("INDEX*******", "setOnClickListeners: "+finalIndex );
                     onImageClick(v , finalIndex);
                 }
             });
         }
     }
     protected void onImageClick(View v , int i) {
-        imageView2 = v.findViewById(R.id.imageView2);
-        imageView.setImageDrawable(imageView2.getDrawable());
+        if(v == Close)
+        {
+
+            bitmap.remove(i);
+            linearLayout.removeViewAt(i);
+
+        }
+        else if(v == imageView2)
+        {
+
+            imageView.setImageDrawable(imageView2.getDrawable());
+        }
     }
 }

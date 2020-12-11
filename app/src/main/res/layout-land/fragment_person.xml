@@ -30,15 +30,16 @@
         android:src="@drawable/ic_baseline_add_a_photo_24" />
 
     <HorizontalScrollView
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/_300sdp"
         android:layout_height="match_parent"
         android:scrollbars="horizontal"
+        android:layout_gravity="center"
         android:fillViewport="true"
         android:layout_margin="@dimen/_10sdp">
 
         <LinearLayout
             android:id="@+id/Gallery2"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/_300sdp"
             android:layout_height="@dimen/_90sdp"
             android:orientation="horizontal" >
         </LinearLayout>
