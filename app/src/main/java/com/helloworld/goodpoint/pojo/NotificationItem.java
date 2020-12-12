@@ -2,17 +2,14 @@ package com.helloworld.goodpoint.pojo;
 
 import android.graphics.Bitmap;
 
-import java.util.Calendar;
-import java.util.Date;
-
 public class NotificationItem {
     String title;
-    Calendar date;
+    String date;
     String description;
     Bitmap image;
     boolean read;
 
-    public NotificationItem(String title, Calendar date, String description, Bitmap image) {
+    public NotificationItem(String title, String date, String description, Bitmap image) {
         this.title = title;
         this.date = date;
         this.description = description;
@@ -24,7 +21,7 @@ public class NotificationItem {
         return title;
     }
 
-    public Calendar getDate() {
+    public String getDate() {
         return date;
     }
 

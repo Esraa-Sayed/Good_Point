@@ -78,7 +78,8 @@
                 android:textAllCaps="false"
                 android:padding="@dimen/_3sdp"
                 android:drawableStart="@drawable/ic_baseline_archive_24"
-                android:text="Archive"/>
+                android:text="Archive"
+                android:focusable="false"/>
 
             <Button
                 android:id="@+id/notification_read"
@@ -88,7 +89,8 @@
                 android:textAllCaps="false"
                 android:padding="@dimen/_3sdp"
                 android:drawableStart="@drawable/ic_baseline_check_24"
-                android:text="Select as read"/>
+                android:text="Select as read"
+                android:focusable="false"/>
         </LinearLayout>
 
     </LinearLayout>

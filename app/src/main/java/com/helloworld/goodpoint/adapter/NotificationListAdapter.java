@@ -15,7 +15,9 @@ import androidx.annotation.Nullable;
 
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.NotificationItem;
+import com.helloworld.goodpoint.ui.NotificationFragment;
 
+import java.util.Calendar;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -24,18 +26,21 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
 
     Context context;
     List<NotificationItem> list;
+    NotificationFragment fragment;
 
-    public NotificationListAdapter(@NonNull Context context, int resource, @NonNull List<NotificationItem> list) {
+    public NotificationListAdapter(@NonNull Context context, int resource, @NonNull List<NotificationItem> list, NotificationFragment fragment) {
         super(context, resource, list);
         this.context = context;
         this.list = list;
+        this.fragment = fragment;
     }
 
     @NonNull
     @Override
-    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View notificationItem = convertView;
         ViewHolder viewHolder;
+        final int revposition = list.size()-position-1;
         if(notificationItem == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             notificationItem = inflater.inflate(R.layout.notification_item, parent, false);
@@ -44,7 +49,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         }else
             viewHolder = (ViewHolder) notificationItem.getTag();
 
-        if(!list.get(position).isRead()){
+        if(!list.get(revposition).isRead()){
             viewHolder.getRead().setVisibility(View.VISIBLE);
             viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
             viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
@@ -53,7 +58,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             viewHolder.getRead().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    list.get(position).setRead(true);
+                    list.get(revposition).setRead(true);
                     notifyDataSetChanged();
                 }
             });
@@ -67,16 +72,19 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         viewHolder.getArchive().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                list.remove(position);
-                notifyDataSetChanged();
+                list.remove(revposition);
+                if(list.isEmpty())
+                    fragment.updateFragmentView();
+                else
+                    notifyDataSetChanged();
             }
         });
 
-        viewHolder.getTitle().setText(list.get(position).getTitle());
-        //viewHolder.getDate().setText(list.get(position).getDate().toString());
-        viewHolder.getDescription().setText(list.get(position).getDescription());
-        if(list.get(position).getImage() != null)
-            viewHolder.getImageView().setImageBitmap(list.get(position).getImage());
+        viewHolder.getTitle().setText(list.get(revposition).getTitle());
+        viewHolder.getDate().setText(list.get(revposition).getDate());
+        viewHolder.getDescription().setText(list.get(revposition).getDescription());
+        if(list.get(revposition).getImage() != null)
+            viewHolder.getImageView().setImageBitmap(list.get(revposition).getImage());
 
 
 
@@ -125,6 +133,8 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         }
 
         public CircleImageView getImageView() {
+            if(imageView == null)
+                imageView = convertView.findViewById(R.id.notification_image);
             return imageView;
         }
 
