@@ -13,10 +13,10 @@ import com.helloworld.goodpoint.R;
 import java.util.Calendar;
 
 public class SigninActivity extends AppCompatActivity {
-    EditText Email,Pass;
-    TextView ForgetPass;
-    CheckBox RememberMe;
-    Button Sigin ,CreateNewAccount;
+    private EditText Email,Pass;
+    private TextView ForgetPass;
+    private CheckBox RememberMe;
+    private Button Sigin ,CreateNewAccount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +30,5 @@ public class SigninActivity extends AppCompatActivity {
         ForgetPass = findViewById(R.id.forgetPass);
         Sigin =findViewById(R.id.sigin);
         CreateNewAccount = findViewById(R.id.NewAccount);
-
     }
 }

@@ -17,7 +17,8 @@
             android:layout_width="@dimen/_150sdp"
             android:layout_height="@dimen/_120sdp"
             android:src="@drawable/ic_baseline_account_circle_150"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:id="@+id/im"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -168,7 +169,8 @@
                 android:text="@string/CreateAccount"
                 android:textColor="#ffffff"
                 android:textSize="@dimen/_13ssp"
-                android:background="@drawable/custom_button"/>
+                android:background="@drawable/custom_button"
+                android:id="@+id/createAccount"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
