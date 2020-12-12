@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.helloworld.goodpoint.R;
 
 public class SignupActivity extends AppCompatActivity {
     private TextView DateT ;
+    EditText UserName, Email, Password, Phone, Country;
     private DatePickerDialog.OnDateSetListener DateSet;
     private int year, month, Day;
 
@@ -64,6 +66,10 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     protected void inti() {
+        UserName =findViewById(R.id.Name);
+        Email = findViewById(R.id.Email);
+        Password =findViewById(R.id.Pass);
+        Country =findViewById(R.id.country);
         DateT = findViewById(R.id.Date);
         Calendar cal = Calendar.getInstance();//To get today's date
         year = cal.get(Calendar.YEAR);

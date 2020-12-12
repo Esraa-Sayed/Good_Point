@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/UserName"
                     android:inputType="text"
-
+                    android:id="@+id/Name"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -62,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/Email"
-
+                    android:id="@+id/Email"
                     android:inputType="textEmailAddress"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -84,7 +84,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/Password"
-                    android:inputType="textWebPassword"/>
+                    android:inputType="textWebPassword"
+                    android:id="@+id/Pass"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
         <LinearLayout
@@ -105,7 +106,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/PhoneNumber"
-                    />
+                    android:id="@+id/country"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
         <LinearLayout
@@ -167,7 +168,7 @@
                 android:text="@string/CreateAccount"
                 android:textColor="#ffffff"
                 android:textSize="@dimen/_13ssp"
-                android:background="@drawable/oval"/>
+                android:background="@drawable/custom_button"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
