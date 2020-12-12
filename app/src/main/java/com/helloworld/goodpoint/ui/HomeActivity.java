@@ -25,9 +25,9 @@ public class HomeActivity extends AppCompatActivity {
         init();
         setToolBar();
 
-        /*
+        ///*
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.home_frag,new MapFragment());
+        ft.replace(R.id.home_frag,new NotificationFragment());
         ft.commitNow();
         //*/
 
