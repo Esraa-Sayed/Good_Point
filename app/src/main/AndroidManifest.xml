@@ -8,8 +8,6 @@
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -37,8 +35,7 @@
         <activity android:name=".ui.LostObjectDetailsActivity" android:parentActivityName=".ui.MainActivity"
             android:label="@string/LostItemDetails"/>
         <activity android:name=".ui.ActionActivity" />
-        <activity android:name=".ui.HomeActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".ui.HomeActivity" />
         <activity android:name=".ui.SignupActivity" />
         <activity android:name=".ui.SigninActivity" />
         <activity android:name=".ui.MainActivity">
