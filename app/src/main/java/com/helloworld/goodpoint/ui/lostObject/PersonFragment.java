@@ -43,6 +43,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private LayoutInflater inflater2;
     private View rootView;
    private Button Close;
+   private int nmberOfImageSelected;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -139,6 +140,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     View view = inflater2.inflate(R.layout.images, linearLayout, false);
                     imageView2 = (ImageView) view.findViewById(R.id.imageView2);
                     Close =  (Button)view.findViewById(R.id.Close);
+                    Close.setBackgroundColor(0x80F38E3A);
                     imageView2.setImageBitmap(bitmap.get(i));
                     linearLayout.addView(view);
                 }
@@ -149,6 +151,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     View view = inflater2.inflate(R.layout.images, linearLayout, false);
                     imageView2 = view.findViewById(R.id.imageView2);
                     Close =   (Button)view.findViewById(R.id.Close);
+                    Close.setBackgroundColor(0x80F38E3A);
                     imageView2.setImageBitmap(bitmap.get(i));
                     linearLayout.addView(view);
 
@@ -158,35 +161,30 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         setOnClickListeners();
     }
     private void setOnClickListeners() {
-      linearLayout.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onImageClick(v ,0);
-            }
-        });
         for (int index = 0; index < linearLayout.getChildCount(); index++) {
+            final int finalIndex1 = index;
             View view = linearLayout.getChildAt(index);
-            final int finalIndex = index;
-            view.setOnClickListener(new View.OnClickListener() {
-
-                public void onClick(View v) {
-                    Log.e("INDEX*******", "setOnClickListeners: "+finalIndex );
-                    onImageClick(v , finalIndex);
+            Close = view.findViewById(R.id.Close);
+            imageView2 = view.findViewById(R.id.imageView2);
+            Close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    bitmap.remove(finalIndex1);
+                    if(nmberOfImageSelected == finalIndex1)
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_image));
+                    linearLayout.removeViewAt(finalIndex1);
+                    setOnClickListeners();
                 }
             });
-        }
-    }
-    protected void onImageClick(View v , int i) {
-        if(v == Close)
-        {
+            imageView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    imageView2 = view.findViewById(R.id.imageView2);
+                    imageView.setImageDrawable(imageView2.getDrawable());
+                    nmberOfImageSelected = finalIndex1;
+                }
+            });
 
-            bitmap.remove(i);
-            linearLayout.removeViewAt(i);
-
-        }
-        else if(v == imageView2)
-        {
-
-            imageView.setImageDrawable(imageView2.getDrawable());
-        }
+         }
     }
 }
