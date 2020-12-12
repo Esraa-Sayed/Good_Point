@@ -44,6 +44,7 @@ public class NotificationFragment extends Fragment {
         item = new NotificationItem("Fifth Title", calendar, "this is a description 5",null);
         list.add(item);
         item = new NotificationItem("Sixth Title", calendar, "this is a description 6",null);
+        item.setRead(true);
         list.add(item);
     }
 
