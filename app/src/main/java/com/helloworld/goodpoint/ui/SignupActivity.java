@@ -19,6 +19,7 @@ import com.helloworld.goodpoint.R;
 import java.util.Calendar;
 
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.lostObject.LostObjectDetailsActivity;
 
 import com.helloworld.goodpoint.R;
 
