@@ -36,7 +36,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DatePickerDialog dialog = new DatePickerDialog(
-                        LostObjectDetailsActivity.this,
+                        SignupActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         DateSet,
                         year, month, Day

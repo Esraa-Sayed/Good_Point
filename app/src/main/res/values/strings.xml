@@ -71,4 +71,18 @@
     <string name="ObjectFound">Object found</string>
     <string name="dateOfFound">Date of found</string>
     <string name="ObjectLocation">Object location</string>
+
+    <string name="UserName"> User Name</string>
+    <string name="Email"> Email</string>
+    <string name="Password"> Password</string>
+    <string name="PhoneNumber"> Phone Number</string>
+    <string name="Country"> Country</string>
+    <string name="BirthOfDate"> Birth of date </string>
+    <string name="CreateAccount">Create Account</string>
+    <string name="GoodPoint"> Good Point </string>
+    <string name="CreateNewAccount">Create New Account</string>
+    <string name="SignIn">SING IN</string>
+    <string name="RememberMe">Remember Me</string>
+    <string name="or">or</string>
+    <string name="ForgetPassword"><a href="http://www.google.com">Forget Password?</a></string>
 </resources>
