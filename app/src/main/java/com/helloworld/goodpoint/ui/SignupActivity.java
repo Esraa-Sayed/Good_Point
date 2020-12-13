@@ -1,10 +1,13 @@
 package com.helloworld.goodpoint.ui;
 
+<<<<<<< HEAD
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+=======
+>>>>>>> d163ba2bfa932ba97fea23352ed1765335c5732b
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,13 +18,13 @@ import android.provider.MediaStore;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.helloworld.goodpoint.R;
 
@@ -29,9 +32,12 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.regex.Pattern;
 
+<<<<<<< HEAD
 import com.helloworld.goodpoint.R;
 import android.util.Patterns;
 
+=======
+>>>>>>> d163ba2bfa932ba97fea23352ed1765335c5732b
 public class SignupActivity extends AppCompatActivity {
     private TextView DateT;
     private EditText UserName, Email, Password, Phone, Country;

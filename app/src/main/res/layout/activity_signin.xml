@@ -105,12 +105,13 @@
        android:layout_height="wrap_content"
        android:orientation="horizontal"
        android:layout_marginTop="@dimen/_10sdp">
-       <view
+       <View
            android:layout_width="@dimen/_95sdp"
            android:layout_height="@dimen/_2sdp"
            android:layout_marginTop="@dimen/_9sdp"
            android:layout_marginRight="@dimen/_20sdp"
            android:layout_marginLeft="@dimen/_15sdp"
+           android:background="@android:color/darker_gray"
            />
        <TextView
            android:layout_width="wrap_content"
@@ -119,12 +120,13 @@
            android:layout_gravity="center"
            android:layout_marginLeft="@dimen/_15sdp"
            android:text="@string/or"/>
-       <view
+       <View
            android:layout_width="@dimen/_100sdp"
            android:layout_height="@dimen/_2sdp"
            android:layout_marginLeft="@dimen/_50sdp"
            android:layout_marginTop="@dimen/_9sdp"
-           android:layout_marginRight="@dimen/_20sdp"/>
+           android:layout_marginRight="@dimen/_20sdp"
+           android:background="@android:color/darker_gray"/>
 
    </LinearLayout>
         <Button
