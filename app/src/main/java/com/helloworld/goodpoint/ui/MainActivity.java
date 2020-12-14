@@ -9,6 +9,7 @@ import android.os.Bundle;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import android.view.View;
 <<<<<<< HEAD
@@ -26,6 +27,8 @@ import android.widget.TextView;
 >>>>>>> parent of da76247... Coding in lost object
 =======
 >>>>>>> parent of 95103ed... Date of missing finsh
+=======
+>>>>>>> parent of afb0570... test
 
 import com.helloworld.goodpoint.R;
 
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+<<<<<<< HEAD
         List<Fragment> list = new ArrayList<>();
         list.add(new PageFragment1());
         list.add(new PageFragment2());
@@ -79,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+=======
+
+>>>>>>> parent of afb0570... test
     }
 <<<<<<< HEAD
 <<<<<<< HEAD

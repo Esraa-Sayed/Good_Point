@@ -27,6 +27,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 =======
@@ -65,3 +66,7 @@
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 >>>>>>> parent of da76247... Coding in lost object
+=======
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+>>>>>>> parent of afb0570... test

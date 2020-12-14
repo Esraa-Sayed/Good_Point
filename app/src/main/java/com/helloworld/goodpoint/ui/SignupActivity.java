@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import com.helloworld.goodpoint.R;
 
 import java.util.Calendar;
@@ -21,6 +22,8 @@ import java.util.Calendar;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.lostObject.LostObjectDetailsActivity;
 
+=======
+>>>>>>> parent of afb0570... test
 public class SignupActivity extends AppCompatActivity {
     private TextView DateT ;
     private DatePickerDialog.OnDateSetListener DateSet;
