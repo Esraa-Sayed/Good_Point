@@ -7,6 +7,7 @@
     tools:context=".ui.SigninActivity">
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         <ImageButton
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -141,6 +142,9 @@
 
 
     </LinearLayout>
+=======
+</androidx.constraintlayout.widget.ConstraintLayout>
+>>>>>>> parent of c3029fd... start siginin
 =======
 </androidx.constraintlayout.widget.ConstraintLayout>
 >>>>>>> parent of c3029fd... start siginin
