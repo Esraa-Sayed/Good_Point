@@ -3,7 +3,6 @@ package com.helloworld.goodpoint.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.helloworld.goodpoint.R;
 
@@ -14,5 +13,4 @@ public class ActionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_action);
     }
-
 }

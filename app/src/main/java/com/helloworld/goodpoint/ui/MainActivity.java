@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import android.view.View;
 import android.widget.Toast;
@@ -20,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 >>>>>>> abdelrhman
+=======
+>>>>>>> parent of da76247... Coding in lost object
 
 import com.helloworld.goodpoint.R;
 
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+<<<<<<< HEAD
 
     private void createDots(int current_position) {
         if (Dots_layout != null)
@@ -94,4 +98,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+=======
+>>>>>>> parent of da76247... Coding in lost object
 }

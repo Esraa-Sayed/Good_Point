@@ -3,6 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     <string name="ItemMissing">Item Missing</string>
     <string name="dateOfMissing">Date of missing</string>
@@ -63,4 +64,6 @@
     <string name="CreateAccount">Create Account</string>
 >>>>>>> signin
 >>>>>>> 4e5d1530d687f1a10a4e41fdf57a7de7bf73e2a8
+=======
+>>>>>>> parent of da76247... Coding in lost object
 </resources>
