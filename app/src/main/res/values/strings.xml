@@ -6,6 +6,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     <string name="ItemMissing">Item Missing</string>
     <string name="dateOfMissing">Date of missing</string>
@@ -75,4 +76,6 @@
 >>>>>>> parent of c3029fd... start siginin
 =======
 >>>>>>> parent of 139933f... Complete choose city
+=======
+>>>>>>> parent of 2b16bf4... Change Header Activity name
 </resources>

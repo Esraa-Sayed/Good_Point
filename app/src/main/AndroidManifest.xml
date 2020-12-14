@@ -35,12 +35,16 @@
         <activity android:name=".ui.ForgetPasswordActivity" />
         <activity android:name=".ui.FoundObjectActivity" />
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         <activity android:name=".ui.lostObject.LostObjectDetailsActivity" android:parentActivityName=".ui.MainActivity"
             android:label="@string/LostItemDetails"/>
 =======
         <activity android:name=".ui.LostObjectDetailsActivity" />
 >>>>>>> parent of da76247... Coding in lost object
+=======
+        <activity android:name=".ui.LostObjectDetailsActivity" />
+>>>>>>> parent of 2b16bf4... Change Header Activity name
         <activity android:name=".ui.ActionActivity" />
         <activity android:name=".ui.HomeActivity" />
         <activity android:name=".ui.SignupActivity" />
