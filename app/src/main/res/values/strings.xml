@@ -9,6 +9,7 @@
 =======
     <string name="ItemMissing">Item Missing</string>
     <string name="dateOfMissing">Date of missing</string>
+<<<<<<< HEAD
     <string name="City">City</string>
     <string name="Cairo">Cairo</string>
     <string name="Alexandria">Alexandria</string>
@@ -72,4 +73,6 @@
 >>>>>>> parent of c3029fd... start siginin
 =======
 >>>>>>> parent of c3029fd... start siginin
+=======
+>>>>>>> parent of 139933f... Complete choose city
 </resources>
