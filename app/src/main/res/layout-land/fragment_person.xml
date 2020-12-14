@@ -27,7 +27,7 @@
         android:layout_height="@dimen/_130sdp"
         android:layout_gravity="center"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_baseline_add_a_photo_24" />
+        android:src="@drawable/ic_baseline_gallery_24" />
 
     <HorizontalScrollView
         android:layout_width="@dimen/_300sdp"

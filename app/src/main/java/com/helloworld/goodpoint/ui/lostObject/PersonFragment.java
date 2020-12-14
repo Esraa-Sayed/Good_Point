@@ -27,6 +27,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.FoundObjectActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,36 +71,49 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if(view == imageView) {
-            PopupMenu popupMenu = new PopupMenu(getActivity(), view);
-            popupMenu.getMenuInflater().inflate(R.menu.choose_photo, popupMenu.getMenu());
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.TakePhoto:
-                            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            if (i.resolveActivity(getActivity().getPackageManager()) != null) {
-                                startActivityForResult(i, 10);
-                            } else
-                                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-                            break;
-                        case R.id.Gallery:
-                            Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT,
-                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                            pickPhoto.setType("image/*");//accept any type of images
-                            if (pickPhoto.resolveActivity(getActivity().getPackageManager()) != null) {
-                                startActivityForResult(pickPhoto, 1);
-                            } else
-                                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            if (getActivity() instanceof FoundObjectActivity)
+            {
+                PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+                popupMenu.getMenuInflater().inflate(R.menu.choose_photo, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.TakePhoto:
+                                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                if (i.resolveActivity(getActivity().getPackageManager()) != null) {
+                                    startActivityForResult(i, 10);
+                                } else
+                                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                                break;
+                            case R.id.Gallery:
+                                Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT,
+                                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                                pickPhoto.setType("image/*");//accept any type of images
+                                if (pickPhoto.resolveActivity(getActivity().getPackageManager()) != null) {
+                                    startActivityForResult(pickPhoto, 1);
+                                } else
+                                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
 
-                            break;
+                                break;
 
+                        }
+                        return true;
                     }
-                    return true;
-                }
-            });
-            popupMenu.show();
+                });
+                popupMenu.show();
+            }
+            else if (getActivity() instanceof LostObjectDetailsActivity) {
+                Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                pickPhoto.setType("image/*");//accept any type of images
+                if (pickPhoto.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(pickPhoto, 1);
+                } else
+                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            }
         }
     }
     @Override
@@ -171,7 +185,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 public void onClick(View view) {
                     bitmap.remove(finalIndex1);
                     if(nmberOfImageSelected == finalIndex1)
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_image));
+                    {
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_gallery_24));
+                    }
+
                     linearLayout.removeViewAt(finalIndex1);
                     setOnClickListeners();
                 }

@@ -1,4 +1,4 @@
-package com.helloworld.goodpoint.ui;
+package com.helloworld.goodpoint.ui.foundObject;
 
 import androidx.appcompat.app.AppCompatActivity;
 

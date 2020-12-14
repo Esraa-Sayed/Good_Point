@@ -71,6 +71,7 @@
     <string name="ObjectFound">Object found</string>
     <string name="dateOfFound">Date of found</string>
     <string name="ObjectLocation">Object location</string>
+    <string name="FoundItemDetails">Found object details</string>
 
 
 </resources>

@@ -22,11 +22,12 @@
             android:textStyle="bold"
             android:text="@string/ObjectFound" />
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/_250sdp"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/_30sdp"
             android:layout_marginRight="@dimen/_30sdp"
             android:orientation="horizontal"
+            android:layout_gravity="center"
             >
 
             <TextView
@@ -53,12 +54,13 @@
 
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/_250sdp"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/_30sdp"
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginRight="@dimen/_30sdp"
             android:orientation="horizontal"
+            android:layout_gravity="center"
             >
             <Button
                 android:layout_width="@dimen/_140sdp"
@@ -85,7 +87,7 @@
                 android:textSize="@dimen/_14ssp"
                 android:gravity="center"
                 android:editable="false"
-               />
+                />
 
         </LinearLayout>
         <TextView
