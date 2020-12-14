@@ -1,6 +1,7 @@
-package com.helloworld.goodpoint.ui;
+package com.helloworld.goodpoint.ui.lostFoundObject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 
 import android.app.DatePickerDialog;
 import android.app.Fragment;
@@ -9,18 +10,14 @@ import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.ui.lostObject.LostObjectDetailsActivity;
-import com.helloworld.goodpoint.ui.lostObject.ObjectFragment;
-import com.helloworld.goodpoint.ui.lostObject.PersonFragment;
 
 import java.util.Calendar;
 
@@ -28,7 +25,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private TextView DateFound ;
     private DatePickerDialog.OnDateSetListener DateSet;
     private int year, month, Day;
-    private Button Person , Object;
+    private Button Person , Object,FoundLocatin;
     private Fragment PersonF,ObjectF;
     FragmentManager FM ;
     FragmentTransaction FT;
@@ -68,6 +65,24 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
                 break;
+            case R.id.FoundLocatin:
+                PopupMenu popupMenu = new PopupMenu(this, view);
+                popupMenu.getMenuInflater().inflate(R.menu.choose_location, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.TakeCurrLocation:
+                                break;
+                            case R.id.DeteLocation:
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
+                    break;
             case R.id.PersonFound:
                 FT.replace(R.id.FragmentFoundID,PersonF,null);
                 Person.setTextColor(0xFFF38E3A);
@@ -87,9 +102,11 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     protected void inti() {
 
         DateFound = findViewById(R.id.DateFound);
-        DateFound.setOnClickListener(this);
+        FoundLocatin = findViewById(R.id.FoundLocatin);
         Person = findViewById(R.id.PersonFound);
         Object = findViewById(R.id.ObjectFound);
+        DateFound.setOnClickListener(this);
+        FoundLocatin.setOnClickListener(this);
         Person.setOnClickListener(this);
         Object.setOnClickListener(this);
         PersonF = new PersonFragment();

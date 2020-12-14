@@ -1,4 +1,4 @@
-package com.helloworld.goodpoint.ui.lostObject;
+package com.helloworld.goodpoint.ui.lostFoundObject;
 
 import android.Manifest;
 import android.app.Fragment;
@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +26,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.ui.FoundObjectActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;

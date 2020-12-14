@@ -8,7 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.ui.lostObject.LostObjectDetailsActivity;
+import com.helloworld.goodpoint.ui.lostFoundObject.FoundObjectActivity;
+import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 Button Found , Lost;

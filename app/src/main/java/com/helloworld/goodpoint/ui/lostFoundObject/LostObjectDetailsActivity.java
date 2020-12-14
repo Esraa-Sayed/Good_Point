@@ -1,4 +1,4 @@
-package com.helloworld.goodpoint.ui.lostObject;
+package com.helloworld.goodpoint.ui.lostFoundObject;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -29,11 +29,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".ui.foundObject.ForgetPasswordActivity" />
-        <activity android:name=".ui.FoundObjectActivity" android:parentActivityName=".ui.MainActivity"
+        <activity android:name=".ui.ForgetPasswordActivity" />
+        <activity android:name=".ui.lostFoundObject.FoundObjectActivity" android:parentActivityName=".ui.MainActivity"
             android:label="@string/FoundItemDetails"/>
 
-        <activity android:name=".ui.lostObject.LostObjectDetailsActivity" android:parentActivityName=".ui.MainActivity"
+        <activity android:name=".ui.lostFoundObject.LostObjectDetailsActivity" android:parentActivityName=".ui.MainActivity"
             android:label="@string/LostItemDetails"/>
         <activity android:name=".ui.ActionActivity" />
         <activity android:name=".ui.HomeActivity" />
