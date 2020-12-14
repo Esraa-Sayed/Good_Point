@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,10 +46,7 @@ public class MainActivity extends AppCompatActivity {
         slideAdapter = new SlideAdapter(getSupportFragmentManager(), list);
         pager.setAdapter(slideAdapter);
         Dots_layout = (LinearLayout) findViewById(R.id.dotsLayout);
-        createDots(0);
-        arrow=(ImageView) findViewById(R.id.arrow);
-
-
+       // createDots(0);
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                createDots(position);
+               // createDots(position);
             }
 
             @Override

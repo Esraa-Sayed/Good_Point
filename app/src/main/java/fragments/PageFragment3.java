@@ -18,7 +18,6 @@ public class PageFragment3 extends Fragment {
         ViewGroup rootview=(ViewGroup)inflater.inflate(R.layout.home2,container,false);
 
         return  rootview;
-
     }
 }
 

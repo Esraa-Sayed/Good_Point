@@ -85,4 +85,6 @@
     <string name="RememberMe">Remember Me</string>
     <string name="or">or</string>
     <string name="ForgetPassword"><a href="http://www.google.com">Forget Password?</a></string>
+    <string name="HelpOthers">Help others easy if you found anything</string>
+    <string name="Skip">Skip</string>
 </resources>

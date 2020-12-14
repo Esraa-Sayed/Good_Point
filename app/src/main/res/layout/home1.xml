@@ -7,36 +7,21 @@
     android:background="@color/colorPrimary"
     android:backgroundTint="#ECCB26"
     android:foregroundTint="#7C1010">
-
-
     <TextView
         android:id="@+id/Skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="325dp"
-        android:layout_marginBottom="13dp"
+        android:layout_marginEnd="@dimen/_325sdp"
+        android:layout_marginBottom="@dimen/_13sdp"
         android:fontFamily="@font/roboto_bold"
         android:text="Skip "
         android:textAlignment="center"
         android:textColor="#3F51B5"
         android:textSize="30sp"
-        tools:layout_editor_absoluteX="692dp"
-        tools:layout_editor_absoluteY="1474dp" />
-
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="250dp"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="61dp"
-        android:layout_marginEnd="7dp"
-        app:srcCompat="@color/cardview_dark_background"
-        tools:layout_editor_absoluteX="-14dp"
-        tools:layout_editor_absoluteY="16dp" />
-
+        tools:layout_editor_absoluteX="@dimen/_692sdp"
+        tools:layout_editor_absoluteY="@dimen/_1474sdp" />
     <ImageView
         android:id="@+id/imageView10"
         android:layout_width="250dp"
@@ -82,7 +67,7 @@
         android:layout_marginEnd="31dp"
         android:layout_marginBottom="225dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Help others easy if you found anything"
+        android:text="@string/HelpOthers"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="#0F1010"
