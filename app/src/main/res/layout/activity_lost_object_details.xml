@@ -11,13 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+<<<<<<< HEAD
         tools:context=".ui.lostObject.LostObjectDetailsActivity">
+=======
+        android:rotationX="91"
+        tools:context=".ui.LostObjectDetailsActivity">
+
+>>>>>>> parent of 95103ed... Date of missing finsh
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_25sdp"
+            android:layout_margin="@dimen/_30sdp"
             android:textColor="@android:color/black"
+<<<<<<< HEAD
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold"
             android:text="@string/ObjectMissing" />
@@ -58,19 +65,28 @@
                 android:text="@string/dateOfMissing"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/_14ssp" />
+=======
+            android:textSize="@dimen/_35ssp"
+            android:text="@string/ItemMissing" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+>>>>>>> parent of 95103ed... Date of missing finsh
 
             <TextView
-                android:id="@+id/Date"
-                android:layout_width="@dimen/_150sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:padding="@dimen/_5sdp"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/_14ssp"
-                android:gravity="center"
-                android:background="#66B1BABA"/>
+                android:text="@string/dateOfMissing" />
 
+            <DatePicker
+                android:id="@+id/simpleDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:datePickerMode="spinner"/>
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"

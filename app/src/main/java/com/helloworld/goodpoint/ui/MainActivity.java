@@ -11,6 +11,7 @@ import android.os.Bundle;
 <<<<<<< HEAD
 =======
 import android.view.View;
+<<<<<<< HEAD
 import android.widget.Toast;
 >>>>>>> 4e5d1530d687f1a10a4e41fdf57a7de7bf73e2a8
 =======
@@ -23,6 +24,8 @@ import android.widget.TextView;
 >>>>>>> abdelrhman
 =======
 >>>>>>> parent of da76247... Coding in lost object
+=======
+>>>>>>> parent of 95103ed... Date of missing finsh
 
 import com.helloworld.goodpoint.R;
 
@@ -78,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     private void createDots(int current_position) {
         if (Dots_layout != null)
@@ -97,6 +101,12 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+=======
+    protected void Intent(View v)
+    {
+        Intent I  = new Intent(this , LostObjectDetailsActivity.class);
+        startActivity(I);
+>>>>>>> parent of 95103ed... Date of missing finsh
     }
 =======
 >>>>>>> parent of da76247... Coding in lost object
