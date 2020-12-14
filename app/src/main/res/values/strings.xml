@@ -37,6 +37,7 @@
     <string name="Banha">Banha</string>
     <string name="Arish">Arish</string>
     <string name="LostItemDetails">Lost item details</string>
+<<<<<<< HEAD
     <string name="TypeOfTheItem">Type of the item</string>
     <string name="Person">Person</string>
     <string name="Object">Object</string>
@@ -78,4 +79,6 @@
 >>>>>>> parent of 139933f... Complete choose city
 =======
 >>>>>>> parent of 2b16bf4... Change Header Activity name
+=======
+>>>>>>> parent of a1f5c59... Person-Object Fragments
 </resources>

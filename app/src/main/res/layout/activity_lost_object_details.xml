@@ -19,17 +19,24 @@
 
 >>>>>>> parent of 95103ed... Date of missing finsh
         <TextView
+            android:id="@string/ItemMissing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/_30sdp"
             android:textColor="@android:color/black"
 <<<<<<< HEAD
+<<<<<<< HEAD
             android:textSize="@dimen/_20ssp"
+=======
+            android:textSize="@dimen/_25ssp"
+>>>>>>> parent of a1f5c59... Person-Object Fragments
             android:textStyle="bold"
 <<<<<<< HEAD
             android:text="@string/ObjectMissing" />
         <com.google.android.material.textfield.TextInputLayout
+
+            android:id="@string/City"
             android:layout_width="@dimen/_248sdp"
             android:layout_height="@dimen/_50sdp"
             android:layout_gravity="center"
@@ -64,6 +71,10 @@
 
             <TextView
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                android:id="@+id/DateOfMissing"
+>>>>>>> parent of a1f5c59... Person-Object Fragments
                 android:layout_width="@dimen/_186sdp"
 =======
                 android:id="@+id/DateOfMissing"
@@ -99,6 +110,7 @@
                 android:layout_height="wrap_content"
                 android:datePickerMode="spinner"/>
         </LinearLayout>
+<<<<<<< HEAD
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -149,6 +161,9 @@
             android:text="@string/Match"
             android:textColor="#EFEDED"
             android:textSize="@dimen/_15ssp"/>
+=======
+
+>>>>>>> parent of a1f5c59... Person-Object Fragments
     </LinearLayout>
 </ScrollView>
 =======

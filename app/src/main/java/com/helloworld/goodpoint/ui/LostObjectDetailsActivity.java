@@ -1,6 +1,5 @@
 package com.helloworld.goodpoint.ui;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 <<<<<<< HEAD
@@ -8,8 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+<<<<<<< HEAD
 import android.os.Build;
 >>>>>>> parent of 139933f... Complete choose city
+=======
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
+>>>>>>> parent of a1f5c59... Person-Object Fragments
 import android.os.Bundle;
 
 import com.helloworld.goodpoint.R;
@@ -21,10 +26,19 @@ public class LostObjectDetailsActivity extends AppCompatActivity {
 import java.util.Calendar;
 
 public class LostObjectDetailsActivity extends AppCompatActivity {
+<<<<<<< HEAD
     private TextView DateT ;
     private DatePickerDialog.OnDateSetListener DateSet;
     int year , month , Day;
 >>>>>>> parent of 139933f... Complete choose city
+=======
+    private TextView DateT;
+    private DatePickerDialog.OnDateSetListener DateSet;
+    private AutoCompleteTextView autoCom;
+    private int year, month, Day;
+    List<String> list;
+
+>>>>>>> parent of a1f5c59... Person-Object Fragments
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,10 +71,17 @@ public class LostObjectDetailsActivity extends AppCompatActivity {
         };
     }
 
+<<<<<<< HEAD
     protected void inti()
     {
 
         DateT =  findViewById(R.id.Date);
+=======
+    protected void inti() {
+
+        DateT = findViewById(R.id.Date);
+        autoCom = findViewById(R.id.auto);
+>>>>>>> parent of a1f5c59... Person-Object Fragments
         Calendar cal = Calendar.getInstance();//To get today's date
         year= cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
