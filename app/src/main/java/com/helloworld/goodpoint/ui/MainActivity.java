@@ -6,17 +6,12 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.helloworld.goodpoint.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private SlideAdapter slideAdapter;
     private LinearLayout Dots_layout;
     private ImageView[] dots;
-    private int[] layouts = {R.layout.activity_home, R.layout.home1, R.layout.home2};
+    private int[] layouts = {R.layout.slider_page1, R.layout.slider_page2, R.layout.slider_page3};
     private TextView Next,Skip,Start;
     private ImageView arrow;
     @Override
@@ -45,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         pager = findViewById(R.id.viewpager);
         slideAdapter = new SlideAdapter(getSupportFragmentManager(), list);
         pager.setAdapter(slideAdapter);
-        Dots_layout = (LinearLayout) findViewById(R.id.dotsLayout);
-       // createDots(0);
+       Dots_layout = (LinearLayout) findViewById(R.id.dotsLayout);
+       createDots(0);
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -55,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-               // createDots(position);
+                createDots(position);
             }
 
             @Override

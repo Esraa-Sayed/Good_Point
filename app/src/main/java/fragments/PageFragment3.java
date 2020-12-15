@@ -15,7 +15,7 @@ public class PageFragment3 extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup rootview=(ViewGroup)inflater.inflate(R.layout.home2,container,false);
+        ViewGroup rootview=(ViewGroup)inflater.inflate(R.layout.slider_page3,container,false);
 
         return  rootview;
     }

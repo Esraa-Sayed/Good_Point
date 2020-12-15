@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         tools:context=".ui.MainActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+
         >
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
        />
+
     <LinearLayout
         android:id="@+id/dotsLayout"
-        android:layout_width="137dp"
-        android:layout_height="84dp"
-        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginEnd="132dp"
-        android:layout_marginBottom="17dp"
+        android:layout_marginStart="@dimen/_50sdp"
+        android:layout_marginLeft="@dimen/_119sdp"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_40sdp"
         android:gravity="center"
         android:orientation="horizontal"></LinearLayout>
-</LinearLayout>
+
+
+</RelativeLayout>
