@@ -30,23 +30,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_home);
 
         init();
-        setToolBar();
-        navigationView.setNavigationItemSelectedListener(this);
+        setToolBarAndDrawer();
 
         ///*
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.home_frag,new HomeFragment());
+        ft.replace(R.id.home_frag,new NotificationFragment());
         ft.commitNow();
         //*/
 
     }
 
-    private void setToolBar() {
+    private void setToolBarAndDrawer() {
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.nav_drawer_open,R.string.nav_drawer_close);
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(android.R.color.white));
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void init() {
@@ -82,7 +82,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 return false;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 
     private AlertDialog.Builder createDialog(String title, int icon) {
@@ -99,6 +99,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }).setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                     }
                 }).setCancelable(false);
     }

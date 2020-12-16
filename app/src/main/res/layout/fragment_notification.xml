@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="There isn\'t any notification yet"
+        android:text="There isn\'t any notification now"
         android:visibility="gone"/>
 
 </FrameLayout>
