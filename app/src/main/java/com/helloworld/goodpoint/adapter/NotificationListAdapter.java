@@ -41,33 +41,18 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         View notificationItem = convertView;
         ViewHolder viewHolder;
         final int revposition = list.size()-position-1;
+
         if(notificationItem == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            notificationItem = inflater.inflate(R.layout.notification_item, parent, false);
+            notificationItem = createItem(parent);
             viewHolder = new ViewHolder(notificationItem);
             notificationItem.setTag(viewHolder);
         }else
             viewHolder = (ViewHolder) notificationItem.getTag();
 
-        if(!list.get(revposition).isRead()){
-            viewHolder.getRead().setVisibility(View.VISIBLE);
-            viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
-            viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
-            viewHolder.getRead().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
-
-            viewHolder.getRead().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    list.get(revposition).setRead(true);
-                    notifyDataSetChanged();
-                }
-            });
-        }else {
-            viewHolder.getRead().setVisibility(View.GONE);
-            viewHolder.getLayout().setBackgroundColor(Color.WHITE);
-            viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button2));
-
-        }
+        if(!list.get(revposition).isRead())
+            setItemRead(viewHolder,revposition);
+        else
+            setItemNotRead(viewHolder);
 
         viewHolder.getArchive().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,15 +65,43 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             }
         });
 
+        setItemDetails(viewHolder,revposition);
+
+        return notificationItem;
+    }
+
+    private void setItemDetails(ViewHolder viewHolder, int revposition) {
         viewHolder.getTitle().setText(list.get(revposition).getTitle());
         viewHolder.getDate().setText(list.get(revposition).getDate());
         viewHolder.getDescription().setText(list.get(revposition).getDescription());
         if(list.get(revposition).getImage() != null)
             viewHolder.getImageView().setImageBitmap(list.get(revposition).getImage());
+    }
 
+    private void setItemNotRead(ViewHolder viewHolder) {
+        viewHolder.getRead().setVisibility(View.GONE);
+        viewHolder.getLayout().setBackgroundColor(Color.WHITE);
+        viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button2));
+    }
 
+    private void setItemRead(ViewHolder viewHolder, final int position) {
+        viewHolder.getRead().setVisibility(View.VISIBLE);
+        viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+        viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
+        viewHolder.getRead().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
 
-        return notificationItem;
+        viewHolder.getRead().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                list.get(position).setRead(true);
+                notifyDataSetChanged();
+            }
+        });
+    }
+
+    private View createItem(ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        return inflater.inflate(R.layout.notification_item, parent, false);
     }
 
     private class ViewHolder{

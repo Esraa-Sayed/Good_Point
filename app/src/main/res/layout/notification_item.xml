@@ -89,7 +89,7 @@
                 android:textAllCaps="false"
                 android:padding="@dimen/_3sdp"
                 android:drawableStart="@drawable/ic_baseline_check_24"
-                android:text="Select as read"
+                android:text="Set as read"
                 android:focusable="false"/>
         </LinearLayout>
 
