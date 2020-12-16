@@ -74,6 +74,7 @@
     <string name="FoundItemDetails">Found object details</string>
     <string name="CurrentLocation">My current location</string>
     <string name="LocatingPlace">Locating the place</string>
+    <string name="title_activity_detect_location">Map</string>
 
 
 </resources>

@@ -9,7 +9,8 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -30,12 +31,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity
+            android:name=".detect_location"
+            android:label="@string/title_activity_detect_location"></activity>
         <activity android:name=".ui.ForgetPasswordActivity" />
-        <activity android:name=".ui.lostFoundObject.FoundObjectActivity" android:parentActivityName=".ui.MainActivity"
-            android:label="@string/FoundItemDetails"/>
-
-        <activity android:name=".ui.lostFoundObject.LostObjectDetailsActivity" android:parentActivityName=".ui.MainActivity"
-            android:label="@string/LostItemDetails"/>
+        <activity
+            android:name=".ui.lostFoundObject.FoundObjectActivity"
+            android:label="@string/FoundItemDetails"
+            android:parentActivityName=".ui.MainActivity" />
+        <activity
+            android:name=".ui.lostFoundObject.LostObjectDetailsActivity"
+            android:label="@string/LostItemDetails"
+            android:parentActivityName=".ui.MainActivity" />
         <activity android:name=".ui.ActionActivity" />
         <activity android:name=".ui.HomeActivity" />
         <activity android:name=".ui.SignupActivity" />
