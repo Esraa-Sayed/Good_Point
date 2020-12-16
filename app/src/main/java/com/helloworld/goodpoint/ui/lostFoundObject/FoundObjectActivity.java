@@ -166,6 +166,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         {
             Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
         }
+        else if(requestCode == 11 && (grantResults.length > 0) &&
+                grantResults[0] == PackageManager.PERMISSION_DENIED)
+        {
+            Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
+        }
+
     }
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
