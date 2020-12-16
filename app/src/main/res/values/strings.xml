@@ -88,4 +88,14 @@
     <string name="HelpOthers">Help others easy if you found anything</string>
     <string name="Skip">Skip</string>
     <string name="skip">Skip</string>
+    <string name="play_again">play_again</string>
+    <string name="next">Next  ></string>
+    <string name="next_btn">Next</string>
+    <string name="start">Start</string>
+    <string name="forget_pass_details">provide your account\'s email for which you want to reset your password</string>
+    <string name="make_selection">Make Selection</string>
+    <string name="via_sms">via sms:</string>
+    <string name="make_selection_detail1">+923335545644</string>
+    <string name="via_mail">via mail:</string>
+    <string name="mak_selection_details2">example@gmail.com</string>
 </resources>

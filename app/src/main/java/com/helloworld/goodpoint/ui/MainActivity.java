@@ -1,81 +1,43 @@
 package com.helloworld.goodpoint.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
+
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.View;
 
 import com.helloworld.goodpoint.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import fragments.PageFragment1;
-import fragments.PageFragment2;
-import fragments.PageFragment3;
 
 public class MainActivity extends AppCompatActivity {
-    private ViewPager pager;
-    private SlideAdapter slideAdapter;
-    private LinearLayout Dots_layout;
-    private ImageView[] dots;
-    private int[] layouts = {R.layout.slider_page1, R.layout.slider_page2, R.layout.slider_page3};
-    private TextView Next,Skip,Start;
-    private ImageView arrow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        List<Fragment> list = new ArrayList<>();
-        list.add(new PageFragment1());
-        list.add(new PageFragment2());
-        list.add(new PageFragment3());
+        PrefManager prefManager = new PrefManager(getApplicationContext());
+        if (prefManager.isFirstTimeLaunch()) {
+            prefManager.setFirstTimeLaunch(true);
+            startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
+            finish();
+        } else {
+            setContentView(R.layout.activity_main);
+            findViewById(R.id.btn_play_again).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PrefManager prefManager = new PrefManager(getApplicationContext());
+                    prefManager.setFirstTimeLaunch(true);
+                    startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
+                    finish();
+                }
+            });
+            findViewById(R.id.forget).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, ForgetPasswordActivity.class));
 
-        pager = findViewById(R.id.viewpager);
-        slideAdapter = new SlideAdapter(getSupportFragmentManager(), list);
-        pager.setAdapter(slideAdapter);
-       Dots_layout = (LinearLayout) findViewById(R.id.dotsLayout);
-       createDots(0);
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                createDots(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-    }
-
-    private void createDots(int current_position) {
-        if (Dots_layout != null)
-            Dots_layout.removeAllViews();
-        dots = new ImageView[layouts.length];
-        for (int i = 0; i < layouts.length; i++) {
-            dots[i] = new ImageView(this);
-            if (i == current_position) {
-                dots[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.active_dot));
-            } else {
-                dots[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.default_dot));
-            }
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
-                    , ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(4, 0, 4, 0);
-            Dots_layout.addView(dots[i], params);
-
+                }
+            });
         }
     }
 }

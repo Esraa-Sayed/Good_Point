@@ -39,29 +39,6 @@
         android:textColor="#0F1010"
         android:textSize="@dimen/_20ssp"
   />
-
-    <TextView
-        android:id="@+id/Next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Start "
-        android:layout_marginTop="@dimen/_405sdp"
-        android:layout_marginLeft="@dimen/_230sdp"
-        android:textAlignment="center"
-        android:textColor="#456191"
-        android:textSize="@dimen/_20ssp"
-        />
-
-    <ImageView
-        android:id="@+id/arrow"
-        android:layout_width="@dimen/_34sdp"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_marginTop="@dimen/_395sdp"
-        android:layout_marginLeft="@dimen/_270sdp"
-        app:srcCompat="@drawable/ic_baseline_navigate_next_24"
-      />
-
     <ImageView
         android:id="@+id/imageView13"
         android:layout_width="@dimen/_160sdp"
