@@ -1,40 +1,74 @@
 package com.helloworld.goodpoint.ui.lostFoundObject;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.helloworld.goodpoint.R;
 
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 public class FoundObjectActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView DateFound ;
+    private TextView DateFound;
+    private EditText Location;
     private DatePickerDialog.OnDateSetListener DateSet;
     private int year, month, Day;
-    private Button Person , Object,FoundLocatin;
-    private Fragment PersonF,ObjectF;
-    FragmentManager FM ;
-    FragmentTransaction FT;
+    private Button Person, Object, FoundLocatin;
+    private Fragment PersonF, ObjectF;
+    private FragmentManager FM;
+    private FragmentTransaction FT;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private  double Latitude =0;
+    private  double Longitude =0;
+    double LA = 31.3103751;
+    double LO = 29.8581603;
+    FusedLocationProviderClient fusedLocationProviderClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_found_object);
         inti();
-        DateSet = new DatePickerDialog.OnDateSetListener() {
+          DateSet = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 m++;
@@ -73,6 +107,17 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.TakeCurrLocation:
+
+                                fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(FoundObjectActivity.this);
+                                if (ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                        && ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                                    ActivityCompat.requestPermissions(FoundObjectActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},100);
+                                }
+                                else
+                                {
+                                    getCurrentLocation();
+                                }
                                 break;
                             case R.id.DeteLocation:
                                 break;
@@ -82,7 +127,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     }
                 });
                 popupMenu.show();
-                    break;
+                break;
             case R.id.PersonFound:
                 FT.replace(R.id.FragmentFoundID,PersonF,null);
                 Person.setTextColor(0xFFF38E3A);
@@ -99,12 +144,96 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 break;
         }
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        if(requestCode == 100 && (grantResults.length > 0) &&
+                grantResults[0] + grantResults[1]== PackageManager.PERMISSION_DENIED)
+        {
+            getCurrentLocation();
+        }
+        else if(requestCode == 100)
+        {
+            Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
+        }
+    }
+    @SuppressLint("MissingPermission")
+    private void getCurrentLocation() {
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                ||locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        )
+        {
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                @SuppressLint("MissingPermission")
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    Location location = task.getResult();
+                    if(location != null) {
+                        Longitude = location.getLongitude();
+                        Latitude = location.getLatitude();
+                        Geocoder geocoder = new Geocoder(FoundObjectActivity.this, Locale.getDefault());
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(Latitude,Longitude,1);
+                            String Country = addresses.get(0).getCountryName();
+                            String City = addresses.get(0).getAdminArea();
+                            String area = addresses.get(0).getLocality();
+                            String Locate = area + ","+ City + "," + Country + ".";
+                            Location.setText(Locate);
+                            Log.e("LOc1", "onMenuItemClick: "+ Locate);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        LocationRequest locationRequest = new LocationRequest()
+                                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                                .setInterval(10000)
+                                .setFastestInterval(1000)
+                                .setNumUpdates(1);
+                        LocationCallback locationCallback = new LocationCallback(){
+                            @Override
+                            public void onLocationResult(LocationResult locationResult) {
+                                Location location1 = locationResult.getLastLocation();
+                                Longitude = location1.getLongitude();
+                                Latitude = location1.getLatitude();
+                                Geocoder geocoder = new Geocoder(FoundObjectActivity.this, Locale.getDefault());
+                                try {
+                                    Log.e("LOc2", "onMenuItemClick: "+ Latitude + "    "+Longitude );
+                                    List<Address> addresses = geocoder.getFromLocation(Latitude,Longitude,1);
+                                    String Country = addresses.get(0).getCountryName();
+                                    String City = addresses.get(0).getAdminArea();
+                                    String area = addresses.get(0).getLocality();
+                                    String Locate = area + ","+ City + "," + Country + ".";
+                                    Location.setText(Locate);
+                                    Log.e("LOc1", "onMenuItemClick: "+ Locate);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+                        fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
+
+                    }
+                }
+            });
+        }
+        else
+        {
+            //when location servies is not enabled
+            //open location setting
+            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
+    }
     protected void inti() {
 
         DateFound = findViewById(R.id.DateFound);
         FoundLocatin = findViewById(R.id.FoundLocatin);
         Person = findViewById(R.id.PersonFound);
         Object = findViewById(R.id.ObjectFound);
+        Location = findViewById(R.id.Location);
         DateFound.setOnClickListener(this);
         FoundLocatin.setOnClickListener(this);
         Person.setOnClickListener(this);
