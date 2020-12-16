@@ -3,8 +3,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -18,12 +16,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,16 +48,11 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private EditText Location;
     private DatePickerDialog.OnDateSetListener DateSet;
     private int year, month, Day;
-    private Button Person, Object, FoundLocatin;
+    private Button Person;
+    private Button Object;
     private Fragment PersonF, ObjectF;
-    private FragmentManager FM;
-    private FragmentTransaction FT;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
-    private  double Latitude =0;
-    private  double Longitude =0;
-    double LA = 31.3103751;
-    double LO = 29.8581603;
+    private  double Latitude = 0;
+    private  double Longitude = 0;
     FusedLocationProviderClient fusedLocationProviderClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +77,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     }
     @Override
     public void onClick(View view) {
-        FM = getFragmentManager();
-        FT= FM.beginTransaction();
+        FragmentManager FM = getFragmentManager();
+        FragmentTransaction FT = FM.beginTransaction();
         switch (view.getId() ) {
             case R.id.DateFound:
                 DatePickerDialog dialog = new DatePickerDialog(
@@ -112,7 +103,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                 if (ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                                         && ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                                    ActivityCompat.requestPermissions(FoundObjectActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},100);
+                                    ActivityCompat.requestPermissions(FoundObjectActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},12);
                                 }
                                 else
                                 {
@@ -146,23 +137,23 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
-        if(requestCode == 100 && (grantResults.length > 0) &&
-                grantResults[0] + grantResults[1]== PackageManager.PERMISSION_DENIED)
+        if(requestCode == 12 && (grantResults.length > 0) &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED)
         {
             getCurrentLocation();
         }
-        else if(requestCode == 100)
+        else if(requestCode == 12 && (grantResults.length > 0) &&
+                grantResults[0] == PackageManager.PERMISSION_DENIED)
         {
             Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
         }
     }
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
-        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                ||locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
         )
         {
             fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
@@ -230,12 +221,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     protected void inti() {
 
         DateFound = findViewById(R.id.DateFound);
-        FoundLocatin = findViewById(R.id.FoundLocatin);
+        Button foundLocatin = findViewById(R.id.FoundLocatin);
         Person = findViewById(R.id.PersonFound);
         Object = findViewById(R.id.ObjectFound);
         Location = findViewById(R.id.Location);
         DateFound.setOnClickListener(this);
-        FoundLocatin.setOnClickListener(this);
+        foundLocatin.setOnClickListener(this);
         Person.setOnClickListener(this);
         Object.setOnClickListener(this);
         PersonF = new PersonFragment();
