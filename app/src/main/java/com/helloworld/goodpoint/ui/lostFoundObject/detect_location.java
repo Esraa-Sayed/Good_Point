@@ -1,8 +1,10 @@
-package com.helloworld.goodpoint;
+package com.helloworld.goodpoint.ui.lostFoundObject;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,11 +12,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.helloworld.goodpoint.R;
 
 public class detect_location extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    double Latitude;
+    double Longitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +27,9 @@ public class detect_location extends FragmentActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Intent intent = getIntent();
+        Latitude = intent.getExtras().getDouble("Latitude");
+        Longitude = intent.getExtras().getDouble("Longitude");
     }
 
     /**
@@ -39,8 +46,8 @@ public class detect_location extends FragmentActivity implements OnMapReadyCallb
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        LatLng sydney = new LatLng(Latitude, Longitude);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Your current location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }

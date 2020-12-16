@@ -51,8 +51,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private Button Person;
     private Button Object;
     private Fragment PersonF, ObjectF;
-    private  double Latitude = 0;
-    private  double Longitude = 0;
+     double Latitude;
+     double Longitude;
     FusedLocationProviderClient fusedLocationProviderClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +75,21 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             }
         };
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(FoundObjectActivity.this);
+        if (ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(FoundObjectActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},12);
+        }
+        else
+        {
+            getCurrentLocation();
+        }
+    }
+
     @Override
     public void onClick(View view) {
         FragmentManager FM = getFragmentManager();
@@ -99,20 +114,24 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                         switch (item.getItemId()) {
                             case R.id.TakeCurrLocation:
 
-                                fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(FoundObjectActivity.this);
-                                if (ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                                        && ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                                    ActivityCompat.requestPermissions(FoundObjectActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},12);
-                                }
-                                else
-                                {
-                                    getCurrentLocation();
+                                Geocoder geocoder = new Geocoder(FoundObjectActivity.this, Locale.getDefault());
+                                try {
+                                    List<Address> addresses = geocoder.getFromLocation(Latitude,Longitude,1);
+                                    String Country = addresses.get(0).getCountryName();
+                                    String City = addresses.get(0).getAdminArea();
+                                    String area = addresses.get(0).getLocality();
+                                    String Locate = area + ","+ City + "," + Country + ".";
+                                    Location.setText(Locate);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
                                 break;
                             case R.id.DeteLocation:
+                               Intent intent = new Intent(FoundObjectActivity.this, detect_location.class);
+                               intent.putExtra("Latitude",Latitude);
+                               intent.putExtra("Longitude",Longitude);
+                               startActivity(intent);
                                 break;
-
                         }
                         return true;
                     }
@@ -164,18 +183,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     if(location != null) {
                         Longitude = location.getLongitude();
                         Latitude = location.getLatitude();
-                        Geocoder geocoder = new Geocoder(FoundObjectActivity.this, Locale.getDefault());
-                        try {
-                            List<Address> addresses = geocoder.getFromLocation(Latitude,Longitude,1);
-                            String Country = addresses.get(0).getCountryName();
-                            String City = addresses.get(0).getAdminArea();
-                            String area = addresses.get(0).getLocality();
-                            String Locate = area + ","+ City + "," + Country + ".";
-                            Location.setText(Locate);
-                            Log.e("LOc1", "onMenuItemClick: "+ Locate);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
                     }
                     else
                     {
@@ -190,19 +197,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                 Location location1 = locationResult.getLastLocation();
                                 Longitude = location1.getLongitude();
                                 Latitude = location1.getLatitude();
-                                Geocoder geocoder = new Geocoder(FoundObjectActivity.this, Locale.getDefault());
-                                try {
-                                    Log.e("LOc2", "onMenuItemClick: "+ Latitude + "    "+Longitude );
-                                    List<Address> addresses = geocoder.getFromLocation(Latitude,Longitude,1);
-                                    String Country = addresses.get(0).getCountryName();
-                                    String City = addresses.get(0).getAdminArea();
-                                    String area = addresses.get(0).getLocality();
-                                    String Locate = area + ","+ City + "," + Country + ".";
-                                    Location.setText(Locate);
-                                    Log.e("LOc1", "onMenuItemClick: "+ Locate);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
                             }
                         };
                         fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());

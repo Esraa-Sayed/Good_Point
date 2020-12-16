@@ -32,7 +32,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".detect_location"
+            android:name=".ui.lostFoundObject.detect_location"
             android:label="@string/title_activity_detect_location"></activity>
         <activity android:name=".ui.ForgetPasswordActivity" />
         <activity
