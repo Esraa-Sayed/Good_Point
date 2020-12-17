@@ -38,7 +38,7 @@ public class SignupActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener DateSet;
     private int year, month, Day;
     private ImageView image;
-    //Button CreateAccount;
+    Button CreateAccount;
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^" +
                     //"(?=.*[0-9])" +         //at least 1 digit
@@ -73,23 +73,26 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 m++;
-                if (y > year) {
+                if (y > year || (y == year && m > month) || (y == year && m > month && d > Day) ) {
                     Toast.makeText(SignupActivity.this, "", Toast.LENGTH_SHORT).show();
-                    String todayDate = year + "/" + (month + 1) + "/" + Day;
+                    String todayDate = Day + "/" + (month + 1) + "/" + year;
                     DateT.setText(todayDate);
-                } else {
+                }
+                else {
                     Toast.makeText(SignupActivity.this, "hi", Toast.LENGTH_SHORT).show();
                     String Date = d + "/" + m + "/" + y;
                     DateT.setText(Date);
                 }
             }
         };
-    /*CreateAccount.setOnClickListener(new View.OnClickListener() {
+    CreateAccount.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+            Toast.makeText(SignupActivity.this, "", Toast.LENGTH_SHORT).show();
+            confirmInput(view);
         }
-    });*/
+    });
+    /**/
     }
 
     protected void inti() {
@@ -99,7 +102,7 @@ public class SignupActivity extends AppCompatActivity {
         Country = findViewById(R.id.country);
         DateT = findViewById(R.id.Date);
         image = findViewById(R.id.im);
-       // CreateAccount = findViewById(R.id.createAccount);
+        CreateAccount = findViewById(R.id.createAccount);
         Calendar cal = Calendar.getInstance();//To get today's date
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
@@ -190,5 +193,5 @@ public class SignupActivity extends AppCompatActivity {
         input += "\n";
         input += "Password: " + Password.getText().toString();
         Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
-    }
+    }/**/
 }
