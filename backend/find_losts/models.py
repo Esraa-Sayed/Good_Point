@@ -26,7 +26,6 @@ class FoundObject(models.Model):
     date = models.DateTimeField(null=False)
     longitude = models.DecimalField()
     latitude = models.DecimalField()
-    street = models.CharField()
     city = models.CharField(max_length=35,null=False)
     is_delivered = models.BooleanField()
     user_id = models.ForeignKey(User, related_name='lost')
@@ -45,11 +44,11 @@ class FoundItem(models.Model):
 
 
 class Match(models.Model):
-    id_l = models.ForeignKey(LostObject, primary_key=True)
-    id_f = models.ForeignKey(LostObject, primary_key=True)
+    id_l = models.ForeignKey(LostObject, primary_key=True, on_delete=models.CASCADE(), null=False)
+    id_f = models.ForeignKey(LostObject, primary_key=True, on_delete=models.CASCADE(), null=False)
     date_of_receiving = models.DateTimeField(auto_now_add=True)
 
 
 class Candidate(models.Model):
-    id_l = models.ForeignKey(LostObject, primary_key=True)
-    id_f = models.ForeignKey(LostObject, primary_key=True)
+    id_l = models.ForeignKey(LostObject, primary_key=True, null=False)
+    id_f = models.ForeignKey(LostObject, primary_key=True, null=False)
