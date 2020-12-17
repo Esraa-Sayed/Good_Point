@@ -38,7 +38,7 @@ public class SignupActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener DateSet;
     private int year, month, Day;
     private ImageView image;
-    Button CreateAccount;
+    //Button CreateAccount;
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^" +
                     //"(?=.*[0-9])" +         //at least 1 digit
@@ -84,12 +84,12 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         };
-    CreateAccount.setOnClickListener(new View.OnClickListener() {
+    /*CreateAccount.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 
         }
-    });
+    });*/
     }
 
     protected void inti() {
@@ -99,13 +99,13 @@ public class SignupActivity extends AppCompatActivity {
         Country = findViewById(R.id.country);
         DateT = findViewById(R.id.Date);
         image = findViewById(R.id.im);
-        CreateAccount = findViewById(R.id.createAccount);
+       // CreateAccount = findViewById(R.id.createAccount);
         Calendar cal = Calendar.getInstance();//To get today's date
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
         Day = cal.get(Calendar.DAY_OF_MONTH);
         String TodayDate = Day + "/" + (month + 1) + "/" + year;
-        DateT.setText(TodayDate);
+        DateT.setText(TodayDate);/**/
     }
 
     @Override

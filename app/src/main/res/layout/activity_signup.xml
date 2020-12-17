@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.SignupActivity"
+    android:layout_gravity="center">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hello"/>
+</LinearLayout>-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -156,21 +169,16 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:background="#66B1BABA"/>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:gravity="center"
-            android:padding="@dimen/_5ssp">
-            <Button
-                android:layout_width="@dimen/_180sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:text="@string/CreateAccount"
-                android:textColor="#ffffff"
-                android:textSize="@dimen/_13ssp"
-                android:background="@drawable/custom_button"
-                android:id="@+id/createAccount"/>
-        </LinearLayout>
+
+        <Button
+            android:layout_width="@dimen/_180sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:text="@string/CreateAccount"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:textSize="@dimen/_13ssp"
+            android:background="@drawable/custom_button"
+            android:id="@+id/createAccount"/>
+       <!---->
     </LinearLayout>
 </ScrollView>
