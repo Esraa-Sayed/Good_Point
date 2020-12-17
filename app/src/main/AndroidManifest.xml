@@ -16,7 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MakeSelection"></activity>
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone"></activity>
+        <activity android:name=".ui.forgetPasswordScreens.VerifiyCode" />
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPassSuccessMessage" />
+        <activity android:name=".ui.forgetPasswordScreens.SetNewPassword" />
+        <activity android:name=".ui.forgetPasswordScreens.MakeSelection" />
         <activity android:name=".ui.WelcomeActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -33,7 +37,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".ui.ForgetPasswordActivity" />
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithEmail" />
         <activity android:name=".ui.FoundObjectActivity" />
         <activity
             android:name=".ui.lostObject.LostObjectDetailsActivity"

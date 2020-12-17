@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.forget).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, ForgetPasswordActivity.class));
+                    startActivity(new Intent(MainActivity.this, MakeSelection.class));
 
                 }
             });

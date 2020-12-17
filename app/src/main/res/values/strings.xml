@@ -98,4 +98,15 @@
     <string name="make_selection_detail1">+923335545644</string>
     <string name="via_mail">via mail:</string>
     <string name="mak_selection_details2">example@gmail.com</string>
+    <string name="forget_password2">Forget Password</string>
+    <string name="new_credentials">New credentials</string>
+    <string name="new_credentials_details">Your identity has been verified set your new password</string>
+    <string name="password_updated">Password Updated</string>
+    <string name="updated_details">Your Password has been updated</string>
+    <string name="login1">Login</string>
+    <string name="code">Code</string>
+    <string name="code_verification">Verification</string>
+    <string name="verify_code">Verify Code</string>
+    <string name="find_your_missed">Find your missed</string>
+    <string name="item_easy">item easy</string>
 </resources>
