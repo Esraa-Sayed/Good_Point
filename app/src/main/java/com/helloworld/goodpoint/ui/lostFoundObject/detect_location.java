@@ -46,8 +46,8 @@ public class detect_location extends FragmentActivity implements OnMapReadyCallb
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(Latitude, Longitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Your current location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng curLocation = new LatLng(Latitude, Longitude);
+        mMap.addMarker(new MarkerOptions().position(curLocation).title("Your current location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLocation,15));
     }
 }
