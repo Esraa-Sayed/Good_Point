@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -33,18 +34,17 @@
 
         <activity
             android:name=".ui.lostFoundObject.detect_location"
-            android:label="@string/title_activity_detect_location"></activity>
+            android:label="@string/title_activity_detect_location"/>
         <activity android:name=".ui.ForgetPasswordActivity" />
         <activity
             android:name=".ui.lostFoundObject.FoundObjectActivity"
-            android:label="@string/FoundItemDetails"
-            android:parentActivityName=".ui.MainActivity" />
+            android:label="@string/FoundItemDetails" />
         <activity
             android:name=".ui.lostFoundObject.LostObjectDetailsActivity"
-            android:label="@string/LostItemDetails"
-            android:parentActivityName=".ui.MainActivity" />
+            android:label="@string/LostItemDetails" />
         <activity android:name=".ui.ActionActivity" />
-        <activity android:name=".ui.HomeActivity" />
+        <activity android:name=".ui.HomeActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".ui.SignupActivity" />
         <activity android:name=".ui.SigninActivity" />
         <activity android:name=".ui.MainActivity">
