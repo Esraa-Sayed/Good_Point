@@ -78,7 +78,7 @@
         android:text="@string/SignIn"
         android:background="@drawable/oval"
         android:textColor="#ffffff"
-        android:id="@+id/sigin"/>
+        android:id="@+id/signin"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -135,6 +135,7 @@
             android:textSize="@dimen/_15sdp"
             android:text="@string/CreateNewAccount"
             android:textColor="#ffffff"
+            android:background="@drawable/custom_button"
             android:id="@+id/NewAccount"/>
 
 </LinearLayout>

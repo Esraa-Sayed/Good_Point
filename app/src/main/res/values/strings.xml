@@ -90,7 +90,7 @@
     <string name="CreateAccount">Create Account</string>
     <string name="GoodPoint"> Good Point </string>
     <string name="CreateNewAccount">Create New Account</string>
-    <string name="SignIn">SING IN</string>
+    <string name="SignIn">SIGN IN</string>
     <string name="RememberMe">Remember Me</string>
     <string name="or">or</string>
     <string name="ForgetPassword"><a href="http://www.google.com">Forget Password?</a></string>
