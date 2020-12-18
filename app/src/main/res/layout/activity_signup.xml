@@ -136,7 +136,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:hint="@string/Country"
+                    android:hint="@string/City"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
