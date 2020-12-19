@@ -33,7 +33,7 @@ import android.util.Patterns;
 
 public class SignupActivity extends AppCompatActivity {
     private TextView DateT;
-    private EditText UserName, Email, Password, Phone, Country;
+    private EditText UserName, Email, Password, Phone, City;
     private DatePickerDialog.OnDateSetListener DateSet;
     private int year, month, Day;
     private ImageView image;
@@ -53,6 +53,7 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        //getSupportActionBar().setTitle("Sing up");
         inti();
         if(savedInstanceState != null )
         {
@@ -106,7 +107,7 @@ public class SignupActivity extends AppCompatActivity {
         UserName = findViewById(R.id.Name);
         Email = findViewById(R.id.Email);
         Password = findViewById(R.id.Pass);
-        Country = findViewById(R.id.country);
+        City = findViewById(R.id.country);
         DateT = findViewById(R.id.Date);
         image = findViewById(R.id.im);
         registerForContextMenu(image);

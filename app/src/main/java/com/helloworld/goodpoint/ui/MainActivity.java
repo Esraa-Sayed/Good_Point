@@ -10,13 +10,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PrefManager prefManager = new PrefManager(getApplicationContext());
+        setContentView(R.layout.activity_main);
         if (prefManager.isFirstTimeLaunch()) {
             prefManager.setFirstTimeLaunch(true);
             startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
             finish();
         }
         else {
-            setContentView(R.layout.activity_main);
+
             startActivity(new Intent(this,SigninActivity.class));
             finish();
         }

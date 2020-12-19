@@ -29,9 +29,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setToolBarAndDrawer();
 
         ///*
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.home_frag,new HomeFragment());
-        ft.commitNow();
+       // FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+      //  ft.replace(R.id.home_frag,new HomeFragment());
+      //  ft.commitNow();
         //*/
 
     }
