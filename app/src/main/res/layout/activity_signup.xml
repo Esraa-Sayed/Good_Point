@@ -11,19 +11,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/_10sdp">
+        android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="@dimen/_150sdp"
             android:layout_height="@dimen/_120sdp"
             android:src="@drawable/ic_baseline_account_circle_150"
             android:layout_gravity="center"
-            android:id="@+id/im"/>
+            android:id="@+id/im"
+            android:layout_marginTop="@dimen/_20sdp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_margin="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_15sdp">
             <ImageView
 
@@ -51,7 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_15sdp">
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_margin="@dimen/_10sdp">
             <ImageView
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -74,7 +76,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_15sdp">
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_margin="@dimen/_10sdp">
             <ImageView
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -100,7 +103,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_15sdp">
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_margin="@dimen/_10sdp">
             <ImageView
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -122,7 +126,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_15sdp">
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_margin="@dimen/_10sdp">
             <ImageView
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -145,7 +150,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/_15sdp"
-            android:padding="@dimen/_10ssp">
+            android:padding="@dimen/_10ssp"
+            android:layout_margin="@dimen/_10sdp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -169,11 +175,12 @@
         <Button
             android:layout_width="@dimen/_180sdp"
             android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:text="@string/CreateAccount"
             android:textColor="#ffffff"
             android:layout_gravity="center"
             android:textSize="@dimen/_13ssp"
-            android:background="@drawable/oval"
+            android:background="@drawable/custom_button"
             android:id="@+id/createAccount"/>
        <!---->
     </LinearLayout>
