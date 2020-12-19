@@ -21,24 +21,6 @@ public class MainActivity extends AppCompatActivity {
             prefManager.setFirstTimeLaunch(true);
             startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
             finish();
-        } else {
-            setContentView(R.layout.activity_main);
-            findViewById(R.id.btn_play_again).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PrefManager prefManager = new PrefManager(getApplicationContext());
-                    prefManager.setFirstTimeLaunch(true);
-                    startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
-                    finish();
-                }
-            });
-            findViewById(R.id.forget).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, MakeSelection.class));
-
-                }
-            });
         }
     }
 }
