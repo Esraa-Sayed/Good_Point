@@ -17,7 +17,6 @@ import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.NotificationItem;
 import com.helloworld.goodpoint.ui.NotificationFragment;
 
-import java.util.Calendar;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
