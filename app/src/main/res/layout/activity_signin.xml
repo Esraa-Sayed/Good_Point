@@ -115,7 +115,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/Country"
+                    android:hint="@string/City"
                     android:background="#ffffff"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
