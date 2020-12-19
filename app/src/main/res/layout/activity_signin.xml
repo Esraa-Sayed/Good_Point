@@ -78,7 +78,7 @@
         android:text="@string/SignIn"
         android:background="@drawable/oval"
         android:textColor="#ffffff"
-        android:id="@+id/sigin"/>
+        android:id="@+id/signin"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
             android:layout_centerInParent ="true"
             android:linksClickable="true" />
     </LinearLayout>
-   <LinearLayout
+  <!-- <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:orientation="horizontal"
@@ -126,7 +126,7 @@
            android:layout_marginTop="@dimen/_9sdp"
            android:layout_marginRight="@dimen/_20sdp"/>
 
-   </LinearLayout>
+   </LinearLayout>-->
         <Button
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_30sdp"
@@ -134,8 +134,8 @@
             android:layout_height="@dimen/_40sdp"
             android:textSize="@dimen/_15sdp"
             android:text="@string/CreateNewAccount"
-            android:background="@drawable/custom_button"
             android:textColor="#ffffff"
+            android:background="@drawable/custom_button"
             android:id="@+id/NewAccount"/>
 
 </LinearLayout>

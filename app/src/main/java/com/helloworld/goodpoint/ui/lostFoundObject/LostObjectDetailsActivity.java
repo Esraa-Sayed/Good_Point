@@ -1,6 +1,5 @@
-package com.helloworld.goodpoint.ui;
+package com.helloworld.goodpoint.ui.lostFoundObject;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -9,7 +8,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -34,7 +32,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private DatePickerDialog.OnDateSetListener DateSet;
     private AutoCompleteTextView autoCom;
     private int year, month, Day;
-
     List<String> list;
 
     @Override
@@ -47,7 +44,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 m++;
                 if (y > year || (m > month && y >= year)|| (d > Day && m >= month && y >= year)) {
-                    Toast.makeText(LostObjectDetailsActivity.this, "Unknown date", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LostObjectDetailsActivity.this, "Invalid date", Toast.LENGTH_LONG).show();
                     String todayDate = year + "/" + (month + 1) + "/" + Day;
                     DateT.setText(todayDate);
                 } else {
@@ -95,17 +92,19 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
        switch (view.getId() )
         { case R.id.Person:
             FT.replace(R.id.FragmentID,PersonF,null);
+            Person.setTextColor(0xFFF38E3A);
+            Object.setTextColor(Color.BLACK);
+
             FT.commit();
             break;
-
             case R.id.Object:
-
             FT.replace(R.id.FragmentID,ObjectF,null);
+            Object.setTextColor(0xFFF38E3A);
+            Person.setTextColor(Color.BLACK);
+
             FT.commit();
             break;
-
             case  R.id.Date:
-
             DatePickerDialog dialog = new DatePickerDialog(
                     LostObjectDetailsActivity.this,
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,

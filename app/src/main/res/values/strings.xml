@@ -2,8 +2,33 @@
     <string name="app_name">Good Point</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ObjectMissing">Object Missing</string>
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
     <string name="ItemMissing">Item Missing</string>
     <string name="dateOfMissing">Date of missing</string>
+    <string name="LostItemDetails">Lost object details</string>
+    <string name="TypeOfTheObject">Type of the object</string>
+    <string name="Person">Person</string>
+    <string name="Item">Item</string>
+    <string name="AddImageOfPerson">Add image of person</string>
+    <string name="AddItemDetails">Add item details</string>
+    <string name="SerialID">Serial ID</string>
+    <string name="Match">Match</string>
+    <string name="Description">Description</string>
+    <string name="ColorOfObject">Color</string>
+    <string-array name="Types">
+        <item>Type</item>
+        <item>Phone</item>
+        <item>Labtob</item>
+        <item>Wallet</item>
+        <item>Bag</item>
+        <item>Watch</item>
+        <item>Money</item>
+        <item>Glasses or sunglasses</item>
+        <item>Books</item>
+        <item>Others</item>
+    </string-array>
     <string name="City">City</string>
     <string name="Cairo">Cairo</string>
     <string name="Alexandria">Alexandria</string>
@@ -29,41 +54,50 @@
     <string name="ShibinElKom">Shibin El Kom</string>
     <string name="Banha">Banha</string>
     <string name="Arish">Arish</string>
-    <string name="LostItemDetails">Lost item details</string>
-    <string name="TypeOfTheItem">Type of the item</string>
-    <string name="Person">Person</string>
-    <string name="Object">Object</string>
-    <string name="AddImageOfPerson">Add image of person</string>
-    <string name="AddObjectDetails">Add object details</string>
-    <string name="SerialID">Serial ID</string>
-    <string name="Match">Match</string>
-    <string name="Description">Description</string>
-    <string-array name="Types">
-        <item>Type</item>
-        <item>Phone</item>
-        <item>Labtob</item>
-        <item>Wallet</item>
-        <item>Bag</item>
-        <item>Watch</item>
-        <item>Money</item>
-        <item>Glasses or sunglasses</item>
-        <item>Books</item>
-        <item>Others</item>
-    </string-array>
+    <string name="Red"> Red</string>
+    <string name="Yellow">Yellow</string>
+    <string name="Blue">Blue</string>
+    <string name="Orange">Orange</string>
+    <string name="Green">Green</string>
+    <string name="Violet">Violet</string>
+    <string name="Brown">Brown</string>
+    <string name="Magenta">Magenta</string>
+    <string name="Tan">Tan</string>
+    <string name="Cyan">Cyan</string>
+    <string name="Olive">Olive</string>
+    <string name="Pink">Pink</string>
+    <string name="Black">Black</string>
+    <string name="White">White</string>
+    <string name="Gray">Gray</string>
+    <string name="Purple">Purple</string>
+    <string name="TheBrand">The brand</string>
+    <string name="ObjectFound">Object found</string>
+    <string name="dateOfFound">Date of found</string>
+    <string name="ObjectLocation">Location</string>
+    <string name="FoundItemDetails">Found object details</string>
+    <string name="CurrentLocation">My current location</string>
+    <string name="LocatingPlace">Locating the place</string>
+    <string name="title_activity_detect_location">Map</string>
+
 
 
     <string name="UserName"> User Name</string>
     <string name="Email"> Email</string>
     <string name="Password"> Password</string>
     <string name="PhoneNumber"> Phone Number</string>
-    <string name="Country"> Country</string>
     <string name="BirthOfDate"> Birth of date </string>
     <string name="CreateAccount">Create Account</string>
     <string name="GoodPoint"> Good Point </string>
     <string name="CreateNewAccount">Create New Account</string>
-    <string name="SignIn">SING IN</string>
+    <string name="SignIn">SIGN IN</string>
     <string name="RememberMe">Remember Me</string>
     <string name="or">or</string>
+    <string name="Signup">Sign up</string>
     <string name="ForgetPassword"><a href="http://www.google.com">Forget Password?</a></string>
+
+    <string name="capture">Capture Image</string>
+    <string name="choose">Choose From Gallery</string>
+
+    <string name="delete">Delete</string>
 
 </resources>
