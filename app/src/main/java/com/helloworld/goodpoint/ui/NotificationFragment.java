@@ -3,35 +3,26 @@ package com.helloworld.goodpoint.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.adapter.NotificationListAdapter;
 import com.helloworld.goodpoint.pojo.NotificationItem;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
 public class NotificationFragment extends Fragment {
-
     List<NotificationItem> list;
     ListView listView;
     TextView noNotification;
-
     public NotificationFragment() {
         // Required empty public constructor
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +42,11 @@ public class NotificationFragment extends Fragment {
         list.add(item);
         item = new NotificationItem("Sixth Title", "13/12/2020", "this is a description 6",null);
         list.add(item);//*/
-    }
+        }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_notification, container, false);
         init(v);
         updateFragmentView();

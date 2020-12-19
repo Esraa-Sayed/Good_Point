@@ -7,24 +7,18 @@
     tools:context=".ui.SigninActivity"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:background="@drawable/ic_home_background"
-   >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:textSize="@dimen/_34sdp"
-        android:layout_marginTop="@dimen/_70sdp"
-        android:layout_marginLeft="@dimen/_125sdp"
-        android:text="Good Point"/>
+    android:layout_margin="20dp">
 
-
+        <ImageButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/account_circle"
+            android:background="#ffffff"
+            android:layout_gravity="center"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_100sdp"
-            android:layout_marginLeft="@dimen/_15sdp">
+            android:orientation="horizontal">
             <ImageView
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
@@ -36,20 +30,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:layout_marginRight="@dimen/_20sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/UserName"
                     android:inputType="text"
-                    android:id="@+id/email"/>
+                    android:background="#ffffff"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_15sdp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_email_24"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Email"
+                    android:background="#ffffff"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
             <ImageView
                 android:layout_marginTop="20dp"
@@ -63,12 +74,52 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_20sdp"
                     android:hint="@string/Password"
-                    android:inputType="textWebPassword"
-                    android:id="@+id/pass"/>
+                    android:background="#ffffff"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_phone_android_24"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/PhoneNumber"
+                    android:background="#ffffff"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_room_24"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="MissingClass">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Country"
+                    android:background="#ffffff"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
     <Button
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_30sdp"
@@ -138,4 +189,5 @@
             android:background="@drawable/custom_button"
             android:id="@+id/NewAccount"/>
 
-</LinearLayout>
+
+    </LinearLayout>

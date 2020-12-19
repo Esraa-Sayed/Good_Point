@@ -29,8 +29,6 @@ import com.helloworld.goodpoint.R;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.regex.Pattern;
-
-import com.helloworld.goodpoint.R;
 import android.util.Patterns;
 
 public class SignupActivity extends AppCompatActivity {
@@ -120,7 +118,6 @@ public class SignupActivity extends AppCompatActivity {
         String TodayDate = Day + "/" + (month + 1) + "/" + year;
         DateT.setText(TodayDate);/**/
     }
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);

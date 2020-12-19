@@ -3,6 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ObjectMissing">Object Missing</string>
+
     <string name="nav_drawer_open">Open navigation drawer</string>
     <string name="nav_drawer_close">Close navigation drawer</string>
     <string name="ItemMissing">Item Missing</string>
@@ -79,8 +80,6 @@
     <string name="LocatingPlace">Locating the place</string>
     <string name="title_activity_detect_location">Map</string>
 
-
-
     <string name="UserName"> User Name</string>
     <string name="Email"> Email</string>
     <string name="Password"> Password</string>
@@ -94,9 +93,35 @@
     <string name="or">or</string>
     <string name="ForgetPassword"><a href="http://www.google.com">Forget Password?</a></string>
 
+
     <string name="capture">Capture Image</string>
     <string name="choose">Choose From Gallery</string>
 
     <string name="delete">Delete</string>
 
+
+    <string name="HelpOthers">Help others easy if you found anything</string>
+    <string name="Skip">Skip</string>
+    <string name="skip">Skip</string>
+    <string name="play_again">play_again</string>
+    <string name="next">Next  ></string>
+    <string name="next_btn">Next</string>
+    <string name="start">Start</string>
+    <string name="forget_pass_details">provide your account\'s email for which you want to reset your password</string>
+    <string name="make_selection">Make Selection</string>
+    <string name="via_sms">via sms:</string>
+    <string name="make_selection_detail1">+923335545644</string>
+    <string name="via_mail">via mail:</string>
+    <string name="mak_selection_details2">example@gmail.com</string>
+    <string name="forget_password2">Forget Password</string>
+    <string name="new_credentials">New credentials</string>
+    <string name="new_credentials_details">Your identity has been verified set your new password</string>
+    <string name="password_updated">Password Updated</string>
+    <string name="updated_details">Your Password has been updated</string>
+    <string name="login1">Login</string>
+    <string name="code">Code</string>
+    <string name="code_verification">Verification</string>
+    <string name="verify_code">Verify Code</string>
+    <string name="find_your_missed">Find your missed</string>
+    <string name="item_easy">item easy</string>
 </resources>
