@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.ContextMenu;
@@ -39,6 +40,7 @@ public class SignupActivity extends AppCompatActivity {
     private int year, month, Day;
     private ImageView image;
     Button CreateAccount;
+    Bitmap Bitmap_Image ; Uri imageUri;
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^" +
                     //"(?=.*[0-9])" +         //at least 1 digit
@@ -54,6 +56,13 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         inti();
+        if(savedInstanceState != null )
+        {
+            Bitmap_Image = savedInstanceState.getParcelable("BitmapImage");
+            if(Bitmap_Image != null){
+                image.setImageBitmap(Bitmap_Image);
+            }
+        }
         DateT.setOnClickListener(new View.OnClickListener() {
             // @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -102,6 +111,7 @@ public class SignupActivity extends AppCompatActivity {
         Country = findViewById(R.id.country);
         DateT = findViewById(R.id.Date);
         image = findViewById(R.id.im);
+        registerForContextMenu(image);
         CreateAccount = findViewById(R.id.createAccount);
         Calendar cal = Calendar.getInstance();//To get today's date
         year = cal.get(Calendar.YEAR);
@@ -143,6 +153,20 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10 && resultCode == RESULT_OK) {
+            Bitmap_Image = (Bitmap) data.getExtras().get("data");
+            image.setImageBitmap(Bitmap_Image);
+        }
+        if (requestCode == 11 && resultCode == RESULT_OK) {
+            imageUri = data.getData();
+            try {
+                Bitmap_Image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            } catch (IOException e) {
+                Toast.makeText(this,"Dina",Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            image.setImageURI(imageUri);
+        }
     }
     private boolean validateEmail() {
         String emailInput = Email.getText().toString().trim();
@@ -194,4 +218,9 @@ public class SignupActivity extends AppCompatActivity {
         input += "Password: " + Password.getText().toString();
         Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
     }/**/
+    public void onSaveInstanceState(@NonNull Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("BitmapImage",Bitmap_Image);
+    }
 }
