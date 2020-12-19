@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.helloworld.goodpoint">
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the "MyLocation" functionality.
-    -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -17,20 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone"></activity>
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone"/>
         <activity android:name=".ui.forgetPasswordScreens.VerifiyCode" />
         <activity android:name=".ui.forgetPasswordScreens.ForgetPassSuccessMessage" />
         <activity android:name=".ui.forgetPasswordScreens.SetNewPassword" />
         <activity android:name=".ui.forgetPasswordScreens.MakeSelection" />
         <activity android:name=".ui.WelcomeActivity" />
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -40,21 +27,14 @@
         <activity
             android:name=".ui.lostFoundObject.detect_location"
             android:label="@string/title_activity_detect_location"/>
-        <activity android:name=".ui.ForgetPasswordActivity" />
         <activity
             android:name=".ui.lostFoundObject.FoundObjectActivity"
             android:label="@string/FoundItemDetails" />
-        <activity
-            android:name=".ui.lostFoundObject.LostObjectDetailsActivity"/>
         <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithEmail" />
-        <activity android:name=".ui.FoundObjectActivity" />
         <activity
-            android:name=".ui.lostObject.LostObjectDetailsActivity"
+            android:name=".ui.lostFoundObject.LostObjectDetailsActivity"
             android:label="@string/LostItemDetails" />
         <activity android:name=".ui.ActionActivity" />
-
-        <activity android:name=".ui.HomeActivity" />
-        <activity android:name=".ui.SignupActivity" />
 
         <activity android:name=".ui.HomeActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
