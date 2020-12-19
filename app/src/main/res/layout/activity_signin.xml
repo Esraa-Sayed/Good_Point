@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.SigninActivity"
     android:orientation="vertical"
+    android:layout_gravity="center"
     android:background="@drawable/ic_home_background"
     >
     <TextView
@@ -12,8 +13,8 @@
         android:layout_height="wrap_content"
         android:textColor="#ffffff"
         android:textSize="@dimen/_25sdp"
-        android:layout_marginTop="@dimen/_70sdp"
-        android:layout_marginLeft="@dimen/_125sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginLeft="@dimen/_130sdp"
         android:text="Good Point"/>
 
 
