@@ -4,10 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.SigninActivity"
-    android:orientation="vertical"
-    android:layout_gravity="center"
-    android:background="@drawable/ic_home_background"
-    >
+    android:orientation = "vertical"
+    android:layout_gravity = "center">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,16 +29,16 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_person_24"/>
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/usernameWrapper"
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
-                android:layout_marginRight="@dimen/_20sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/UserName"
+                android:hint="@string/Email"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:inputType="text"
-                android:id="@+id/email"/>
+                android:id="@+id/Name" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
@@ -51,11 +49,11 @@
         android:layout_marginLeft="@dimen/_15sdp"
         android:orientation="horizontal">
         <ImageView
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_lock_24"/>
+            android:layout_marginTop = "@dimen/_20sdp"
+            android:layout_marginRight = "@dimen/_10sdp"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:src = "@drawable/ic_baseline_lock_24"/>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
