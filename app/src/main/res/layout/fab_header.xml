@@ -7,8 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/Add_point"
-        android:paddingLeft="10.00dp"
-        android:textSize="20.00sp"
+        android:paddingLeft="@dimen/_8sdp"
+        android:textSize="@dimen/_16ssp"
         android:textColor="#000000">
     </TextView>
 
