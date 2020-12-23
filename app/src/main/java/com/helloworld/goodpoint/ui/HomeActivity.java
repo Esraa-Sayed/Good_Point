@@ -6,12 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.helloworld.goodpoint.R;
 
@@ -20,6 +25,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Toolbar toolbar;
     AlertDialog.Builder dialog;
+    BottomNavigationView bottomNavigationView;
+    FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +41,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
       //  ft.replace(R.id.home_frag,new HomeFragment());
       //  ft.commitNow();
         //*/
+
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        //To Disable item under Fab
+        Menu menuNav=bottomNavigationView.getMenu();
+        MenuItem nav_item2 = menuNav.findItem(R.id.placeholder);
+        nav_item2.setEnabled(false);
+
+        bottomNavigationView.setBackgroundColor(0); //To hide the color of nav view
+        bottomNavigationView.setOnNavigationItemSelectedListener(navListner);
+
+
+        //To make first fragment is home when opening the app
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
 
     }
 
@@ -107,4 +130,36 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         else
             super.onBackPressed();
     }
+
+    public void showPopup(View v){ //Fab Action
+        FabFragment fabFragment = new FabFragment();
+        fabFragment.show(getSupportFragmentManager(), fabFragment.getTag());
+    }
+
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListner =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment selectedFragment = null;
+
+                    switch (item.getItemId()) {
+                        case R.id.miHome:
+                            selectedFragment = new HomeFragment();
+                            break;
+                        case R.id.miMatch:
+                            selectedFragment = new MatchFragment();
+                            break;
+                        case R.id.miProfile:
+                            //selectedFragment = new ProfileFragment();
+                            selectedFragment = new NotificationFragment();
+                            break;
+                        case R.id.miLocation:
+                            selectedFragment = new MapFragment();
+                            break;
+                    }
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                    return true;
+                }
+            };
 }

@@ -1,66 +1,91 @@
 package com.helloworld.goodpoint.ui;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+
+import androidx.fragment.app.Fragment;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.adapter.MyExpandableListAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class HomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    List<String> groupList;
+    List<String> childList;
+    Map<String, List<String>> objects; //To link group list with child list
+    ExpandableListView expandableListView;
+    ExpandableListAdapter expandableListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_home, container, false);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        createGroupList();
+        createObjects();
+
+        expandableListView = v.findViewById(R.id.expanded_menu);
+        expandableListAdapter = new MyExpandableListAdapter(getActivity(), groupList, objects); //getActivity
+        expandableListView.setAdapter(expandableListAdapter);
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            int lastExpandedPosition = -1;
+            @Override
+            public void onGroupExpand(int i) {
+                if(lastExpandedPosition != -1 && i != lastExpandedPosition){
+                    expandableListView.collapseGroup(lastExpandedPosition);
+                }
+                lastExpandedPosition = i;
+            }
+        });
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int i, int i1, long l) {
+                String selected = expandableListAdapter.getChild(i,i1).toString();
+                return true;
+            }
+        });
+
+        return  v;
     }
+
+
+    private void createObjects() {
+        String[] LossesObjects = {"Mobile HUAWEI", "Black wallet", "Child", "ID card"};
+        String[] FindingsObjects = {"Money 250 L.E", "White Cat", "Laptop Dell", "Gray Wristwatch"};
+
+        objects = new HashMap<String, List<String>>();
+        for (String group : groupList){
+            if (group.equals(getString(R.string.Losses))){
+                loadChild(LossesObjects);
+            }
+            else if (group.equals(getString(R.string.Founds)))
+                loadChild(FindingsObjects);
+            objects.put(group, childList);
+        }
+    }
+
+    private void loadChild(String[] AllObjects) {
+        childList = new ArrayList<>();
+        for (String obj : AllObjects)
+            childList.add(obj);
+    }
+
+
+    private void createGroupList() {
+        groupList = new ArrayList<>();
+        groupList.add(getString(R.string.Losses));
+        groupList.add(getString(R.string.Founds));
+    }
+
 }

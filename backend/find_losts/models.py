@@ -17,7 +17,9 @@ class LostPerson(models.Model):
 
 class LostItem(models.Model):
     id_l = models.ForeignKey(LostObject, primary_key=True)
-    type = models.CharField(max_length=20,null=False)
+    type = models.CharField(max_length=20)
+    color = models.CharField(max_length=20, null=True)
+    brand = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=700)
     serial_number = models.CharField(max_length=100,null=True)
 
@@ -38,7 +40,9 @@ class FoundPerson(models.Model):
 
 class FoundItem(models.Model):
     id_f = models.ForeignKey(LostObject, primary_key=True)
-    type = models.CharField(max_length=20, null=False)
+    type = models.CharField(max_length=20)
+    color = models.CharField(max_length=20, null=True)
+    brand = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=700)
     serial_number = models.CharField(max_length=100, null=True)
 

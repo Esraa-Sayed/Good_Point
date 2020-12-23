@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
 
-            startActivity(new Intent(this,SigninActivity.class));
+            startActivity(new Intent(this,HomeActivity.class));
             finish();
         }
     }
