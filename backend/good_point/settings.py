@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_account',
     'find_losts',
+    'notification',
 ]
 
 MIDDLEWARE = [

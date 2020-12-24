@@ -10,4 +10,4 @@ class Notification(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
     is_archived = models.BooleanField(default=False)
-    user_id = models.ForeignKey(User, related_name='notified')
+    user_id = models.ForeignKey(User, related_name='notified', on_delete=models.DO_NOTHING, db_column='user_id')
