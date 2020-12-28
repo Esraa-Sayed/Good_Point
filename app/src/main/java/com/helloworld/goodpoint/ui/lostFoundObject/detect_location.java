@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +31,7 @@ public class detect_location extends FragmentActivity implements OnMapReadyCallb
         Intent intent = getIntent();
         Latitude = intent.getExtras().getDouble("Latitude");
         Longitude = intent.getExtras().getDouble("Longitude");
+        Toast.makeText(this,Latitude + "  "+Longitude,Toast.LENGTH_LONG);
     }
 
     /**
@@ -44,7 +46,6 @@ public class detect_location extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         // Add a marker in Sydney and move the camera
         LatLng curLocation = new LatLng(Latitude, Longitude);
         mMap.addMarker(new MarkerOptions().position(curLocation).title("Your current location"));
