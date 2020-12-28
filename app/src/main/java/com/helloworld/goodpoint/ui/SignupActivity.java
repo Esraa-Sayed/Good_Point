@@ -101,7 +101,7 @@ public class SignupActivity extends AppCompatActivity {
     CreateAccount.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Toast.makeText(SignupActivity.this, "", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(SignupActivity.this, "", Toast.LENGTH_SHORT).show();
             confirmInput(view);
         }
     });
@@ -188,19 +188,7 @@ public class SignupActivity extends AppCompatActivity {
             return true;
         }
     }
-    private boolean validatephone() {
-        String emailInput = Phone.getText().toString().trim();
-        if (emailInput.isEmpty()) {
-            Email.setError("Field can't be empty");
-            return false;
-        } else if (emailInput.length() != 11) {
-            Email.setError("Please enter a valid phone number");
-            return false;
-        } else {
-            Email.setError(null);
-            return true;
-        }
-    }
+
     private boolean validateUsername() {
         String usernameInput = UserName.getText().toString().trim();
         if (usernameInput.isEmpty()) {
@@ -239,9 +227,29 @@ public class SignupActivity extends AppCompatActivity {
             city.setError(null);
             return true;
         }
-    }
+    }//
+    private boolean validatePhone() {
+        String pInput = Phone.getText().toString().trim();
+        if (pInput.isEmpty()) {
+            Phone.setError("Field can't be empty");
+            return false;
+        } else if (pInput.length() != 11) {
+            Phone.setError("Please enter a valid phone number");
+            return false;
+        } else {
+            try{
+                int i=Integer.parseInt(pInput);
+                Phone.setError("Please enter a valid phone number");
+            }
+            catch (Exception e){
+                Phone.setError(null);
+            }
+
+            return true;
+        }
+    }//| !validatePhone()
     public void confirmInput(View v) {
-        if (!validateEmail() | !validateUsername() | !validatePassword() | !validatephone() ||!validateCity()) {
+        if (!validateEmail() | !validateUsername() | !validatePassword()  |!validateCity()) {
             return;
         }
         String input = "Email: " + Email.getText().toString();
