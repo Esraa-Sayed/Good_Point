@@ -106,6 +106,9 @@
     <string name="Losses"><b>The Losses</b></string>
     <string name="Founds">The Findings</string>
 
+    <string name="button_lost"><b><i>Lost</i></b></string>
+    <string name="button_found"><b><i>Found</i></b></string>
+
     <string name="capture">Capture Image</string>
     <string name="choose">Choose From Gallery</string>
 

@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_account',
     'find_losts',
+    'notification',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +79,12 @@ WSGI_APPLICATION = 'good_point.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Good_Point',
+        'USER': 'postgres',
+        'PASSWORD': '[,]f,dkj2020',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 

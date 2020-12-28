@@ -1,10 +1,12 @@
 package com.helloworld.goodpoint.ui.lostFoundObject;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -29,11 +31,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.helloworld.goodpoint.R;
@@ -53,6 +59,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private Fragment PersonF, ObjectF;
      double Latitude;
      double Longitude;
+     int place_picker_request = 1;
     FusedLocationProviderClient fusedLocationProviderClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,10 +134,17 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                 }
                                 break;
                             case R.id.DeteLocation:
-                               Intent intent = new Intent(FoundObjectActivity.this, detect_location.class);
-                               intent.putExtra("Latitude",Latitude);
-                               intent.putExtra("Longitude",Longitude);
-                               startActivity(intent);
+                                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                                try {
+                                    Intent intent = builder.build(FoundObjectActivity.this);
+                                    startActivityForResult(intent,place_picker_request);
+                                }
+                                catch (GooglePlayServicesRepairableException e) {
+                                    e.printStackTrace();
+                                    Log.e("Crash", "onMenuItemClick: " + e.getMessage() );
+                                } catch (GooglePlayServicesNotAvailableException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                         }
                         return true;
@@ -154,6 +168,30 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 break;
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == place_picker_request && resultCode == RESULT_OK)
+        {
+            Place place = PlacePicker.getPlace(data,this);
+            StringBuilder stringBuilder = new  StringBuilder();
+            Latitude = place.getLatLng().latitude;
+            Longitude = place.getLatLng().longitude;
+            Geocoder geocoder = new Geocoder(FoundObjectActivity.this, Locale.getDefault());
+            try {
+                List<Address> addresses = geocoder.getFromLocation(Latitude,Longitude,1);
+                String Country = addresses.get(0).getCountryName();
+                String City = addresses.get(0).getAdminArea();
+                String area = addresses.get(0).getLocality();
+                String Locate = area + ","+ City + "," + Country + ".";
+                Location.setText(Locate);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == 12 && (grantResults.length > 0) &&
@@ -192,7 +230,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     }
                     else
                     {
-                        LocationRequest locationRequest = new LocationRequest()
+                        @SuppressLint("RestrictedApi") LocationRequest locationRequest = new LocationRequest()
                                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                                 .setInterval(10000)
                                 .setFastestInterval(1000)

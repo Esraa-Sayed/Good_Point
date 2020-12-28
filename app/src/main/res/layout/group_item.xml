@@ -3,14 +3,14 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/radius_expand"
-    android:padding="10.00dp">
+    android:padding="@dimen/_8sdp">
 
     <TextView
         android:id="@+id/group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="30.00dp"
-        android:textSize="16.00sp"
+        android:paddingLeft="@dimen/_23sdp"
+        android:textSize="@dimen/_13ssp"
         android:textColor="#FD9727"
         android:text="" />
 

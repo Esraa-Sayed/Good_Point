@@ -10,3 +10,6 @@ class User(AbstractUser):
     city = models.CharField(max_length=35, null=False)
     profile_pic = models.BinaryField(blank=True, null=True)
     id_card_pic = models.BinaryField(blank=True, null=True)
+    
+    class Meta:
+        db_table = 'user'
