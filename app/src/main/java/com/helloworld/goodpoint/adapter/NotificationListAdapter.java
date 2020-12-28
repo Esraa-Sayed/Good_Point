@@ -15,8 +15,10 @@ import androidx.annotation.Nullable;
 
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.NotificationItem;
-import com.helloworld.goodpoint.ui.NotificationFragment;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,13 +27,11 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
 
     Context context;
     List<NotificationItem> list;
-    NotificationFragment fragment;
 
-    public NotificationListAdapter(@NonNull Context context, int resource, @NonNull List<NotificationItem> list, NotificationFragment fragment) {
+    public NotificationListAdapter(@NonNull Context context, int resource, @NonNull List<NotificationItem> list) {
         super(context, resource, list);
         this.context = context;
         this.list = list;
-        this.fragment = fragment;
     }
 
     @NonNull
@@ -48,54 +48,24 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         }else
             viewHolder = (ViewHolder) notificationItem.getTag();
 
-        if(!list.get(revposition).isRead())
-            setItemRead(viewHolder,revposition);
+        if(list.get(revposition).isRead())
+            viewHolder.getLayout().setBackgroundColor(Color.WHITE);
         else
-            setItemNotRead(viewHolder);
-
-        viewHolder.getArchive().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                list.remove(revposition);
-                if(list.isEmpty())
-                    fragment.updateFragmentView();
-                else
-                    notifyDataSetChanged();
-            }
-        });
+            viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.light_orange));
 
         setItemDetails(viewHolder,revposition);
 
         return notificationItem;
     }
 
-    private void setItemDetails(ViewHolder viewHolder, int revposition) {
+    private void setItemDetails(@NotNull ViewHolder viewHolder, int revposition) {
         viewHolder.getTitle().setText(list.get(revposition).getTitle());
-        viewHolder.getDate().setText(list.get(revposition).getDate());
+        Date date = list.get(revposition).getDate();
+        String date_time = date.getDate()+"/"+(date.getMonth()+1)+"/"+(date.getYear()+1900)+" "+date.getHours()+":"+date.getMinutes();
+        viewHolder.getDate().setText(date_time);
         viewHolder.getDescription().setText(list.get(revposition).getDescription());
         if(list.get(revposition).getImage() != null)
             viewHolder.getImageView().setImageBitmap(list.get(revposition).getImage());
-    }
-
-    private void setItemNotRead(ViewHolder viewHolder) {
-        viewHolder.getRead().setVisibility(View.GONE);
-        viewHolder.getLayout().setBackgroundColor(Color.WHITE);
-        viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button2));
-    }
-
-    private void setItemRead(ViewHolder viewHolder, final int position) {
-        viewHolder.getRead().setVisibility(View.VISIBLE);
-        viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
-        viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
-        viewHolder.getRead().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
-
-        viewHolder.getRead().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                list.get(position).setRead(true);
-                notifyDataSetChanged();
-            }
-        });
     }
 
     private View createItem(ViewGroup parent) {
@@ -106,7 +76,6 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
     private class ViewHolder{
         private View convertView;
         private TextView title, date, description;
-        private Button archive, read;
         private CircleImageView imageView;
         private LinearLayout layout;
 
@@ -130,18 +99,6 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             if(description == null)
                 description = convertView.findViewById(R.id.notification_description);
             return description;
-        }
-
-        public Button getArchive() {
-            if(archive == null)
-                archive = convertView.findViewById(R.id.notification_archive);
-            return archive;
-        }
-
-        public Button getRead() {
-            if(read == null)
-                read = convertView.findViewById(R.id.notification_read);
-            return read;
         }
 
         public CircleImageView getImageView() {

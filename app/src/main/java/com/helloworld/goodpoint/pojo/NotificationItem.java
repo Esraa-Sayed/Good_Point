@@ -2,14 +2,16 @@ package com.helloworld.goodpoint.pojo;
 
 import android.graphics.Bitmap;
 
+import java.util.Date;
+
 public class NotificationItem {
     String title;
-    String date;
+    Date date;
     String description;
     Bitmap image;
     boolean read;
 
-    public NotificationItem(String title, String date, String description, Bitmap image) {
+    public NotificationItem(String title, Date date, String description, Bitmap image) {
         this.title = title;
         this.date = date;
         this.description = description;
@@ -21,7 +23,7 @@ public class NotificationItem {
         return title;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 

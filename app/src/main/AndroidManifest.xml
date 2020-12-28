@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.helloworld.goodpoint">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/application_icon2"
@@ -12,12 +14,16 @@
         android:roundIcon="@drawable/application_icon2"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone"/>
+        <activity android:name=".ui.NotificationActivity"></activity>
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone" />
         <activity android:name=".ui.forgetPasswordScreens.VerifiyCode" />
         <activity android:name=".ui.forgetPasswordScreens.ForgetPassSuccessMessage" />
         <activity android:name=".ui.forgetPasswordScreens.SetNewPassword" />
         <activity android:name=".ui.forgetPasswordScreens.MakeSelection" />
-        <activity android:name=".ui.WelcomeActivity"  android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity
+            android:name=".ui.WelcomeActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -27,22 +33,26 @@
 
         <activity
             android:name=".ui.lostFoundObject.FoundObjectActivity"
-            android:label="@string/FoundItemDetails" android:parentActivityName=".ui.HomeActivity"/>
+            android:label="@string/FoundItemDetails"
+            android:parentActivityName=".ui.HomeActivity" />
         <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithEmail" />
         <activity
             android:name=".ui.lostFoundObject.LostObjectDetailsActivity"
-            android:label="@string/LostItemDetails" android:parentActivityName=".ui.HomeActivity"/>
+            android:label="@string/LostItemDetails"
+            android:parentActivityName=".ui.HomeActivity" />
         <activity android:name=".ui.ActionActivity" />
-
-        <activity android:name=".ui.HomeActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".ui.SignupActivity"
+        <activity
+            android:name=".ui.HomeActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".ui.SignupActivity"
             android:label="@string/Signup" />
-
-        <activity android:name=".ui.SigninActivity"
-            android:theme="@style/NoActionBar"/>
-
-        <activity android:name=".ui.MainActivity">
+        <activity
+            android:name=".ui.SigninActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

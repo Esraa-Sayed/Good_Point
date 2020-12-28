@@ -18,6 +18,8 @@ public class PrefManager {
 
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
 
+    private static final String IS_LOGINNED = "Token";
+
     public PrefManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
@@ -31,6 +33,15 @@ public class PrefManager {
 
     public boolean isFirstTimeLaunch() {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH,true);
+    }
+
+    public void setLogin(String token){
+        editor.putString(IS_LOGINNED, token);
+        editor.commit();
+    }
+
+    public String isLoginned() {
+        return pref.getString(IS_LOGINNED,"");
     }
 
 }

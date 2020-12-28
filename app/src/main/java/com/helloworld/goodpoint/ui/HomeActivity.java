@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,11 +38,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         init();
         setToolBarAndDrawer();
 
-        ///*
-       // FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-      //  ft.replace(R.id.home_frag,new HomeFragment());
-      //  ft.commitNow();
-        //*/
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -73,6 +70,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nv);
         navigationView.bringToFront();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        menu.getItem(0).getIcon().mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.notification)
+            startActivity(new Intent(this,NotificationActivity.class));
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -152,7 +163,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             break;
                         case R.id.miProfile:
                             //selectedFragment = new ProfileFragment();
-                            selectedFragment = new NotificationFragment();
                             break;
                         case R.id.miLocation:
                             selectedFragment = new MapFragment();

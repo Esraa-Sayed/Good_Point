@@ -16,12 +16,7 @@
             android:id="@+id/notification_image"
             android:layout_width="@dimen/_75sdp"
             android:layout_height="@dimen/_75sdp"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:layout_marginTop="@dimen/_3sdp"/>
+        
     </LinearLayout>
 
     <LinearLayout
@@ -58,40 +53,7 @@
             android:padding="@dimen/_3sdp"
             android:textColor="@android:color/black"
             android:textSize="@dimen/_10ssp"
-            android:text="we found your item with Ahmed Mostafa, click here to communicate with him"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:background="@android:color/darker_gray"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/notification_archive"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAllCaps="false"
-                android:padding="@dimen/_3sdp"
-                android:drawableStart="@drawable/ic_baseline_archive_24"
-                android:text="Archive"
-                android:focusable="false"/>
-
-            <Button
-                android:id="@+id/notification_read"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAllCaps="false"
-                android:padding="@dimen/_3sdp"
-                android:drawableStart="@drawable/ic_baseline_check_24"
-                android:text="Set as read"
-                android:focusable="false"/>
-        </LinearLayout>
+            android:text="your item is found with Ahmed Mostafa, click here to communicate with him"/>
 
     </LinearLayout>
 </LinearLayout>

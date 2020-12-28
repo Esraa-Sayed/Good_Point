@@ -1,0 +1,530 @@
+Index: app/src/main/res/menu/drawer_menu.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<menu xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\">\r\n    <group android:checkableBehavior=\"single\">\r\n        <item android:id=\"@+id/drawer_share\"\r\n            android:title=\"Share the app\"\r\n            android:icon=\"@drawable/ic_baseline_share_24\" />\r\n        <item android:id=\"@+id/drawer_rate\"\r\n            android:title=\"Rate\"\r\n            android:icon=\"@drawable/ic_baseline_star_rate_24\" />\r\n        <item android:id=\"@+id/drawer_feedback\"\r\n            android:title=\"Feedback\"\r\n            android:icon=\"@drawable/ic_baseline_feedback_24\" />\r\n        <item android:id=\"@+id/drawer_about_us\"\r\n            android:title=\"About us\"\r\n            android:icon=\"@drawable/ic_baseline_help_24\" />\r\n        <item android:id=\"@+id/drawer_setting\"\r\n            android:title=\"Setting\"\r\n            android:icon=\"@drawable/ic_baseline_settings_24\" />\r\n        <item android:id=\"@+id/drawer_logout\"\r\n            android:title=\"Logout\"\r\n            android:icon=\"@drawable/ic_baseline_exit_to_app_24\" />\r\n    </group>\r\n</menu>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/menu/drawer_menu.xml	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ app/src/main/res/menu/drawer_menu.xml	(date 1608839732444)
+@@ -14,6 +14,9 @@
+         <item android:id="@+id/drawer_about_us"
+             android:title="About us"
+             android:icon="@drawable/ic_baseline_help_24" />
++        <item android:id="@+id/drawer_archive"
++            android:title="Archive"
++            android:icon="@drawable/ic_baseline_archive_24" />
+         <item android:id="@+id/drawer_setting"
+             android:title="Setting"
+             android:icon="@drawable/ic_baseline_settings_24" />
+Index: app/src/main/java/com/helloworld/goodpoint/adapter/NotificationListAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.helloworld.goodpoint.adapter;\r\n\r\nimport android.content.Context;\r\nimport android.graphics.Color;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.Button;\r\nimport android.widget.LinearLayout;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\n\r\nimport com.helloworld.goodpoint.R;\r\nimport com.helloworld.goodpoint.pojo.NotificationItem;\r\nimport com.helloworld.goodpoint.ui.NotificationFragment;\r\n\r\nimport java.util.List;\r\n\r\nimport de.hdodenhof.circleimageview.CircleImageView;\r\n\r\npublic class NotificationListAdapter extends ArrayAdapter<NotificationItem> {\r\n\r\n    Context context;\r\n    List<NotificationItem> list;\r\n    NotificationFragment fragment;\r\n\r\n    public NotificationListAdapter(@NonNull Context context, int resource, @NonNull List<NotificationItem> list, NotificationFragment fragment) {\r\n        super(context, resource, list);\r\n        this.context = context;\r\n        this.list = list;\r\n        this.fragment = fragment;\r\n    }\r\n\r\n    @NonNull\r\n    @Override\r\n    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {\r\n        View notificationItem = convertView;\r\n        ViewHolder viewHolder;\r\n        final int revposition = list.size()-position-1;\r\n\r\n        if(notificationItem == null){\r\n            notificationItem = createItem(parent);\r\n            viewHolder = new ViewHolder(notificationItem);\r\n            notificationItem.setTag(viewHolder);\r\n        }else\r\n            viewHolder = (ViewHolder) notificationItem.getTag();\r\n\r\n        if(!list.get(revposition).isRead())\r\n            setItemRead(viewHolder,revposition);\r\n        else\r\n            setItemNotRead(viewHolder);\r\n\r\n        viewHolder.getArchive().setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                list.remove(revposition);\r\n                if(list.isEmpty())\r\n                    fragment.updateFragmentView();\r\n                else\r\n                    notifyDataSetChanged();\r\n            }\r\n        });\r\n\r\n        setItemDetails(viewHolder,revposition);\r\n\r\n        return notificationItem;\r\n    }\r\n\r\n    private void setItemDetails(ViewHolder viewHolder, int revposition) {\r\n        viewHolder.getTitle().setText(list.get(revposition).getTitle());\r\n        viewHolder.getDate().setText(list.get(revposition).getDate());\r\n        viewHolder.getDescription().setText(list.get(revposition).getDescription());\r\n        if(list.get(revposition).getImage() != null)\r\n            viewHolder.getImageView().setImageBitmap(list.get(revposition).getImage());\r\n    }\r\n\r\n    private void setItemNotRead(ViewHolder viewHolder) {\r\n        viewHolder.getRead().setVisibility(View.GONE);\r\n        viewHolder.getLayout().setBackgroundColor(Color.WHITE);\r\n        viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button2));\r\n    }\r\n\r\n    private void setItemRead(ViewHolder viewHolder, final int position) {\r\n        viewHolder.getRead().setVisibility(View.VISIBLE);\r\n        viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.colorAccent));\r\n        viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));\r\n        viewHolder.getRead().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));\r\n\r\n        viewHolder.getRead().setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                list.get(position).setRead(true);\r\n                notifyDataSetChanged();\r\n            }\r\n        });\r\n    }\r\n\r\n    private View createItem(ViewGroup parent) {\r\n        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);\r\n        return inflater.inflate(R.layout.notification_item, parent, false);\r\n    }\r\n\r\n    private class ViewHolder{\r\n        private View convertView;\r\n        private TextView title, date, description;\r\n        private Button archive, read;\r\n        private CircleImageView imageView;\r\n        private LinearLayout layout;\r\n\r\n        public ViewHolder(View view) {\r\n            this.convertView = view;\r\n        }\r\n\r\n        public TextView getTitle() {\r\n            if(title == null)\r\n                title = convertView.findViewById(R.id.notification_title);\r\n            return title;\r\n        }\r\n\r\n        public TextView getDate() {\r\n            if(date == null)\r\n                date = convertView.findViewById(R.id.notification_date);\r\n            return date;\r\n        }\r\n\r\n        public TextView getDescription() {\r\n            if(description == null)\r\n                description = convertView.findViewById(R.id.notification_description);\r\n            return description;\r\n        }\r\n\r\n        public Button getArchive() {\r\n            if(archive == null)\r\n                archive = convertView.findViewById(R.id.notification_archive);\r\n            return archive;\r\n        }\r\n\r\n        public Button getRead() {\r\n            if(read == null)\r\n                read = convertView.findViewById(R.id.notification_read);\r\n            return read;\r\n        }\r\n\r\n        public CircleImageView getImageView() {\r\n            if(imageView == null)\r\n                imageView = convertView.findViewById(R.id.notification_image);\r\n            return imageView;\r\n        }\r\n\r\n        public LinearLayout getLayout() {\r\n            if(layout == null)\r\n                layout = convertView.findViewById(R.id.notification_layout);\r\n            return layout;\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/helloworld/goodpoint/adapter/NotificationListAdapter.java	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ app/src/main/java/com/helloworld/goodpoint/adapter/NotificationListAdapter.java	(date 1608839767743)
+@@ -17,6 +17,8 @@
+ import com.helloworld.goodpoint.pojo.NotificationItem;
+ import com.helloworld.goodpoint.ui.NotificationFragment;
+ 
++import org.jetbrains.annotations.NotNull;
++
+ import java.util.List;
+ 
+ import de.hdodenhof.circleimageview.CircleImageView;
+@@ -48,10 +50,10 @@
+         }else
+             viewHolder = (ViewHolder) notificationItem.getTag();
+ 
+-        if(!list.get(revposition).isRead())
+-            setItemRead(viewHolder,revposition);
++        if(list.get(revposition).isRead())
++            setItemRead(viewHolder);
+         else
+-            setItemNotRead(viewHolder);
++            setItemNotRead(viewHolder, revposition);
+ 
+         viewHolder.getArchive().setOnClickListener(new View.OnClickListener() {
+             @Override
+@@ -69,7 +71,7 @@
+         return notificationItem;
+     }
+ 
+-    private void setItemDetails(ViewHolder viewHolder, int revposition) {
++    private void setItemDetails(@NotNull ViewHolder viewHolder, int revposition) {
+         viewHolder.getTitle().setText(list.get(revposition).getTitle());
+         viewHolder.getDate().setText(list.get(revposition).getDate());
+         viewHolder.getDescription().setText(list.get(revposition).getDescription());
+@@ -77,15 +79,15 @@
+             viewHolder.getImageView().setImageBitmap(list.get(revposition).getImage());
+     }
+ 
+-    private void setItemNotRead(ViewHolder viewHolder) {
++    private void setItemRead(@NotNull ViewHolder viewHolder) {
+         viewHolder.getRead().setVisibility(View.GONE);
+         viewHolder.getLayout().setBackgroundColor(Color.WHITE);
+         viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button2));
+     }
+ 
+-    private void setItemRead(ViewHolder viewHolder, final int position) {
++    private void setItemNotRead(@NotNull ViewHolder viewHolder, final int position) {
+         viewHolder.getRead().setVisibility(View.VISIBLE);
+-        viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
++        viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+         viewHolder.getArchive().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
+         viewHolder.getRead().setBackground(context.getResources().getDrawable(R.drawable.notification_button1));
+ 
+Index: app/src/main/java/com/helloworld/goodpoint/ui/PrefManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.helloworld.goodpoint.ui;\r\n\r\n\r\nimport android.content.Context;\r\nimport android.content.SharedPreferences;\r\n\r\n\r\npublic class PrefManager {\r\n    SharedPreferences pref;\r\n    SharedPreferences.Editor editor;\r\n    Context _context;\r\n\r\n    // shared pref mode\r\n    int PRIVATE_MODE = 0;\r\n\r\n    // Shared preferences file name\r\n    private static final String PREF_NAME = \"androidhive-welcome\";\r\n\r\n    private static final String IS_FIRST_TIME_LAUNCH = \"IsFirstTimeLaunch\";\r\n\r\n    public PrefManager(Context context) {\r\n        this._context = context;\r\n        pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);\r\n        editor = pref.edit();\r\n    }\r\n\r\n    public void setFirstTimeLaunch(boolean isFirstTime) {\r\n        editor.putBoolean(IS_FIRST_TIME_LAUNCH, isFirstTime);\r\n        editor.commit();\r\n    }\r\n\r\n    public boolean isFirstTimeLaunch() {\r\n        return pref.getBoolean(IS_FIRST_TIME_LAUNCH,true);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/helloworld/goodpoint/ui/PrefManager.java	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ app/src/main/java/com/helloworld/goodpoint/ui/PrefManager.java	(date 1609075844954)
+@@ -18,6 +18,8 @@
+ 
+     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
+ 
++    private static final String IS_LOGINNED = "Token";
++
+     public PrefManager(Context context) {
+         this._context = context;
+         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+@@ -33,4 +35,13 @@
+         return pref.getBoolean(IS_FIRST_TIME_LAUNCH,true);
+     }
+ 
++    public void setLogin(String token){
++        editor.putString(IS_LOGINNED, token);
++        editor.commit();
++    }
++
++    public String isLoginned() {
++        return pref.getString(IS_LOGINNED,"");
++    }
++
+ }
+Index: app/src/main/java/com/helloworld/goodpoint/ui/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.helloworld.goodpoint.ui;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport com.helloworld.goodpoint.R;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        PrefManager prefManager = new PrefManager(getApplicationContext());\r\n        setContentView(R.layout.activity_main);\r\n        if (prefManager.isFirstTimeLaunch()) {\r\n            prefManager.setFirstTimeLaunch(true);\r\n            startActivity(new Intent(MainActivity.this, WelcomeActivity.class));\r\n            finish();\r\n        }\r\n        else {\r\n\r\n            startActivity(new Intent(this,SigninActivity.class));\r\n            finish();\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/helloworld/goodpoint/ui/MainActivity.java	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ app/src/main/java/com/helloworld/goodpoint/ui/MainActivity.java	(date 1609075845569)
+@@ -15,8 +15,12 @@
+             prefManager.setFirstTimeLaunch(true);
+             startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
+             finish();
+-        }
+-        else {
++        }else if(!prefManager.isLoginned().isEmpty()) {
++
++            Intent intent = new Intent(this, HomeActivity.class);
++            startActivity(intent);
++            finish();
++        }else {
+ 
+             startActivity(new Intent(this,SigninActivity.class));
+             finish();
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_12_16_2020_11_25_PM_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_12_16_2020_11_25_PM_[Default_Changelist]/shelved.patch	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_12_16_2020_11_25_PM_[Default_Changelist]/shelved.patch	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
+@@ -1,1 +0,0 @@
+-diff --git .idea/shelf/Uncommitted_changes_before_Update_at_12_8_2020_7_12_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_12_8_2020_7_12_PM__Default_Changelist_.xml
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_12_16_2020_11_25_PM__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_12_16_2020_11_25_PM__Default_Changelist_.xml	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_12_16_2020_11_25_PM__Default_Changelist_.xml	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_12_16_2020_11_25_PM_[Default_Changelist]" date="1608153981426" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_16_2020_11_25_PM_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 12/16/2020 11:25 PM [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_12_17_2020_7_10_PM_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_12_17_2020_7_10_PM_[Default_Changelist]/shelved.patch	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_12_17_2020_7_10_PM_[Default_Changelist]/shelved.patch	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
+@@ -1,58 +0,0 @@
+-Index: app/src/main/java/com/helloworld/goodpoint/ui/SignupActivity.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.helloworld.goodpoint.ui;\r\n\r\n<<<<<<< HEAD\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.fragment.app.Fragment;\r\n\r\n=======\r\n>>>>>>> d163ba2bfa932ba97fea23352ed1765335c5732b\r\nimport android.app.DatePickerDialog;\r\nimport android.content.Intent;\r\nimport android.graphics.Bitmap;\r\nimport android.graphics.Color;\r\nimport android.graphics.drawable.ColorDrawable;\r\nimport android.os.Bundle;\r\nimport android.provider.MediaStore;\r\nimport android.view.ContextMenu;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.DatePicker;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.helloworld.goodpoint.R;\r\n\r\nimport java.io.IOException;\r\nimport java.util.Calendar;\r\nimport java.util.regex.Pattern;\r\n\r\n<<<<<<< HEAD\r\nimport com.helloworld.goodpoint.R;\r\nimport android.util.Patterns;\r\n\r\n=======\r\n>>>>>>> d163ba2bfa932ba97fea23352ed1765335c5732b\r\npublic class SignupActivity extends AppCompatActivity {\r\n    private TextView DateT;\r\n    private EditText UserName, Email, Password, Phone, Country;\r\n    private DatePickerDialog.OnDateSetListener DateSet;\r\n    private int year, month, Day;\r\n    private ImageView image;\r\n    Button CreateAccount;\r\n    private static final Pattern PASSWORD_PATTERN =\r\n            Pattern.compile(\"^\" +\r\n                    //\"(?=.*[0-9])\" +         //at least 1 digit\r\n                    //\"(?=.*[a-z])\" +         //at least 1 lower case letter\r\n                    //\"(?=.*[A-Z])\" +         //at least 1 upper case letter\r\n                    \"(?=.*[a-zA-Z])\" +      //any letter\r\n                    \"(?=.*[@#$%^&+=])\" +    //at least 1 special character\r\n                    \"(?=\\\\S+$)\" +           //no white spaces\r\n                    \".{4,}\" +               //at least 4 characters\r\n                    \"$\");\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_signup);\r\n        inti();\r\n        DateT.setOnClickListener(new View.OnClickListener() {\r\n            // @RequiresApi(api = Build.VERSION_CODES.N)\r\n            @Override\r\n            public void onClick(View view) {\r\n                DatePickerDialog dialog = new DatePickerDialog(\r\n                        SignupActivity.this,\r\n                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,\r\n                        DateSet,\r\n                        year, month, Day\r\n                );\r\n                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));\r\n                dialog.show();\r\n            }\r\n\r\n        });\r\n        DateSet = new DatePickerDialog.OnDateSetListener() {\r\n            @Override\r\n            public void onDateSet(DatePicker datePicker, int y, int m, int d) {\r\n                m++;\r\n                if (y > year) {\r\n                    Toast.makeText(SignupActivity.this, \"\", Toast.LENGTH_SHORT).show();\r\n                    String todayDate = year + \"/\" + (month + 1) + \"/\" + Day;\r\n                    DateT.setText(todayDate);\r\n                } else {\r\n                    Toast.makeText(SignupActivity.this, \"hi\", Toast.LENGTH_SHORT).show();\r\n                    String Date = d + \"/\" + m + \"/\" + y;\r\n                    DateT.setText(Date);\r\n                }\r\n            }\r\n        };\r\n    CreateAccount.setOnClickListener(new View.OnClickListener() {\r\n        @Override\r\n        public void onClick(View view) {\r\n\r\n        }\r\n    });\r\n    }\r\n\r\n    protected void inti() {\r\n        UserName = findViewById(R.id.Name);\r\n        Email = findViewById(R.id.Email);\r\n        Password = findViewById(R.id.Pass);\r\n        Country = findViewById(R.id.country);\r\n        DateT = findViewById(R.id.Date);\r\n        image = findViewById(R.id.im);\r\n        CreateAccount = findViewById(R.id.createAccount);\r\n        Calendar cal = Calendar.getInstance();//To get today's date\r\n        year = cal.get(Calendar.YEAR);\r\n        month = cal.get(Calendar.MONTH);\r\n        Day = cal.get(Calendar.DAY_OF_MONTH);\r\n        String TodayDate = Day + \"/\" + (month + 1) + \"/\" + year;\r\n        DateT.setText(TodayDate);\r\n    }\r\n\r\n    @Override\r\n    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {\r\n        super.onCreateContextMenu(menu, v, menuInfo);\r\n        getMenuInflater().inflate(R.menu.menu_main, menu);\r\n        Toast.makeText(this, \"onCreateContextMenu\", Toast.LENGTH_SHORT);\r\n        //menu.getItem(2).setEnabled(false);\r\n        menu.findItem(R.id.Delete).setVisible(false);\r\n    }\r\n\r\n    @Override\r\n    public boolean onContextItemSelected(@NonNull MenuItem item) {\r\n        switch (item.getItemId()) {\r\n            case R.id.action_capture:\r\n                //Toast.makeText(this,\"Hello!!\",Toast.LENGTH_SHORT).show();\r\n                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);\r\n                if (cameraIntent.resolveActivity(getPackageManager()) != null) {\r\n                    startActivityForResult(cameraIntent, 10);\r\n                }\r\n                break;\r\n            case R.id.action_choose:\r\n                //Toast.makeText(this,\"Hello\",Toast.LENGTH_SHORT).show();\r\n                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);\r\n                startActivityForResult(gallery, 11);\r\n                break;\r\n        }\r\n\r\n        return super.onContextItemSelected(item);\r\n    }\r\n\r\n    @Override\r\n    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {\r\n        super.onActivityResult(requestCode, resultCode, data);\r\n    }\r\n    private boolean validateEmail() {\r\n        String emailInput = Email.getText().toString().trim();\r\n        if (emailInput.isEmpty()) {\r\n            Email.setError(\"Field can't be empty\");\r\n            return false;\r\n        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {\r\n            Email.setError(\"Please enter a valid email address\");\r\n            return false;\r\n        } else {\r\n            Email.setError(null);\r\n            return true;\r\n        }\r\n    }\r\n    private boolean validateUsername() {\r\n        String usernameInput = UserName.getText().toString().trim();\r\n        if (usernameInput.isEmpty()) {\r\n            UserName.setError(\"Field can't be empty\");\r\n            return false;\r\n        } else if (usernameInput.length() > 15) {\r\n            UserName.setError(\"Username too long\");\r\n            return false;\r\n        } else {\r\n            UserName.setError(null);\r\n            return true;\r\n        }\r\n    }\r\n    private boolean validatePassword() {\r\n        String passwordInput = Password.getText().toString().trim();\r\n        if (passwordInput.isEmpty()) {\r\n            Password.setError(\"Field can't be empty\");\r\n            return false;\r\n        } else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {\r\n            Password.setError(\"Password too weak\");\r\n            return false;\r\n        } else {\r\n            Password.setError(null);\r\n            return true;\r\n        }\r\n    }\r\n    public void confirmInput(View v) {\r\n        if (!validateEmail() | !validateUsername() | !validatePassword()) {\r\n            return;\r\n        }\r\n        String input = \"Email: \" + Email.getText().toString();\r\n        input += \"\\n\";\r\n        input += \"Username: \" + UserName.getText().toString();\r\n        input += \"\\n\";\r\n        input += \"Password: \" + Password.getText().toString();\r\n        Toast.makeText(this, input, Toast.LENGTH_SHORT).show();\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/helloworld/goodpoint/ui/SignupActivity.java	(revision 815e0693e4b129ce26610574d28e90aee7b913c9)
+-+++ app/src/main/java/com/helloworld/goodpoint/ui/SignupActivity.java	(date 1608179258331)
+-@@ -1,43 +1,31 @@
+- package com.helloworld.goodpoint.ui;
+- 
+--<<<<<<< HEAD
+--import androidx.annotation.NonNull;
+--import androidx.annotation.Nullable;
+--import androidx.appcompat.app.AppCompatActivity;
+--import androidx.fragment.app.Fragment;
+--
+--=======
+-->>>>>>> d163ba2bfa932ba97fea23352ed1765335c5732b
+- import android.app.DatePickerDialog;
+- import android.content.Intent;
+--import android.graphics.Bitmap;
+- import android.graphics.Color;
+- import android.graphics.drawable.ColorDrawable;
+- import android.os.Bundle;
+- import android.provider.MediaStore;
+-+import android.util.Patterns;
+- import android.view.ContextMenu;
+- import android.view.MenuItem;
+- import android.view.View;
+-+import android.widget.Button;
+- import android.widget.DatePicker;
+- import android.widget.EditText;
+- import android.widget.ImageView;
+- import android.widget.TextView;
+- import android.widget.Toast;
+- 
+-+import androidx.annotation.NonNull;
+-+import androidx.annotation.Nullable;
+- import androidx.appcompat.app.AppCompatActivity;
+- 
+- import com.helloworld.goodpoint.R;
+- 
+--import java.io.IOException;
+- import java.util.Calendar;
+- import java.util.regex.Pattern;
+- 
+--<<<<<<< HEAD
+--import com.helloworld.goodpoint.R;
+--import android.util.Patterns;
+--
+--=======
+-->>>>>>> d163ba2bfa932ba97fea23352ed1765335c5732b
+- public class SignupActivity extends AppCompatActivity {
+-     private TextView DateT;
+-     private EditText UserName, Email, Password, Phone, Country;
+-diff --git .idea/shelf/Uncommitted_changes_before_Update_at_12_8_2020_7_12_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_12_8_2020_7_12_PM__Default_Changelist_.xml
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_12_17_2020_7_10_PM__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_12_17_2020_7_10_PM__Default_Changelist_.xml	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_12_17_2020_7_10_PM__Default_Changelist_.xml	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_12_17_2020_7_10_PM_[Default_Changelist]" date="1608225138757" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_17_2020_7_10_PM_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 12/17/2020 7:10 PM [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: app/src/main/res/layout-land/activity_action.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout-land/activity_action.xml	(date 1609099906630)
++++ app/src/main/res/layout-land/activity_action.xml	(date 1609099906630)
+@@ -0,0 +1,50 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical"
++    tools:context=".ui.ActionActivity"
++    android:background="#ffffff">
++
++    <RelativeLayout
++        android:layout_weight=".5"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:background="#FD9727">
++
++        <Button
++            android:id="@+id/button_lost"
++            android:layout_width="@dimen/_120sdp"
++            android:layout_height="@dimen/_110sdp"
++            android:layout_centerInParent="true"
++            android:background="@drawable/buttons"
++            android:shadowColor="#000000"
++            android:text="@string/button_lost"
++            android:textColor="#FD9727"
++            android:textSize="@dimen/_25ssp"
++            app:backgroundTint="#FFFFFF"
++            android:onClick="lost_btn"/>
++    </RelativeLayout>
++
++    <RelativeLayout
++        android:layout_weight=".5"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++        <Button
++            android:id="@+id/button_found"
++            android:layout_width="@dimen/_120sdp"
++            android:layout_height="@dimen/_110sdp"
++            android:layout_centerInParent="true"
++            android:background="@drawable/buttons"
++            android:shadowColor="#000000"
++            android:text="@string/button_found"
++            android:textColor="#ffffff"
++            android:textSize="@dimen/_25ssp"
++            app:backgroundTint="#FD9727"
++            android:onClick="found_btn"/>
++    </RelativeLayout>
++</LinearLayout>
+Index: backend/notification/models.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.db import models\r\nfrom user_account.models import User\r\n\r\n\r\n# Create your models here.\r\n\r\nclass Notification(models.Model):\r\n    title = models.CharField(max_length=30, null=False)\r\n    description = models.CharField(max_length=100, null=True)\r\n    date_time = models.DateTimeField(auto_now_add=True)\r\n    is_read = models.BooleanField(default=False)\r\n    is_archived = models.BooleanField(default=False)\r\n    user_id = models.ForeignKey(User, related_name='notified', on_delete=models.DO_NOTHING, db_column='user_id')\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- backend/notification/models.py	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ backend/notification/models.py	(date 1609095513444)
+@@ -8,6 +8,23 @@
+     title = models.CharField(max_length=30, null=False)
+     description = models.CharField(max_length=100, null=True)
+     date_time = models.DateTimeField(auto_now_add=True)
++    is_sent = models.BooleanField(default=False)
+     is_read = models.BooleanField(default=False)
+     is_archived = models.BooleanField(default=False)
+-    user_id = models.ForeignKey(User, related_name='notified', on_delete=models.DO_NOTHING, db_column='user_id')
++    #user_id = models.ForeignKey(User, related_name='notified', on_delete=models.CASCADE, db_column='user_id')
++
++    class Meta:
++        abstract = True
++
++
++class NotificationMatched(Notification):
++
++    class Meta:
++        db_table = 'notification'
++
++
++class NotificationCandidate(Notification):
++
++    class Meta:
++        db_table = 'notification'
++
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<resources>\r\n    <color name=\"colorPrimary\">#6200EE</color>\r\n    <color name=\"colorPrimaryDark\">#3700B3</color>\r\n    <color name=\"colorAccent\">#03DAC5</color>\r\n    <color name=\"white\">#FFFFFF</color>\r\n    <color name=\"light_white\">#EDE5E5</color>\r\n    <color name=\"black\">#000000</color>\r\n    <color name=\"orange\">#FF9800</color>\r\n    <color name=\"transparent\"> #00000000</color>\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/colors.xml	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ app/src/main/res/values/colors.xml	(date 1608839767574)
+@@ -8,5 +8,6 @@
+     <color name="black">#000000</color>
+     <color name="orange">#FF9800</color>
+     <color name="transparent"> #00000000</color>
++    <color name="light_orange">#FF8E37</color>
+ 
+ </resources>
+\ No newline at end of file
+Index: backend/find_losts/models.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.db import models\r\nfrom user_account.models import User\r\n\r\n\r\n# Create your models here.\r\n\r\nclass LostObject(models.Model):\r\n    date = models.DateTimeField(null=False)\r\n    city = models.CharField(max_length=35, null=False)\r\n    user_id = models.ForeignKey(User, related_name='lost', on_delete=models.DO_NOTHING, db_column='user_id')\r\n\r\n\r\nclass LostPerson(models.Model):\r\n    id_l = models.OneToOneField(LostObject, on_delete=models.CASCADE, db_column='id_l')\r\n    image = models.BinaryField(unique=True)\r\n\r\n    class Meta:\r\n        unique_together = (('id_l', 'image'),)\r\n\r\n\r\nclass LostItem(models.Model):\r\n    id_l = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id_l')\r\n    type = models.CharField(max_length=20)\r\n    color = models.CharField(max_length=20, null=True)\r\n    brand = models.CharField(max_length=50, null=True)\r\n    description = models.CharField(max_length=700)\r\n    serial_number = models.CharField(max_length=100, null=True)\r\n\r\n\r\nclass FoundObject(models.Model):\r\n    date = models.DateTimeField(null=False)\r\n    longitude = models.DecimalField(max_digits=14, decimal_places=10, default=0.0)\r\n    latitude = models.DecimalField(max_digits=14, decimal_places=10, default=0.0)\r\n    city = models.CharField(max_length=35, null=False)\r\n    is_delivered = models.BooleanField()\r\n    user_id = models.ForeignKey(User, related_name='found', on_delete=models.DO_NOTHING, db_column='user_id')\r\n\r\n\r\nclass FoundPerson(models.Model):\r\n    id_f = models.OneToOneField(LostObject, on_delete=models.CASCADE, db_column='id_f')\r\n    image = models.BinaryField(unique=True)\r\n\r\n    class Meta:\r\n        unique_together = (('id_f', 'image'),)\r\n\r\n\r\nclass FoundItem(models.Model):\r\n    id_f = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id_f')\r\n    type = models.CharField(max_length=20)\r\n    color = models.CharField(max_length=20, null=True)\r\n    brand = models.CharField(max_length=50, null=True)\r\n    description = models.CharField(max_length=700)\r\n    serial_number = models.CharField(max_length=100, null=True)\r\n    candidate = models.ManyToManyField(LostItem, related_name='candidate', db_column='candidate')\r\n\r\n\r\nclass Match(models.Model):\r\n    id_l = models.OneToOneField(LostObject, related_name='lost_matched', on_delete=models.CASCADE, null=False, db_column='id_l')\r\n    id_f = models.OneToOneField(LostObject, related_name='found_matched', on_delete=models.CASCADE, null=False,\r\n                                db_column='id_f')\r\n    date_of_receiving = models.DateTimeField(auto_now_add=True)\r\n\r\n    class Meta:\r\n        unique_together = (('id_l', 'id_f'),)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- backend/find_losts/models.py	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ backend/find_losts/models.py	(date 1609092229622)
+@@ -7,58 +7,82 @@
+ class LostObject(models.Model):
+     date = models.DateTimeField(null=False)
+     city = models.CharField(max_length=35, null=False)
+-    user_id = models.ForeignKey(User, related_name='lost', on_delete=models.DO_NOTHING, db_column='user_id')
++    user_id = models.ForeignKey(User, related_name='lost', on_delete=models.CASCADE, db_column='user_id')
++    is_matched = models.BooleanField(default=False)
++
++    class Meta:
++        db_table = 'lost_object'
+ 
+ 
+ class LostPerson(models.Model):
+-    id_l = models.OneToOneField(LostObject, on_delete=models.CASCADE, db_column='id_l')
++    id = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id')
++    name = models.CharField(max_length=150)
++
++    class Meta:
++        db_table = 'lost_person'
++
++
++class LostPersonImage(models.Model):
++    id = models.OneToOneField(LostPerson, on_delete=models.CASCADE, db_column='id')
+     image = models.BinaryField(unique=True)
+ 
+     class Meta:
+-        unique_together = (('id_l', 'image'),)
++        db_table = 'lost_person_image'
++        unique_together = (('id', 'image'),)
+ 
+ 
+ class LostItem(models.Model):
+-    id_l = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id_l')
++    id = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id')
+     type = models.CharField(max_length=20)
+     color = models.CharField(max_length=20, null=True)
+     brand = models.CharField(max_length=50, null=True)
+     description = models.CharField(max_length=700)
+     serial_number = models.CharField(max_length=100, null=True)
+ 
++    class Meta:
++        db_table = 'lost_item'
++
+ 
+ class FoundObject(models.Model):
+     date = models.DateTimeField(null=False)
+     longitude = models.DecimalField(max_digits=14, decimal_places=10, default=0.0)
+     latitude = models.DecimalField(max_digits=14, decimal_places=10, default=0.0)
+     city = models.CharField(max_length=35, null=False)
+-    is_delivered = models.BooleanField()
+-    user_id = models.ForeignKey(User, related_name='found', on_delete=models.DO_NOTHING, db_column='user_id')
++    user_id = models.ForeignKey(User, related_name='found', on_delete=models.CASCADE, db_column='user_id')
++    matched_by = models.OneToOneField(LostObject, related_name='match', on_delete=models.CASCADE, db_column='matched_by')
++    date_of_receiving = models.DateTimeField(auto_now_add=True)
++
++    class Meta:
++        db_table = 'found_object'
+ 
+ 
+ class FoundPerson(models.Model):
+-    id_f = models.OneToOneField(LostObject, on_delete=models.CASCADE, db_column='id_f')
++    id = models.OneToOneField(FoundObject, primary_key=True, on_delete=models.CASCADE, db_column='id')
++    name = models.CharField(max_length=150)
++
++    class Meta:
++        db_table = 'found_person'
++
++
++class FoundPersonImage(models.Model):
++    id = models.OneToOneField(FoundPerson, on_delete=models.CASCADE, db_column='id')
+     image = models.BinaryField(unique=True)
+ 
+     class Meta:
+-        unique_together = (('id_f', 'image'),)
++        db_table = 'found_person_image'
++        unique_together = (('id', 'image'),)
+ 
+ 
+ class FoundItem(models.Model):
+-    id_f = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id_f')
++    id = models.OneToOneField(FoundObject, primary_key=True, on_delete=models.CASCADE, db_column='id')
+     type = models.CharField(max_length=20)
+     color = models.CharField(max_length=20, null=True)
+     brand = models.CharField(max_length=50, null=True)
+     description = models.CharField(max_length=700)
+     serial_number = models.CharField(max_length=100, null=True)
+-    candidate = models.ManyToManyField(LostItem, related_name='candidate', db_column='candidate')
+-
+-
+-class Match(models.Model):
+-    id_l = models.OneToOneField(LostObject, related_name='lost_matched', on_delete=models.CASCADE, null=False, db_column='id_l')
+-    id_f = models.OneToOneField(LostObject, related_name='found_matched', on_delete=models.CASCADE, null=False,
+-                                db_column='id_f')
+-    date_of_receiving = models.DateTimeField(auto_now_add=True)
++    candidate = models.ManyToManyField(LostItem, related_name='candidate', db_table='candidate')
+ 
+     class Meta:
+-        unique_together = (('id_l', 'id_f'),)
++        db_table = 'found_item'
++
++
+Index: app/src/main/res/drawable/notification_button1.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<selector xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n    <item android:state_pressed=\"true\">\r\n        <shape android:shape=\"rectangle\">\r\n            <solid android:color=\"@android:color/darker_gray\"/>\r\n\r\n        </shape>\r\n    </item>\r\n    <item android:state_pressed=\"false\">\r\n        <shape android:shape=\"rectangle\">\r\n            <solid android:color=\"@color/colorAccent\"/>\r\n\r\n        </shape>\r\n    </item>\r\n</selector>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/drawable/notification_button1.xml	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ app/src/main/res/drawable/notification_button1.xml	(date 1608839370492)
+@@ -8,7 +8,7 @@
+     </item>
+     <item android:state_pressed="false">
+         <shape android:shape="rectangle">
+-            <solid android:color="@color/colorAccent"/>
++            <solid android:color="@color/light_orange"/>
+ 
+         </shape>
+     </item>
+Index: backend/user_account/models.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.db import models\r\nfrom django.contrib.auth.models import AbstractUser\r\n\r\n\r\n# Create your models here.\r\n\r\nclass User(AbstractUser):\r\n    phone = models.CharField(max_length=20, null=False, unique=True)\r\n    birthdate = models.DateField(null=False)\r\n    city = models.CharField(max_length=35, null=False)\r\n    profile_pic = models.BinaryField(blank=True, null=True)\r\n    id_card_pic = models.BinaryField(blank=True, null=True)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- backend/user_account/models.py	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ backend/user_account/models.py	(date 1608849954687)
+@@ -10,3 +10,6 @@
+     city = models.CharField(max_length=35, null=False)
+     profile_pic = models.BinaryField(blank=True, null=True)
+     id_card_pic = models.BinaryField(blank=True, null=True)
++    
++    class Meta:
++        db_table = 'user'
+Index: app/src/main/res/drawable/buttons.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/drawable/buttons.xml	(date 1608079968021)
++++ app/src/main/res/drawable/buttons.xml	(date 1608079968021)
+@@ -0,0 +1,13 @@
++<?xml version="1.0" encoding="utf-8"?>
++<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
++    <corners
++        android:topLeftRadius="@dimen/_26sdp"
++        android:topRightRadius="0dp"
++        android:bottomLeftRadius="0dp"
++        android:bottomRightRadius="@dimen/_26sdp"
++        />
++    <stroke
++        android:width="@dimen/_3sdp"
++        android:color="#878787"
++        />
++</shape>
+Index: backend/good_point/settings.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"\"\"\r\nDjango settings for good_point project.\r\n\r\nGenerated by 'django-admin startproject' using Django 3.1.4.\r\n\r\nFor more information on this file, see\r\nhttps://docs.djangoproject.com/en/3.1/topics/settings/\r\n\r\nFor the full list of settings and their values, see\r\nhttps://docs.djangoproject.com/en/3.1/ref/settings/\r\n\"\"\"\r\n\r\nfrom pathlib import Path\r\n\r\n# Build paths inside the project like this: BASE_DIR / 'subdir'.\r\nBASE_DIR = Path(__file__).resolve().parent.parent\r\n\r\n\r\n# Quick-start development settings - unsuitable for production\r\n# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/\r\n\r\n# SECURITY WARNING: keep the secret key used in production secret!\r\nSECRET_KEY = 'o$!0f@2-*+x-m9-=h*0-2q25jvx(&2+z)6%7ir)@y_7nvlg9f('\r\n\r\n# SECURITY WARNING: don't run with debug turned on in production!\r\nDEBUG = True\r\n\r\nALLOWED_HOSTS = []\r\n\r\n\r\n# Application definition\r\n\r\nINSTALLED_APPS = [\r\n    'django.contrib.admin',\r\n    'django.contrib.auth',\r\n    'django.contrib.contenttypes',\r\n    'django.contrib.sessions',\r\n    'django.contrib.messages',\r\n    'django.contrib.staticfiles',\r\n    'user_account',\r\n    'find_losts',\r\n    'notification',\r\n]\r\n\r\nMIDDLEWARE = [\r\n    'django.middleware.security.SecurityMiddleware',\r\n    'django.contrib.sessions.middleware.SessionMiddleware',\r\n    'django.middleware.common.CommonMiddleware',\r\n    'django.middleware.csrf.CsrfViewMiddleware',\r\n    'django.contrib.auth.middleware.AuthenticationMiddleware',\r\n    'django.contrib.messages.middleware.MessageMiddleware',\r\n    'django.middleware.clickjacking.XFrameOptionsMiddleware',\r\n]\r\n\r\nROOT_URLCONF = 'good_point.urls'\r\n\r\nTEMPLATES = [\r\n    {\r\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\r\n        'DIRS': [],\r\n        'APP_DIRS': True,\r\n        'OPTIONS': {\r\n            'context_processors': [\r\n                'django.template.context_processors.debug',\r\n                'django.template.context_processors.request',\r\n                'django.contrib.auth.context_processors.auth',\r\n                'django.contrib.messages.context_processors.messages',\r\n            ],\r\n        },\r\n    },\r\n]\r\n\r\nWSGI_APPLICATION = 'good_point.wsgi.application'\r\n\r\n\r\n# Database\r\n# https://docs.djangoproject.com/en/3.1/ref/settings/#databases\r\n\r\nDATABASES = {\r\n    'default': {\r\n        'ENGINE': 'django.db.backends.sqlite3',\r\n        'NAME': BASE_DIR / 'db.sqlite3',\r\n    }\r\n}\r\n\r\n\r\n# Password validation\r\n# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators\r\n\r\nAUTH_PASSWORD_VALIDATORS = [\r\n    {\r\n        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',\r\n    },\r\n    {\r\n        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',\r\n    },\r\n    {\r\n        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',\r\n    },\r\n    {\r\n        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',\r\n    },\r\n]\r\n\r\nAUTH_USER_MODEL = 'user_account.User'\r\n\r\n# Internationalization\r\n# https://docs.djangoproject.com/en/3.1/topics/i18n/\r\n\r\nLANGUAGE_CODE = 'en-us'\r\n\r\nTIME_ZONE = 'UTC'\r\n\r\nUSE_I18N = True\r\n\r\nUSE_L10N = True\r\n\r\nUSE_TZ = True\r\n\r\n\r\n# Static files (CSS, JavaScript, Images)\r\n# https://docs.djangoproject.com/en/3.1/howto/static-files/\r\n\r\nSTATIC_URL = '/static/'\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- backend/good_point/settings.py	(revision add56e7d8a1c8bf46981c23ed0ea7d84877c28a9)
++++ backend/good_point/settings.py	(date 1608931070055)
+@@ -40,6 +40,7 @@
+     'user_account',
+     'find_losts',
+     'notification',
++    'rest_framework',
+ ]
+ 
+ MIDDLEWARE = [
+@@ -78,8 +79,12 @@
+ 
+ DATABASES = {
+     'default': {
+-        'ENGINE': 'django.db.backends.sqlite3',
+-        'NAME': BASE_DIR / 'db.sqlite3',
++        'ENGINE': 'django.db.backends.postgresql',
++        'NAME': 'Good_Point',
++        'USER': 'postgres',
++        'PASSWORD': '[,]f,dkj2020',
++        'HOST': 'localhost',
++        'PORT': '5432'
+     }
+ }
+ 
