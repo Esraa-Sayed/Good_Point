@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -27,17 +28,21 @@ import android.widget.Toast;
 import com.helloworld.goodpoint.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.regex.Pattern;
 import android.util.Patterns;
 
 public class SignupActivity extends AppCompatActivity {
     private TextView DateT;
-    private EditText UserName, Email, Password, Phone, City;
+    private EditText UserName, Email, Password, Phone;
+    AutoCompleteTextView city;
     private DatePickerDialog.OnDateSetListener DateSet;
     private int year, month, Day;
     private ImageView image;
     Button CreateAccount;
+    List<String> list;
     Bitmap Bitmap_Image ; Uri imageUri;
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^" +
@@ -107,7 +112,7 @@ public class SignupActivity extends AppCompatActivity {
         UserName = findViewById(R.id.Name);
         Email = findViewById(R.id.Email);
         Password = findViewById(R.id.Pass);
-        City = findViewById(R.id.country);
+        city = findViewById(R.id.city);
         DateT = findViewById(R.id.Date);
         image = findViewById(R.id.im);
         registerForContextMenu(image);
@@ -118,6 +123,10 @@ public class SignupActivity extends AppCompatActivity {
         Day = cal.get(Calendar.DAY_OF_MONTH);
         String TodayDate = Day + "/" + (month + 1) + "/" + year;
         DateT.setText(TodayDate);/**/
+        prepareList();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+        city.setThreshold(1);
+        city.setAdapter(adapter);
     }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -179,6 +188,19 @@ public class SignupActivity extends AppCompatActivity {
             return true;
         }
     }
+    private boolean validatephone() {
+        String emailInput = Phone.getText().toString().trim();
+        if (emailInput.isEmpty()) {
+            Email.setError("Field can't be empty");
+            return false;
+        } else if (emailInput.length() != 11) {
+            Email.setError("Please enter a valid phone number");
+            return false;
+        } else {
+            Email.setError(null);
+            return true;
+        }
+    }
     private boolean validateUsername() {
         String usernameInput = UserName.getText().toString().trim();
         if (usernameInput.isEmpty()) {
@@ -205,8 +227,21 @@ public class SignupActivity extends AppCompatActivity {
             return true;
         }
     }
+    private boolean validateCity() {
+        String cityInput = city.getText().toString().trim();
+        if (cityInput.isEmpty()) {
+            city.setError("Field can't be empty");
+            return false;
+        } else if (!list.contains(cityInput)) {
+            city.setError("Please Enter valid city!");
+            return false;
+        } else {
+            city.setError(null);
+            return true;
+        }
+    }
     public void confirmInput(View v) {
-        if (!validateEmail() | !validateUsername() | !validatePassword()) {
+        if (!validateEmail() | !validateUsername() | !validatePassword() | !validatephone() ||!validateCity()) {
             return;
         }
         String input = "Email: " + Email.getText().toString();
@@ -216,9 +251,40 @@ public class SignupActivity extends AppCompatActivity {
         input += "Password: " + Password.getText().toString();
         Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
     }/**/
+
+    protected void prepareList() {
+        list = new ArrayList<>();
+        list.add(getString(R.string.Cairo));
+        list.add(getString(R.string.Alexandria));
+        list.add(getString(R.string.ShubraElKheima));
+        list.add(getString(R.string.Giza));
+        list.add(getString(R.string.PortSaid));
+        list.add(getString(R.string.Suez));
+        list.add(getString(R.string.ElMahallaElKubra));
+        list.add(getString(R.string.Luxor));
+        list.add(getString(R.string.Mansoura));
+        list.add(getString(R.string.Tanta));
+        list.add(getString(R.string.Asyut));
+        list.add(getString(R.string.Ismailia));
+        list.add(getString(R.string.Faiyum));
+        list.add(getString(R.string.Zagazig));
+        list.add(getString(R.string.Damietta));
+        list.add(getString(R.string.Aswan));
+        list.add(getString(R.string.Minya));
+        list.add(getString(R.string.BeniSuef));
+        list.add(getString(R.string.Hurghada));
+        list.add(getString(R.string.Qena));
+        list.add(getString(R.string.Sohag));
+        list.add(getString(R.string.ShibinElKom));
+        list.add(getString(R.string.Banha));
+        list.add(getString(R.string.Arish));
+
+    }
     public void onSaveInstanceState(@NonNull Bundle outState)
     {
         super.onSaveInstanceState(outState);
         outState.putParcelable("BitmapImage",Bitmap_Image);
     }
+
+
 }

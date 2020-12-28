@@ -11,6 +11,8 @@
         <item name="colorPrimary">#151514</item>
         <item name="colorPrimaryDark">#ffffff</item>
         <item name="colorAccent">#F38E3A</item>
+        <item name = "android:windowActionBar">false</item>
+        <item name = "android:windowNoTitle">true</item>
     </style>
 
     <style name="Widget.Button.White.BlueText.BlueText.FrameImage" parent="@android:style/Widget.Button">

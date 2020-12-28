@@ -40,7 +40,7 @@
             android:label="@string/Signup" />
 
         <activity android:name=".ui.SigninActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:theme="@style/NoActionBar"/>
 
         <activity android:name=".ui.MainActivity">
             <intent-filter>

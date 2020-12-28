@@ -137,11 +137,12 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <EditText
+                <AutoCompleteTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:hint="@string/City"
+                    android:id="@+id/city"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
