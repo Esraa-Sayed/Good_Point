@@ -1,0 +1,102 @@
+Index: app/src/main/res/layout/activity_signin.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".ui.SigninActivity\"\r\n    android:orientation = \"vertical\"\r\n    android:layout_gravity = \"center\">\r\n    <TextView\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textColor=\"#ffffff\"\r\n        android:textSize=\"@dimen/_25sdp\"\r\n        android:layout_marginTop=\"@dimen/_30sdp\"\r\n        android:layout_marginLeft=\"@dimen/_130sdp\"\r\n        android:text=\"Good Point\"/>\r\n\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:layout_marginTop=\"@dimen/_100sdp\"\r\n        android:layout_marginLeft=\"@dimen/_15sdp\">\r\n        <ImageView\r\n            android:layout_marginTop=\"20dp\"\r\n            android:layout_marginRight=\"10dp\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:src=\"@drawable/ic_baseline_person_24\"/>\r\n        <com.google.android.material.textfield.TextInputLayout\r\n            android:id=\"@+id/username\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\">\r\n            <EditText\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:hint=\"@string/Email\"\r\n                android:layout_marginStart=\"@dimen/_5sdp\"\r\n                android:inputType=\"text\"\r\n                android:id=\"@+id/Name\" />\r\n        </com.google.android.material.textfield.TextInputLayout>\r\n    </LinearLayout>\r\n\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"@dimen/_15sdp\"\r\n        android:orientation=\"horizontal\">\r\n        <ImageView\r\n            android:layout_marginTop = \"@dimen/_20sdp\"\r\n            android:layout_marginRight = \"@dimen/_10sdp\"\r\n            android:layout_width = \"wrap_content\"\r\n            android:layout_height = \"wrap_content\"\r\n            android:src = \"@drawable/ic_baseline_lock_24\"/>\r\n        <com.google.android.material.textfield.TextInputLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\">\r\n            <EditText\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginRight=\"@dimen/_20sdp\"\r\n                android:hint=\"@string/Password\"\r\n                android:inputType=\"textWebPassword\"\r\n                android:id=\"@+id/pass\"/>\r\n        </com.google.android.material.textfield.TextInputLayout>\r\n    </LinearLayout>\r\n    <Button\r\n        android:layout_gravity=\"center\"\r\n        android:layout_marginTop=\"@dimen/_30sdp\"\r\n        android:layout_width=\"@dimen/_180sdp\"\r\n        android:layout_height=\"@dimen/_40sdp\"\r\n        android:textSize=\"@dimen/_15sdp\"\r\n        android:text=\"@string/SignIn\"\r\n        android:background=\"@drawable/oval\"\r\n        android:textColor=\"#ffffff\"\r\n        android:id=\"@+id/signin\"/>\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"@dimen/_10sdp\">\r\n        <CheckBox\r\n            android:id=\"@+id/checkbox\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"@string/RememberMe\"\r\n            android:layout_marginLeft=\"@dimen/_10sdp\" />\r\n        <TextView\r\n            android:layout_width = \"wrap_content\"\r\n            android:layout_height = \"wrap_content\"\r\n            android:text = \"@string/ForgetPassword\"\r\n            android:textColor = \"#F49C3B\"\r\n            android:layout_marginLeft = \"@dimen/_80sdp\"\r\n            android:textSize = \"@dimen/_15sdp\"\r\n            android:autoLink = \"web\" android:id=\"@+id/forgetPass\"\r\n            android:layout_centerInParent =\"true\"\r\n            android:linksClickable=\"true\" />\r\n    </LinearLayout>\r\n    <!-- <LinearLayout\r\n         android:layout_width=\"match_parent\"\r\n         android:layout_height=\"wrap_content\"\r\n         android:orientation=\"horizontal\"\r\n         android:layout_marginTop=\"@dimen/_10sdp\">\r\n         <view\r\n             android:layout_width=\"@dimen/_95sdp\"\r\n             android:layout_height=\"@dimen/_2sdp\"\r\n             android:layout_marginTop=\"@dimen/_9sdp\"\r\n             android:layout_marginRight=\"@dimen/_20sdp\"\r\n             android:layout_marginLeft=\"@dimen/_15sdp\"\r\n             />\r\n         <TextView\r\n             android:layout_width=\"wrap_content\"\r\n             android:layout_height=\"wrap_content\"\r\n             android:textSize=\"@dimen/_13sdp\"\r\n             android:layout_gravity=\"center\"\r\n             android:layout_marginLeft=\"@dimen/_15sdp\"\r\n             android:text=\"@string/or\"/>\r\n         <view\r\n             android:layout_width=\"@dimen/_100sdp\"\r\n             android:layout_height=\"@dimen/_2sdp\"\r\n             android:layout_marginLeft=\"@dimen/_50sdp\"\r\n             android:layout_marginTop=\"@dimen/_9sdp\"\r\n             android:layout_marginRight=\"@dimen/_20sdp\"/>\r\n\r\n     </LinearLayout>-->\r\n    <Button\r\n        android:layout_gravity=\"center\"\r\n        android:layout_marginTop=\"@dimen/_30sdp\"\r\n        android:layout_width=\"@dimen/_190sdp\"\r\n        android:layout_height=\"@dimen/_40sdp\"\r\n        android:textSize=\"@dimen/_15sdp\"\r\n        android:text=\"@string/CreateNewAccount\"\r\n        android:textColor=\"#ffffff\"\r\n        android:background=\"@drawable/custom_button\"\r\n        android:id=\"@+id/NewAccount\"/>\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_signin.xml	(revision 424a55ba90083479889a079dbf046ac937ad7f80)
++++ app/src/main/res/layout/activity_signin.xml	(date 1608757468640)
+@@ -1,5 +1,7 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.helloworld.goodpoint\">\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.INTERNET\"/>\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"false\"\r\n        android:theme=\"@style/AppTheme\">\r\n        <activity android:name=\".ui.forgetPasswordScreens.ForgetPasswordWithPhone\"/>\r\n        <activity android:name=\".ui.forgetPasswordScreens.VerifiyCode\" />\r\n        <activity android:name=\".ui.forgetPasswordScreens.ForgetPassSuccessMessage\" />\r\n        <activity android:name=\".ui.forgetPasswordScreens.SetNewPassword\" />\r\n        <activity android:name=\".ui.forgetPasswordScreens.MakeSelection\" />\r\n        <activity android:name=\".ui.WelcomeActivity\"  android:theme=\"@style/Theme.AppCompat.NoActionBar\"/>\r\n        <meta-data\r\n            android:name=\"com.google.android.geo.API_KEY\"\r\n            android:value=\"@string/google_maps_key\" />\r\n        <meta-data\r\n            android:name=\"preloaded_fonts\"\r\n            android:resource=\"@array/preloaded_fonts\" />\r\n        <activity\r\n            android:name=\".ui.lostFoundObject.detect_location\"\r\n            android:label=\"@string/title_activity_detect_location\"/>\r\n        <activity\r\n            android:name=\".ui.lostFoundObject.FoundObjectActivity\"\r\n            android:label=\"@string/FoundItemDetails\" />\r\n        <activity android:name=\".ui.forgetPasswordScreens.ForgetPasswordWithEmail\" />\r\n        <activity\r\n            android:name=\".ui.lostFoundObject.LostObjectDetailsActivity\"\r\n            android:label=\"@string/LostItemDetails\" />\r\n        <activity android:name=\".ui.ActionActivity\" />\r\n\r\n        <activity android:name=\".ui.HomeActivity\"\r\n            android:theme=\"@style/Theme.AppCompat.Light.NoActionBar\"/>\r\n        <activity android:name=\".ui.SignupActivity\"\r\n            android:label=\"@string/Signup\" />\r\n\r\n        <activity android:name=\".ui.SigninActivity\"\r\n            android:theme=\"@style/Theme.AppCompat.NoActionBar\"/>\r\n\r\n        <activity android:name=\".ui.MainActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 424a55ba90083479889a079dbf046ac937ad7f80)
++++ app/src/main/AndroidManifest.xml	(date 1608757670996)
+@@ -42,7 +42,7 @@
+             android:label="@string/Signup" />
+ 
+         <activity android:name=".ui.SigninActivity"
+-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
++            android:label="@string/Signup" />
+ 
+         <activity android:name=".ui.MainActivity">
+             <intent-filter>
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_53_PM_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_53_PM_[Default_Changelist]/shelved.patch	(revision 424a55ba90083479889a079dbf046ac937ad7f80)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_53_PM_[Default_Changelist]/shelved.patch	(revision 424a55ba90083479889a079dbf046ac937ad7f80)
+@@ -1,35 +0,0 @@
+-Index: .idea/compiler.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CompilerConfiguration\">\r\n    <bytecodeTargetLevel target=\"12\" />\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/compiler.xml	(revision 237ed9fde9f43112e5ff3b1e858eb28c4771f29c)
+-+++ .idea/compiler.xml	(date 1608128298850)
+-@@ -1,6 +1,6 @@
+- <?xml version="1.0" encoding="UTF-8"?>
+- <project version="4">
+-   <component name="CompilerConfiguration">
+--    <bytecodeTargetLevel target="12" />
+-+    <bytecodeTargetLevel target="1.8" />
+-   </component>
+- </project>
+-\ No newline at end of file
+-Index: .idea/misc.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_12\" default=\"false\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/misc.xml	(revision 237ed9fde9f43112e5ff3b1e858eb28c4771f29c)
+-+++ .idea/misc.xml	(date 1608128298512)
+-@@ -1,6 +1,6 @@
+- <?xml version="1.0" encoding="UTF-8"?>
+- <project version="4">
+--  <component name="ProjectRootManager" version="2" languageLevel="JDK_12" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+-+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+-     <output url="file://$PROJECT_DIR$/build/classes" />
+-   </component>
+-   <component name="ProjectType">
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_53_PM__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_53_PM__Default_Changelist_.xml	(revision 424a55ba90083479889a079dbf046ac937ad7f80)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_53_PM__Default_Changelist_.xml	(revision 424a55ba90083479889a079dbf046ac937ad7f80)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_12_16_2020_4_53_PM_[Default_Changelist]" date="1608130406500" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_53_PM_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 12/16/2020 4:53 PM [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_01_PM__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_01_PM__Default_Changelist_.xml	(revision 424a55ba90083479889a079dbf046ac937ad7f80)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_01_PM__Default_Changelist_.xml	(revision 424a55ba90083479889a079dbf046ac937ad7f80)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_12_16_2020_4_01_PM_[Default_Changelist]" date="1608127330341" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_01_PM_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 12/16/2020 4:01 PM [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_01_PM_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_01_PM_[Default_Changelist]/shelved.patch	(revision 424a55ba90083479889a079dbf046ac937ad7f80)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_12_16_2020_4_01_PM_[Default_Changelist]/shelved.patch	(revision 424a55ba90083479889a079dbf046ac937ad7f80)
+@@ -1,1 +0,0 @@
+-diff --git .idea/shelf/Uncommitted_changes_before_Update_at_12_8_2020_7_12_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_12_8_2020_7_12_PM__Default_Changelist_.xml
