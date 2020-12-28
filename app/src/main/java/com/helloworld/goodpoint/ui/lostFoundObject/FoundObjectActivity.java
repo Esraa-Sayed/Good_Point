@@ -145,10 +145,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                 } catch (GooglePlayServicesNotAvailableException e) {
                                     e.printStackTrace();
                                 }
-                               /*Intent intent = new Intent(FoundObjectActivity.this, detect_location.class);
-                               intent.putExtra("Latitude",Latitude);
-                               intent.putExtra("Longitude",Longitude);
-                               startActivity(intent);*/
                                 break;
                         }
                         return true;
