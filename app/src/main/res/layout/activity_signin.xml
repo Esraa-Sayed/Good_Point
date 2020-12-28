@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.SigninActivity"
-    android:orientation="vertical"
-    android:layout_gravity="center"
+    android:orientation = "vertical"
     android:background="@drawable/ic_home_background"
-    >
+    android:layout_gravity = "center">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,8 +17,6 @@
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginLeft="@dimen/_130sdp"
         android:text="Good Point"/>
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,16 +30,16 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_person_24"/>
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/usernameWrapper"
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
-                android:layout_marginRight="@dimen/_20sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/UserName"
+                android:hint="@string/Email"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:inputType="text"
-                android:id="@+id/email"/>
+                android:id="@+id/Name" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
@@ -51,11 +50,11 @@
         android:layout_marginLeft="@dimen/_15sdp"
         android:orientation="horizontal">
         <ImageView
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_lock_24"/>
+            android:layout_marginTop = "@dimen/_20sdp"
+            android:layout_marginRight = "@dimen/_10sdp"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:src = "@drawable/ic_baseline_lock_24"/>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -94,7 +93,7 @@
             android:text = "@string/ForgetPassword"
             android:textColor = "#F49C3B"
             android:layout_marginLeft = "@dimen/_80sdp"
-            android:textSize = "@dimen/_15sdp"
+            android:textSize = "@dimen/_10sdp"
             android:autoLink = "web" android:id="@+id/forgetPass"
             android:layout_centerInParent ="true"
             android:linksClickable="true" />

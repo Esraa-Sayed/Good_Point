@@ -24,23 +24,23 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
-        inti();
+       // inti();
     }
 
     protected void inti() {
-        Email = findViewById(R.id.email);
+       /* Email = findViewById(R.id.email);
         Pass =findViewById(R.id.pass);
         ForgetPass = findViewById(R.id.forgetPass);
         Sigin =findViewById(R.id.signin);
         CreateNewAccount = findViewById(R.id.NewAccount);
 
         Sigin.setOnClickListener(this);
-        CreateNewAccount.setOnClickListener(this);
+        CreateNewAccount.setOnClickListener(this);*/
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        /*switch (view.getId()){
             case R.id.signin:
                 if(validAccount()) {
                     startActivity(new Intent(this, HomeActivity.class));
@@ -51,7 +51,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.NewAccount:
                     startActivity(new Intent(this, SignupActivity.class));
                     break;
-        }
+        }*/
     }
 
     private boolean validAccount() {
