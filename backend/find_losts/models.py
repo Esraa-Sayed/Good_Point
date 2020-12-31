@@ -38,6 +38,7 @@ class LostItem(models.Model):
     brand = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=700)
     serial_number = models.CharField(max_length=100, null=True)
+    image = models.BinaryField(unique=True)
 
     class Meta:
         db_table = 'lost_item'
@@ -51,6 +52,7 @@ class FoundObject(models.Model):
     user_id = models.ForeignKey(User, related_name='found', on_delete=models.CASCADE, db_column='user_id')
     matched_by = models.OneToOneField(LostObject, related_name='match', on_delete=models.CASCADE, db_column='matched_by')
     date_of_receiving = models.DateTimeField(auto_now_add=True)
+    match_percentage = models.DecimalField(max_digits=5, decimal_places=4)
 
     class Meta:
         db_table = 'found_object'
@@ -80,9 +82,17 @@ class FoundItem(models.Model):
     brand = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=700)
     serial_number = models.CharField(max_length=100, null=True)
-    candidate = models.ManyToManyField(LostItem, related_name='candidate', db_table='candidate')
+    image = models.BinaryField(unique=True)
+    #candidate = models.ManyToManyField(LostItem, related_name='candidate', db_table='candidate')
 
     class Meta:
         db_table = 'found_item'
 
 
+class Candidate(models.Model):
+    id_l = models.ForeignKey(LostItem, related_name='candidate', on_delete=models.CASCADE)
+    id_f = models.ForeignKey(FoundItem, related_name='candidate', on_delete=models.CASCADE)
+    percentage = models.DecimalField(max_digits=5, decimal_places=4)
+
+    class Meta:
+        db_table = 'candidate'
