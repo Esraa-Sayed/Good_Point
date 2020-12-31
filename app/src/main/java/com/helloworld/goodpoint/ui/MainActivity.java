@@ -8,7 +8,101 @@ import android.widget.ImageView;
 
 import com.helloworld.goodpoint.R;
 
-public class MainActivity extends AppCompatActivity {
+public class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MainActivity extends AppCompatActivity {
 
     PrefManager prefManager;
     ImageView splash;
