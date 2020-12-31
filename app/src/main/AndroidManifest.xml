@@ -27,6 +27,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -34,7 +36,10 @@
         <activity
             android:name=".ui.lostFoundObject.FoundObjectActivity"
             android:label="@string/FoundItemDetails"
-            android:parentActivityName=".ui.HomeActivity" />
+            android:parentActivityName=".ui.HomeActivity">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" /></activity>
         <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithEmail" />
         <activity
             android:name=".ui.lostFoundObject.LostObjectDetailsActivity"
@@ -43,7 +48,11 @@
         <activity android:name=".ui.ActionActivity" />
         <activity
             android:name=".ui.HomeActivity"
-            android:theme="@style/NoActionBar" />
+            android:theme="@style/NoActionBar" >
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/google_maps_key" />
+        </activity>
         <activity
             android:name=".ui.SignupActivity"
             android:label="@string/Signup" />
