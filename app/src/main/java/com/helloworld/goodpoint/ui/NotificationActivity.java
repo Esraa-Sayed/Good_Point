@@ -36,19 +36,19 @@ public class NotificationActivity extends AppCompatActivity {
 
     private void createList() {
         ///*
-        NotificationItem item = new NotificationItem("First Title", new Date(2019-1900,11,25,10,55), "this is a description 1",null);
+        NotificationItem item = new NotificationItem("item matched", new Date(2019-1900,12-1,25,10,55), "your laptop is found by Ahmed Mostafa",null);
         item.setRead(true);
         list.add(item);
-        item = new NotificationItem("Second Title", new Date(2020-1900,1,1,0,0), "this is a description 2",null);
+        item = new NotificationItem("person matched", new Date(2020-1900,2-1,1,0,0), "Abdelrahman Mamdouh is found by Walid Mohamed",null);
         list.add(item);
-        item = new NotificationItem("Third Title", new Date(2020-1900,2,25,10,55), "this is a description 3",null);
+        item = new NotificationItem("item matched", new Date(2020-1900,3-1,25,10,55), "your wallet is found by Dina Mishahed",null);
         item.setRead(true);
         list.add(item);
-        item = new NotificationItem("Forth Title", new Date(2020-1900,3,17,15,0), "this is a description 4",null);
+        item = new NotificationItem("item matched", new Date(2020-1900,4-1,17,15,0), "your money is found by Esraa Sayed",null);
         list.add(item);
-        item = new NotificationItem("Fifth Title", new Date(2020-1900,11,25,10,55), "this is a description 5",null);
+        item = new NotificationItem("person matched", new Date(2020-1900,12-1,25,10,55), "a relative of Folan Elfolany was found",null);
         list.add(item);
-        item = new NotificationItem("Sixth Title", Calendar.getInstance().getTime(), "this is a description 6",null);
+        item = new NotificationItem("candidate item", Calendar.getInstance().getTime(), "there are 3 candidate phones for matching",null);
         list.add(item);//*/
     }
 

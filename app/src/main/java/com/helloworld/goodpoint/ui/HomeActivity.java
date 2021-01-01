@@ -29,6 +29,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     AlertDialog.Builder dialog;
     BottomNavigationView bottomNavigationView;
     FloatingActionButton fab;
+    Fragment fhome, fmap, fmatch, fprofile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nv);
         navigationView.bringToFront();
+        fhome = new HomeFragment();
+        fmap = new MapFragment();
+        fmatch = new MatchFragment();
+        //fprofile = new ProfileFragment();
     }
 
     @Override
@@ -123,6 +128,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .setNegativeButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        PrefManager prefManager = new PrefManager(getApplicationContext());
+                        prefManager.setLogout();
                         startActivity(new Intent(HomeActivity.this,SigninActivity.class));
                         finish();
                     }
@@ -156,20 +163,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                     switch (item.getItemId()) {
                         case R.id.miHome:
-                            selectedFragment = new HomeFragment();
+                            selectedFragment = fhome;
                             break;
                         case R.id.miMatch:
-                            selectedFragment = new MatchFragment();
+                            selectedFragment = fmatch;
                             break;
                         case R.id.miProfile:
-                            //selectedFragment = new ProfileFragment();
+                            selectedFragment = fprofile;
                             break;
                         case R.id.miLocation:
-                            selectedFragment = new MapFragment();
+                            selectedFragment = fmap;
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                     return true;
                 }
             };
+
+
 }

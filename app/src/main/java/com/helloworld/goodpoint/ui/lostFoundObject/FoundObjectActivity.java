@@ -1,12 +1,7 @@
 package com.helloworld.goodpoint.ui.lostFoundObject;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.core.app.ActivityCompat;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -30,6 +25,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -121,7 +122,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                         switch (item.getItemId()) {
                             case R.id.TakeCurrLocation:
 
-                                Geocoder geocoder = new Geocoder(FoundObjectActivity.this, Locale.getDefault());
+                                Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
                                 try {
                                     List<Address> addresses = geocoder.getFromLocation(Latitude,Longitude,1);
                                     String Country = addresses.get(0).getCountryName();
@@ -178,7 +179,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             StringBuilder stringBuilder = new  StringBuilder();
             Latitude = place.getLatLng().latitude;
             Longitude = place.getLatLng().longitude;
-            Geocoder geocoder = new Geocoder(FoundObjectActivity.this, Locale.getDefault());
+            Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
             try {
                 List<Address> addresses = geocoder.getFromLocation(Latitude,Longitude,1);
                 String Country = addresses.get(0).getCountryName();

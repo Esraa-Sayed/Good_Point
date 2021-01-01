@@ -1,5 +1,6 @@
 package com.helloworld.goodpoint.pojo;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import java.util.Date;
@@ -10,6 +11,7 @@ public class NotificationItem {
     String description;
     Bitmap image;
     boolean read;
+    Intent intent;
 
     public NotificationItem(String title, Date date, String description, Bitmap image) {
         this.title = title;
@@ -41,5 +43,9 @@ public class NotificationItem {
 
     public void setRead(boolean read) {
         this.read = read;
+    }
+
+    public Intent getIntent() {
+        return intent;
     }
 }

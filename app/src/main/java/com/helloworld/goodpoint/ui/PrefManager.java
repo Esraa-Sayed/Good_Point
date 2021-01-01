@@ -40,6 +40,11 @@ public class PrefManager {
         editor.commit();
     }
 
+    public void setLogout(){
+        editor.putString(IS_LOGINNED, "");
+        editor.commit();
+    }
+
     public String isLoginned() {
         return pref.getString(IS_LOGINNED,"");
     }

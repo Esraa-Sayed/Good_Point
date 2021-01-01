@@ -18,8 +18,10 @@ import com.helloworld.goodpoint.pojo.NotificationItem;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -27,6 +29,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
 
     Context context;
     List<NotificationItem> list;
+    Locale locale = new Locale("en");
 
     public NotificationListAdapter(@NonNull Context context, int resource, @NonNull List<NotificationItem> list) {
         super(context, resource, list);
@@ -61,7 +64,8 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
     private void setItemDetails(@NotNull ViewHolder viewHolder, int revposition) {
         viewHolder.getTitle().setText(list.get(revposition).getTitle());
         Date date = list.get(revposition).getDate();
-        String date_time = date.getDate()+"/"+(date.getMonth()+1)+"/"+(date.getYear()+1900)+" "+date.getHours()+":"+date.getMinutes();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm",locale);
+        String date_time = dateFormat.format(date);
         viewHolder.getDate().setText(date_time);
         viewHolder.getDescription().setText(list.get(revposition).getDescription());
         if(list.get(revposition).getImage() != null)
