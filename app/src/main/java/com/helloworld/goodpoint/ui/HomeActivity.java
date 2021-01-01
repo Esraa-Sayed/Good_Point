@@ -38,8 +38,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         init();
         setToolBarAndDrawer();
+        setBottomNavigator();
 
+        //To make first fragment is home when opening the app
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fhome).commit();
 
+    }
+
+    private void setBottomNavigator() {
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -50,11 +56,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         bottomNavigationView.setBackgroundColor(0); //To hide the color of nav view
         bottomNavigationView.setOnNavigationItemSelectedListener(navListner);
-
-
-        //To make first fragment is home when opening the app
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-
     }
 
     private void setToolBarAndDrawer() {
