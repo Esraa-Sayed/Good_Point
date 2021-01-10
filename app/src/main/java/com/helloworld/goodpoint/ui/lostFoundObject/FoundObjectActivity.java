@@ -119,37 +119,41 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.TakeCurrLocation:
-
-                                Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
-                                try {
-                                    List<Address> addresses = geocoder.getFromLocation(Latitude,Longitude,1);
-                                    String Country = addresses.get(0).getCountryName();
-                                    String City = addresses.get(0).getAdminArea();
-                                    String area = addresses.get(0).getLocality();
-                                    String Locate = area + ","+ City + "," + Country + ".";
-                                    Location.setText(Locate);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
-                            case R.id.DeteLocation:
-                                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                                try {
-                                    Intent intent = builder.build(FoundObjectActivity.this);
-                                    startActivityForResult(intent,place_picker_request);
-                                }
-                                catch (GooglePlayServicesRepairableException e) {
-                                    e.printStackTrace();
-                                    Log.e("Crash", "onMenuItemClick: " + e.getMessage() );
-                                } catch (GooglePlayServicesNotAvailableException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
+                        if (ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                && ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(FoundObjectActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 12);
+                        }
+                        else {
+                            switch (item.getItemId()) {
+                                case R.id.TakeCurrLocation:
+                                    Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
+                                    try {
+                                        List<Address> addresses = geocoder.getFromLocation(Latitude, Longitude, 1);
+                                        String Country = addresses.get(0).getCountryName();
+                                        String City = addresses.get(0).getAdminArea();
+                                        String area = addresses.get(0).getLocality();
+                                        String Locate = area + "," + City + "," + Country + ".";
+                                        Location.setText(Locate);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                case R.id.DeteLocation:
+                                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                                    try {
+                                        Intent intent = builder.build(FoundObjectActivity.this);
+                                        startActivityForResult(intent, place_picker_request);
+                                    } catch (GooglePlayServicesRepairableException e) {
+                                        e.printStackTrace();
+                                        Log.e("Crash", "onMenuItemClick: " + e.getMessage());
+                                    } catch (GooglePlayServicesNotAvailableException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                            }
                         }
                         return true;
-                    }
+                     }
                 });
                 popupMenu.show();
                 break;
@@ -203,7 +207,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         else if(requestCode == 12 && (grantResults.length > 0) &&
                 grantResults[0] == PackageManager.PERMISSION_DENIED)
         {
-            Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
         }
         else if(requestCode == 11 && (grantResults.length > 0) &&
                 grantResults[0] == PackageManager.PERMISSION_DENIED)
@@ -250,6 +254,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 }
             });
         }
+
         else
         {
             //when location servies is not enabled
