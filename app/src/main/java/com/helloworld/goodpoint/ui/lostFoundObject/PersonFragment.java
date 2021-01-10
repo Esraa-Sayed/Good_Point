@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -129,11 +131,24 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                         ClipData clipData = data.getClipData();
                         if(clipData != null)
                         {
-                            for(int i = 0; i<clipData.getItemCount();i++)
+                            if(clipData.getItemCount()>10)
                             {
-                                photoFromGallery = clipData.getItemAt(i).getUri();
-                                bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
-                                imageView.setImageBitmap(bitmap.get(bitmap.size()-1));
+                                Toast toast = Toast.makeText(getActivity().getApplicationContext(),"You cannot choose more than 10 images",Toast.LENGTH_LONG);
+                                toast.setGravity(Gravity.BOTTOM,0,0);
+                                toast.show();
+                                for(int i = 0; i<10;i++)
+                                {
+                                    photoFromGallery = clipData.getItemAt(i).getUri();
+                                    bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
+                                    imageView.setImageBitmap(bitmap.get(bitmap.size()-1));
+                                }
+                            }
+                            else {
+                                for (int i = 0; i < clipData.getItemCount(); i++) {
+                                    photoFromGallery = clipData.getItemAt(i).getUri();
+                                    bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
+                                    imageView.setImageBitmap(bitmap.get(bitmap.size() - 1));
+                                }
                             }
                         }
                         else{
@@ -159,14 +174,31 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             }
             else
             {
-                for (int i = linearLayout.getChildCount(); i < bitmap.size(); i++) {
-                    View view = inflater2.inflate(R.layout.images, linearLayout, false);
-                    imageView2 = view.findViewById(R.id.imageView2);
-                    Close =   (Button)view.findViewById(R.id.Close);
-                    Close.setBackgroundColor(0x80F38E3A);
-                    imageView2.setImageBitmap(bitmap.get(i));
-                    linearLayout.addView(view);
+                if((linearLayout.getChildCount()+bitmap.size())>10)
+                {
+                   Toast toast = Toast.makeText(getActivity().getApplicationContext(),"You cannot choose more than 10 images",Toast.LENGTH_LONG);
+                   toast.setGravity(Gravity.BOTTOM,0,0);
+                   toast.show();
+                    for (int i = linearLayout.getChildCount(); i < 10; i++) {
+                        View view = inflater2.inflate(R.layout.images, linearLayout, false);
+                        imageView2 = view.findViewById(R.id.imageView2);
+                        Close =   (Button)view.findViewById(R.id.Close);
+                        Close.setBackgroundColor(0x80F38E3A);
+                        imageView2.setImageBitmap(bitmap.get(i));
+                        linearLayout.addView(view);
 
+                    }
+                }
+                else {
+                    for (int i = linearLayout.getChildCount(); i < bitmap.size(); i++) {
+                        View view = inflater2.inflate(R.layout.images, linearLayout, false);
+                        imageView2 = view.findViewById(R.id.imageView2);
+                        Close = (Button) view.findViewById(R.id.Close);
+                        Close.setBackgroundColor(0x80F38E3A);
+                        imageView2.setImageBitmap(bitmap.get(i));
+                        linearLayout.addView(view);
+
+                    }
                 }
             }
         }

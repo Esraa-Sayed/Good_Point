@@ -14,7 +14,7 @@
     <string name="Item">Item</string>
     <string name="AddImageOfPerson">Add image of person</string>
     <string name="AddItemDetails">Add item details</string>
-    <string name="SerialID">Serial ID</string>
+    <string name="SerialID">Serial ID(optional)</string>
     <string name="Match">Match</string>
     <string name="Description">Description</string>
     <string name="ColorOfObject">Color</string>
