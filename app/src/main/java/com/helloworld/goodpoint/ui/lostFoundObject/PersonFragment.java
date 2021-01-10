@@ -51,7 +51,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     {
         super.onCreate(savedInstanceState);
         if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
-                Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},11);
 
@@ -71,8 +71,13 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if(view == imageView) {
-            if (getActivity() instanceof FoundObjectActivity)
-            {
+            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),  Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 11);
+            }
+            else{
+
+            if (getActivity() instanceof FoundObjectActivity) {
                 PopupMenu popupMenu = new PopupMenu(getActivity(), view);
                 popupMenu.getMenuInflater().inflate(R.menu.choose_photo, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -103,8 +108,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     }
                 });
                 popupMenu.show();
-            }
-            else if (getActivity() instanceof LostObjectDetailsActivity) {
+            } else if (getActivity() instanceof LostObjectDetailsActivity) {
                 Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -114,6 +118,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 } else
                     Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
             }
+        }
         }
     }
     @Override

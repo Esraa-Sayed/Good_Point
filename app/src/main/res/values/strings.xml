@@ -18,6 +18,8 @@
     <string name="Match">Match</string>
     <string name="Description">Description</string>
     <string name="ColorOfObject">Color</string>
+    <string name="type">Type :</string>
+
     <string-array name="Types">
         <item>Type</item>
         <item>Phone</item>
