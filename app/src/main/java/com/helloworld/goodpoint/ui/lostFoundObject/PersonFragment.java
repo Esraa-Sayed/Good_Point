@@ -140,21 +140,18 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                                 {
                                     photoFromGallery = clipData.getItemAt(i).getUri();
                                     bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
-                                    imageView.setImageBitmap(bitmap.get(bitmap.size()-1));
                                 }
                             }
                             else {
                                 for (int i = 0; i < clipData.getItemCount(); i++) {
                                     photoFromGallery = clipData.getItemAt(i).getUri();
                                     bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
-                                    imageView.setImageBitmap(bitmap.get(bitmap.size() - 1));
                                 }
                             }
                         }
                         else{
                             photoFromGallery = data.getData();
                             bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
-                            imageView.setImageBitmap(bitmap.get(bitmap.size()-1));
                         }
 
                     } catch (IOException e) {
