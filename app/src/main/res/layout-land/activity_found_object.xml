@@ -87,6 +87,7 @@
                 android:textSize="@dimen/_12ssp"
                 android:singleLine="true"
                 android:inputType="none"
+                android:cursorVisible="false"
                 android:focusableInTouchMode="false"
                 android:scrollbars="horizontal"
                 android:gravity="center"

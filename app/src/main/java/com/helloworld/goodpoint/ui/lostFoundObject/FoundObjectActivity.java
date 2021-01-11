@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -14,6 +15,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -46,6 +49,10 @@ import com.google.android.gms.tasks.Task;
 import com.helloworld.goodpoint.R;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -124,34 +131,37 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                             ActivityCompat.requestPermissions(FoundObjectActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 12);
                         }
                         else {
-                            switch (item.getItemId()) {
-                                case R.id.TakeCurrLocation:
-                                    Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
-                                    try {
-                                        List<Address> addresses = geocoder.getFromLocation(Latitude, Longitude, 1);
-                                        String Country = addresses.get(0).getCountryName();
-                                        String City = addresses.get(0).getAdminArea();
-                                        String area = addresses.get(0).getLocality();
-                                        String Locate = area + "," + City + "," + Country + ".";
-                                        Location.setText(Locate);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
-                                case R.id.DeteLocation:
-                                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                                    try {
-                                        Intent intent = builder.build(FoundObjectActivity.this);
-                                        startActivityForResult(intent, place_picker_request);
-                                    } catch (GooglePlayServicesRepairableException e) {
-                                        e.printStackTrace();
-                                        Log.e("Crash", "onMenuItemClick: " + e.getMessage());
-                                    } catch (GooglePlayServicesNotAvailableException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
+                            if (!isNetworkAvailable(FoundObjectActivity.this) || !isInternetAvailable()) {
+                                Toast.makeText(FoundObjectActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
                             }
-                        }
+                            switch (item.getItemId()) {
+                                    case R.id.TakeCurrLocation:
+                                        Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
+                                        try {
+                                            List<Address> addresses = geocoder.getFromLocation(Latitude, Longitude, 1);
+                                            String Country = addresses.get(0).getCountryName();
+                                            String City = addresses.get(0).getAdminArea();
+                                            String area = addresses.get(0).getLocality();
+                                            String Locate = area + "," + City + "," + Country + ".";
+                                            Location.setText(Locate);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        break;
+                                    case R.id.DeteLocation:
+                                        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                                        try {
+                                            Intent intent = builder.build(FoundObjectActivity.this);
+                                            startActivityForResult(intent, place_picker_request);
+                                        } catch (GooglePlayServicesRepairableException e) {
+                                            e.printStackTrace();
+                                            Log.e("Crash", "onMenuItemClick: " + e.getMessage());
+                                        } catch (GooglePlayServicesNotAvailableException e) {
+                                            e.printStackTrace();
+                                        }
+                                        break;
+                                }
+                            }
                         return true;
                      }
                 });
@@ -260,6 +270,20 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             //when location servies is not enabled
             //open location setting
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
+    }
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nInfo = cm.getActiveNetworkInfo();
+        boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+        return connected;
+    }
+    public boolean isInternetAvailable() {
+        try {
+            String command = "ping -c 1 google.com";
+            return (Runtime.getRuntime().exec(command).waitFor() == 0);
+        } catch (Exception e) {
+            return false;
         }
     }
     protected void inti() {
