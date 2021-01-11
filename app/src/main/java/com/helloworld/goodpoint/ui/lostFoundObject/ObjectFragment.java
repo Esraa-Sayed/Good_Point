@@ -1,33 +1,56 @@
 package com.helloworld.goodpoint.ui.lostFoundObject;
 
+import android.Manifest;
 import android.app.Fragment;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.helloworld.goodpoint.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+import static android.app.Activity.RESULT_OK;
+
+public class ObjectFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
    private Spinner spinner;
    private List<String> list;
    private AutoCompleteTextView autoCom;
    private TextInputLayout other;
+   private ImageButton objectImageView;
+   private  Bitmap Bitmap_Image ;
+   private Uri imageUri;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},11);
+
+        }
         prepareList();
     }
 
@@ -38,6 +61,8 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
         spinner = v.findViewById(R.id.spinner);
         autoCom = v.findViewById(R.id.ColorOfObject);
         other = v.findViewById(R.id.other);
+        objectImageView = v.findViewById(R.id.objectImageView);
+        objectImageView.setOnClickListener(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getActivity().getApplicationContext(),
                 android.R.layout.simple_list_item_1,
@@ -87,5 +112,75 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == objectImageView) {
+            Log.e("SaSa", "onClick: ");
+            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 11);
+            } else {
+                if (getActivity() instanceof FoundObjectActivity) {
+                    PopupMenu popupMenu = new PopupMenu(getActivity(), v);
+                    popupMenu.getMenuInflater().inflate(R.menu.choose_photo, popupMenu.getMenu());
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.TakePhoto:
+                                    Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    if (i.resolveActivity(getActivity().getPackageManager()) != null) {
+                                        startActivityForResult(i, 10);
+                                    } else
+                                        Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                                    break;
+                                case R.id.Gallery:
+                                    Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                                    gallery.setType("image/*");
+                                    if (gallery.resolveActivity(getActivity().getPackageManager()) != null) {
+                                        startActivityForResult(gallery, 1);
+                                    } else
+                                        Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                                    break;
+                            }
+                            return true;
+                        }
+                    });
+                    popupMenu.show();
+                }
+                else if (getActivity() instanceof LostObjectDetailsActivity) {
+                    Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                    gallery.setType("image/*");
+                    if (gallery.resolveActivity(getActivity().getPackageManager()) != null) {
+                        startActivityForResult(gallery, 1);
+                    } else
+                        Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            switch (requestCode) {
+                case 10:
+                    Bitmap_Image = (Bitmap) data.getExtras().get("data");
+                    objectImageView.setImageBitmap(Bitmap_Image);
+                    break;
+                case 1:
+                    imageUri = data.getData();
+                    try {
+                        Bitmap_Image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                    objectImageView.setImageURI(imageUri);
+                    break;
+            }
+        }
     }
 }

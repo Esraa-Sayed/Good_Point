@@ -21,6 +21,16 @@
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <ImageButton
+        android:id="@+id/objectImageView"
+        style="@android:style/Widget.ImageButton"
+        android:layout_width="@dimen/_130sdp"
+        android:background="#FFFFFF"
+        android:layout_height="@dimen/_130sdp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_10sdp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_baseline_gallery_24" />
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="@dimen/_248sdp"
         android:layout_height="@dimen/_50sdp"
