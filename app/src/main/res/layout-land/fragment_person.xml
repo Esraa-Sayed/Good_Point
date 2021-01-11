@@ -18,15 +18,14 @@
         android:layout_marginBottom="@dimen/_10sdp"
         android:gravity="center"
         android:text="@string/AddImageOfPerson" />
-    <ImageButton
+    <Button
         android:id="@+id/add_new__photo"
-        style="@android:style/Widget.ImageButton"
-        android:layout_width="@dimen/_130sdp"
-        android:background="#FFFFFF"
-        android:layout_height="@dimen/_130sdp"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_80sdp"
         android:layout_gravity="center"
-        android:scaleType="fitCenter"
-        android:src="@drawable/add_new__photo" />
+        android:background="#00FFFFFF"
+        android:drawableBottom="@drawable/add_new_photo2"
+        />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

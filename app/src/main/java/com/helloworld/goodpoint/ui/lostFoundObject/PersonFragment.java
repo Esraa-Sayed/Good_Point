@@ -36,14 +36,14 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 public class PersonFragment extends Fragment implements View.OnClickListener {
-    private ImageButton imageView,add_new__photo;
+    private ImageButton imageView;
     private ImageView imageView2;
     private List<Bitmap> bitmap  = new ArrayList<>();
     private Uri photoFromGallery;
     private LinearLayout linearLayout,ADDP;
     private LayoutInflater inflater2;
     private View rootView;
-    private Button Close;
+    private Button Close,add_new__photo;
     private int nmberOfImageSelected;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
