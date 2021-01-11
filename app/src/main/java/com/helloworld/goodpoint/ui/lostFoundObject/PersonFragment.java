@@ -36,15 +36,15 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 public class PersonFragment extends Fragment implements View.OnClickListener {
-    private ImageButton imageView;
+    private ImageButton imageView,add_new__photo;
     private ImageView imageView2;
     private List<Bitmap> bitmap  = new ArrayList<>();
     private Uri photoFromGallery;
-    private LinearLayout linearLayout;
+    private LinearLayout linearLayout,ADDP;
     private LayoutInflater inflater2;
     private View rootView;
-   private Button Close;
-   private int nmberOfImageSelected;
+    private Button Close;
+    private int nmberOfImageSelected;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -62,21 +62,22 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_person, container, false);
         imageView = rootView.findViewById(R.id.imageView);
+        ADDP = rootView.findViewById(R.id.ADDP);
+        add_new__photo= rootView.findViewById(R.id.add_new__photo);
         linearLayout = (LinearLayout) rootView.findViewById(R.id.Gallery2);
         inflater2 = LayoutInflater.from(getActivity());
-        imageView.setOnClickListener(this);
+        add_new__photo.setOnClickListener(this);
         return rootView;
 
     }
     @Override
     public void onClick(View view) {
-        if(view == imageView) {
+        if(view == add_new__photo) {
             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),  Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 11);
             }
             else{
-
             if (getActivity() instanceof FoundObjectActivity) {
                 PopupMenu popupMenu = new PopupMenu(getActivity(), view);
                 popupMenu.getMenuInflater().inflate(R.menu.choose_photo, popupMenu.getMenu());
@@ -124,6 +125,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        ADDP.setVisibility(View.VISIBLE);
         if(resultCode==RESULT_OK&&data!=null)
         {
             switch(requestCode) {
@@ -218,9 +220,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     bitmap.remove(finalIndex1);
                     if(nmberOfImageSelected == finalIndex1)
                     {
+                        imageView.setVisibility(View.GONE);
                         imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_gallery_24));
                     }
-
                     linearLayout.removeViewAt(finalIndex1);
                     setOnClickListeners();
                 }
@@ -229,6 +231,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onClick(View view) {
                     imageView2 = view.findViewById(R.id.imageView2);
+                    imageView.setVisibility(View.VISIBLE);
                     imageView.setImageDrawable(imageView2.getDrawable());
                     nmberOfImageSelected = finalIndex1;
                 }
