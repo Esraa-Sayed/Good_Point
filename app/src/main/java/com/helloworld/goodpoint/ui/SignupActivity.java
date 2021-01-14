@@ -123,7 +123,8 @@ public class SignupActivity extends AppCompatActivity {
         Day = cal.get(Calendar.DAY_OF_MONTH);
         String TodayDate = Day + "/" + (month + 1) + "/" + year;
         DateT.setText(TodayDate);/**/
-        prepareList();
+        prepareList List = new prepareList();
+        list = List.prepareList(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         city.setThreshold(1);
         city.setAdapter(adapter);
@@ -259,35 +260,6 @@ public class SignupActivity extends AppCompatActivity {
         input += "Password: " + Password.getText().toString();
         Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
     }/**/
-
-    protected void prepareList() {
-        list = new ArrayList<>();
-        list.add(getString(R.string.Cairo));
-        list.add(getString(R.string.Alexandria));
-        list.add(getString(R.string.ShubraElKheima));
-        list.add(getString(R.string.Giza));
-        list.add(getString(R.string.PortSaid));
-        list.add(getString(R.string.Suez));
-        list.add(getString(R.string.ElMahallaElKubra));
-        list.add(getString(R.string.Luxor));
-        list.add(getString(R.string.Mansoura));
-        list.add(getString(R.string.Tanta));
-        list.add(getString(R.string.Asyut));
-        list.add(getString(R.string.Ismailia));
-        list.add(getString(R.string.Faiyum));
-        list.add(getString(R.string.Zagazig));
-        list.add(getString(R.string.Damietta));
-        list.add(getString(R.string.Aswan));
-        list.add(getString(R.string.Minya));
-        list.add(getString(R.string.BeniSuef));
-        list.add(getString(R.string.Hurghada));
-        list.add(getString(R.string.Qena));
-        list.add(getString(R.string.Sohag));
-        list.add(getString(R.string.ShibinElKom));
-        list.add(getString(R.string.Banha));
-        list.add(getString(R.string.Arish));
-
-    }
     public void onSaveInstanceState(@NonNull Bundle outState)
     {
         super.onSaveInstanceState(outState);
