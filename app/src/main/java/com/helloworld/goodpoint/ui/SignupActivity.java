@@ -13,8 +13,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.ContextMenu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -25,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.helloworld.goodpoint.R;
 
 import java.io.IOException;
@@ -36,6 +42,7 @@ import android.util.Patterns;
 
 public class SignupActivity extends AppCompatActivity {
     private TextView DateT;
+    private TextInputLayout tilUserName, tilEmail, tilPassword, tilCity, tilPhone;
     private EditText UserName, Email, Password, Phone;
     AutoCompleteTextView city;
     private DatePickerDialog.OnDateSetListener DateSet;
@@ -106,13 +113,22 @@ public class SignupActivity extends AppCompatActivity {
         }
     });
     /**/
+
     }
 
     protected void inti() {
-        UserName = findViewById(R.id.Name);
-        Email = findViewById(R.id.Email);
-        Password = findViewById(R.id.Pass);
-        city = findViewById(R.id.city);
+        UserName = findViewById(R.id.edName);
+        Email = findViewById(R.id.edEmail);
+        Password = findViewById(R.id.edPass);
+        city = findViewById(R.id.edCity);
+        Phone =findViewById(R.id.edPhone);
+
+        tilUserName = findViewById(R.id.tilName);
+        tilEmail = findViewById(R.id.tilEmail);
+        tilPassword = findViewById(R.id.tilPass);
+        tilCity = findViewById(R.id.tilcity);
+        tilPhone =findViewById(R.id.tilPhone);
+
         DateT = findViewById(R.id.Date);
         image = findViewById(R.id.im);
         registerForContextMenu(image);
@@ -178,13 +194,13 @@ public class SignupActivity extends AppCompatActivity {
     private boolean validateEmail() {
         String emailInput = Email.getText().toString().trim();
         if (emailInput.isEmpty()) {
-            Email.setError("Field can't be empty");
+            tilEmail.setError("Field can't be empty");
             return false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
-            Email.setError("Please enter a valid email address");
+            tilEmail.setError("Please enter a valid email address");
             return false;
         } else {
-            Email.setError(null);
+            tilEmail.setError(null);
             return true;
         }
     }
@@ -192,57 +208,57 @@ public class SignupActivity extends AppCompatActivity {
     private boolean validateUsername() {
         String usernameInput = UserName.getText().toString().trim();
         if (usernameInput.isEmpty()) {
-            UserName.setError("Field can't be empty");
+            tilUserName.setError("Field can't be empty");
             return false;
         } else if (usernameInput.length() > 15) {
-            UserName.setError("Username too long");
+            tilUserName.setError("Username too long");
             return false;
         } else {
-            UserName.setError(null);
+            tilUserName.setError(null);
             return true;
         }
     }
     private boolean validatePassword() {
         String passwordInput = Password.getText().toString().trim();
         if (passwordInput.isEmpty()) {
-            Password.setError("Field can't be empty");
+            tilPassword.setError("Field can't be empty");
             return false;
         } else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
-            Password.setError("Password too weak");
+            tilPassword.setError("Password too weak");
             return false;
         } else {
-            Password.setError(null);
+            tilPassword.setError(null);
             return true;
         }
     }
     private boolean validateCity() {
         String cityInput = city.getText().toString().trim();
         if (cityInput.isEmpty()) {
-            city.setError("Field can't be empty");
+            tilCity.setError("Field can't be empty");
             return false;
         } else if (!list.contains(cityInput)) {
-            city.setError("Please Enter valid city!");
+            tilCity.setError("Please Enter valid city!");
             return false;
         } else {
-            city.setError(null);
+            tilCity.setError(null);
             return true;
         }
     }//
     private boolean validatePhone() {
         String pInput = Phone.getText().toString().trim();
         if (pInput.isEmpty()) {
-            Phone.setError("Field can't be empty");
+            tilPhone.setError("Field can't be empty");
             return false;
         } else if (pInput.length() != 11) {
-            Phone.setError("Please enter a valid phone number");
+            tilPhone.setError("Please enter a valid phone number");
             return false;
         } else {
             try{
                 int i=Integer.parseInt(pInput);
-                Phone.setError("Please enter a valid phone number");
+                tilPhone.setError("Please enter a valid phone number");
             }
             catch (Exception e){
-                Phone.setError(null);
+                tilPhone.setError(null);
             }
 
             return true;
@@ -288,6 +304,7 @@ public class SignupActivity extends AppCompatActivity {
         list.add(getString(R.string.Arish));
 
     }
+
     public void onSaveInstanceState(@NonNull Bundle outState)
     {
         super.onSaveInstanceState(outState);
