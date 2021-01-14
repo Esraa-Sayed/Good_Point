@@ -78,6 +78,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
 
                FT.commit();
                flagPerson = true;
+               flagObject = false;
                break;
            case R.id.Object:
                FT.replace(R.id.FragmentID, ObjectF, "object");
@@ -86,6 +87,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
 
                FT.commit();
                flagObject = true;
+               flagPerson = false;
                break;
            case R.id.Date:
                DatePickerDialog dialog = new DatePickerDialog(
@@ -100,8 +102,16 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
            case R.id.Match:
                if (!flagObject && !flagPerson) {
                    Toast.makeText(this, "Specify the type of the missing object", Toast.LENGTH_SHORT).show();
-               } else {
-                   if(CheckMatch())
+               }
+               else if(flagObject) {
+                   if(CheckMatchObject())
+                   {
+                       Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
+                   }
+               }
+               else if(flagPerson)
+               {
+                   if(CheckMatchPerson())
                    {
                        Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
                    }
@@ -109,7 +119,11 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 break;
         }
     }
-    private boolean CheckMatch()
+    private boolean CheckMatchPerson()
+    {
+        return true;
+    }
+    private boolean CheckMatchObject()
     {
         AutoCompleteTextView V =  ObjectF.getView().findViewById(R.id.ColorOfObject);
         EditText serialObject =  ObjectF.getView().findViewById(R.id.Serial);
