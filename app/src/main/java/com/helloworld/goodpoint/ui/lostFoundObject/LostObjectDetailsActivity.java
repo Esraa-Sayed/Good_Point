@@ -40,8 +40,10 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private prepareList List ;
     private List<String> list,listColor ;
     private String City,ObjectColor,Serial,brand,textArea_information,Type;
-    Bitmap Bitmap_Image;
-    EditText TypeObject;
+    private String PName;
+    private Bitmap Bitmap_Image;
+    private List<Bitmap> Person_Images;
+    private EditText TypeObject;
     private Spinner spinner;
     private boolean flagPerson,flagObject,CheckImageObeject;
     @Override
@@ -121,6 +123,27 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     }
     private boolean CheckMatchPerson()
     {
+        EditText PersonName =  PersonF.getView().findViewById(R.id.PersonName);
+        PName = PersonName.getText().toString();
+        City = autoCom.getText().toString();
+        if(City.isEmpty()) {
+            autoCom.setError("Field can't be empty");
+            return false;
+        }
+        else if (!list.contains(City)) {
+            autoCom.setError("Please Enter a valid city!");
+            return false;
+        }
+        if(PName.isEmpty())
+        {
+            PersonName.setError("Field can't be empty");
+            return false;
+        }
+        else if(Person_Images.size() == 0)
+        {
+            Toast.makeText(this,"You must put at least one picture!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
         return true;
     }
     private boolean CheckMatchObject()
@@ -199,6 +222,8 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     {
         Bitmap_Image = BImage;
     }
+    @Override
+    public void getBitmap_ImagePersonImages(List<Bitmap> PImages){ Person_Images = PImages;}
     protected void inti() {
         DateT = findViewById(R.id.Date);
         autoCom = findViewById(R.id.auto);
