@@ -9,6 +9,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -23,6 +24,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -47,6 +49,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.prepareList;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -57,18 +60,26 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class FoundObjectActivity extends AppCompatActivity implements View.OnClickListener {
+public class FoundObjectActivity extends AppCompatActivity implements View.OnClickListener,objectDataType {
     private TextView DateFound;
     private EditText Location;
     private DatePickerDialog.OnDateSetListener DateSet;
     private int year, month, Day;
     private Button Person;
     private Button Object;
+    private Button MatchFound;
+    private prepareList List ;
+    private List<String> listColor ;
     private Fragment PersonF, ObjectF;
-     double Latitude;
-     double Longitude;
-     int place_picker_request = 1;
+    private String location;
+    private String ObjectColor,Serial,brand,textArea_information,Type;
+    private String PName;
+    private List<Bitmap> Person_Images;
+    double Latitude;
+    double Longitude;
+    int place_picker_request = 1;
     FusedLocationProviderClient fusedLocationProviderClient;
+    private boolean flagPerson,flagObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,9 +142,9 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                             ActivityCompat.requestPermissions(FoundObjectActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 12);
                         }
                         else {
-                            if (!isNetworkAvailable(FoundObjectActivity.this) || !isInternetAvailable()) {
+                           /* if (!isNetworkAvailable(FoundObjectActivity.this) || !isInternetAvailable()) {
                                 Toast.makeText(FoundObjectActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
-                            }
+                            }*/
                             switch (item.getItemId()) {
                                     case R.id.TakeCurrLocation:
                                         Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
@@ -168,6 +179,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 popupMenu.show();
                 break;
             case R.id.PersonFound:
+                flagPerson = true;
+                flagObject = false;
                 FT.replace(R.id.FragmentFoundID,PersonF,null);
                 Person.setTextColor(0xFFF38E3A);
                 Object.setTextColor(Color.BLACK);
@@ -175,15 +188,109 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 FT.commit();
                 break;
             case R.id.ObjectFound:
+                flagObject = true;
+                flagPerson = false;
                 FT.replace(R.id.FragmentFoundID,ObjectF,null);
                 Object.setTextColor(0xFFF38E3A);
                 Person.setTextColor(Color.BLACK);
 
                 FT.commit();
                 break;
+            case R.id.MatchFound:
+                if (!flagObject && !flagPerson) {
+                    Toast.makeText(this, "Specify the type of the missing object", Toast.LENGTH_SHORT).show();
+                }
+                else if(flagObject) {
+                    if(CheckMatchObject())
+                    {
+                        Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else if(flagPerson)
+                {
+                    if(CheckMatchPerson())
+                    {
+                        Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
         }
     }
+    private boolean CheckMatchPerson()
+    {
+        EditText PersonName =  PersonF.getView().findViewById(R.id.PersonName);
+        PName = PersonName.getText().toString();
+        location = Location.getText().toString();
+        if(location.isEmpty())
+        {
+            Toast.makeText(this,"Specify where you found this object",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(PName.isEmpty())
+        {
+            PersonName.setError("Field can't be empty");
+            return false;
+        }
+        else if(Person_Images.size() == 0)
+        {
+            Toast.makeText(this,"You must put at least one picture!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+    private boolean CheckMatchObject()
+    {
+        location = Location.getText().toString();
+        AutoCompleteTextView V =  ObjectF.getView().findViewById(R.id.ColorOfObject);
+        EditText serialObject =  ObjectF.getView().findViewById(R.id.Serial);
+        EditText brandObject =  ObjectF.getView().findViewById(R.id.brand);
+        EditText textArea_informationObject =  ObjectF.getView().findViewById(R.id.textArea_information);
+        EditText TypeObject;
 
+        ObjectColor = V.getText().toString();
+        Serial = serialObject.getText().toString();
+        brand = brandObject.getText().toString();
+        textArea_information = textArea_informationObject.getText().toString();
+        if(location.isEmpty())
+        {
+            Toast.makeText(this,"Specify where you found this object",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (Type.equals("Type")) {
+            Toast.makeText(this,"You must Choose the Type!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(Type.equals("Others"))
+        {
+            TypeObject =  ObjectF.getView().findViewById(R.id.Other);
+            Type = TypeObject.getText().toString();
+            if(Type.isEmpty())
+            {
+                TypeObject.setError("Field can't be empty");
+                return false;
+            }
+        }
+        else if(brand.isEmpty())
+        {
+            brandObject.setError("Field can't be empty");
+            return false;
+        }
+        else if(ObjectColor.isEmpty())
+        {
+            V.setError("Field can't be empty");
+            return false;
+        }
+        else if (!listColor.contains(ObjectColor.trim())) {
+            V.setError("Color isn't known!");
+            return false;
+        }
+        else if(textArea_information.isEmpty())
+        {
+            textArea_informationObject.setError("Field can't be empty");
+            return false;
+        }
+        return true;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -292,13 +399,17 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         Button foundLocatin = findViewById(R.id.FoundLocatin);
         Person = findViewById(R.id.PersonFound);
         Object = findViewById(R.id.ObjectFound);
+        MatchFound = findViewById(R.id.MatchFound);
         Location = findViewById(R.id.Location);
         DateFound.setOnClickListener(this);
         foundLocatin.setOnClickListener(this);
         Person.setOnClickListener(this);
         Object.setOnClickListener(this);
+        MatchFound.setOnClickListener(this);
         PersonF = new PersonFragment();
         ObjectF = new ObjectFragment();
+        List = new prepareList();
+        listColor = List.prepareListColor(this);
         Calendar cal = Calendar.getInstance();//To get today's date
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
@@ -307,4 +418,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         DateFound.setText(todayDate);
     }
 
+    @Override
+    public void getType(String T) { Type = T; }
+    @Override
+    public void getImageCheck(Boolean check) { }
+    @Override
+    public void getBitmap_Image(Bitmap Bitmap_Image) { }
+    @Override
+    public void getBitmap_ImagePersonImages(java.util.List<Bitmap> PImages) { Person_Images = PImages; }
 }

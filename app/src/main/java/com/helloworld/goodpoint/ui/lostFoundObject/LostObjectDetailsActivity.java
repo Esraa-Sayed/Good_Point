@@ -9,13 +9,10 @@ import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 import android.os.Bundle;
 import android.view.View;
@@ -43,8 +40,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private String PName;
     private Bitmap Bitmap_Image;
     private List<Bitmap> Person_Images;
-    private EditText TypeObject;
-    private Spinner spinner;
     private boolean flagPerson,flagObject,CheckImageObeject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +125,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             autoCom.setError("Field can't be empty");
             return false;
         }
-        else if (!list.contains(City)) {
+        else if (!list.contains(City.trim())) {
             autoCom.setError("Please Enter a valid city!");
             return false;
         }
@@ -152,7 +147,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         EditText serialObject =  ObjectF.getView().findViewById(R.id.Serial);
         EditText brandObject =  ObjectF.getView().findViewById(R.id.brand);
         EditText textArea_informationObject =  ObjectF.getView().findViewById(R.id.textArea_information);
-
+        EditText TypeObject;
         City = autoCom.getText().toString();
         ObjectColor = V.getText().toString();
         Serial = serialObject.getText().toString();
@@ -162,7 +157,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             autoCom.setError("Field can't be empty");
             return false;
         }
-        else if (!list.contains(City)) {
+        else if (!list.contains(City.trim())) {
             autoCom.setError("Please Enter a valid city!");
             return false;
         }
@@ -191,7 +186,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             return false;
         }
 
-        else if (!listColor.contains(ObjectColor)) {
+        else if (!listColor.contains(ObjectColor.trim())) {
             V.setError("Color isn't known!");
             return false;
         }
