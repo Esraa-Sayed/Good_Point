@@ -60,6 +60,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
         rootView = inflater.inflate(R.layout.fragment_person, container, false);
         imageView = rootView.findViewById(R.id.imageView);
         ADDP = rootView.findViewById(R.id.ADDP);
@@ -132,6 +133,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 case 10:
                     bitmap.add((Bitmap) data.getExtras().get("data"));
                     imageView.setImageBitmap(bitmap.get(bitmap.size()-1));
+                    ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
                     break;
                 case 1:
                     try {
@@ -166,6 +168,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     }
                     break;
             }
+            ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
             if(linearLayout.getChildCount() == 0) {
                 for (int i = 0; i < bitmap.size(); i++) {
                     View view = inflater2.inflate(R.layout.images, linearLayout, false);
@@ -218,6 +221,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onClick(View view) {
                     bitmap.remove(finalIndex1);
+                    ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
                     if(nmberOfImageSelected == finalIndex1)
                     {
                         imageView.setVisibility(View.GONE);
