@@ -276,8 +276,6 @@ public class SignupActivity extends AppCompatActivity {
         input += "Password: " + Password.getText().toString();
         Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
     }/**/
-<<<<<<< HEAD
-
     protected void prepareList() {
         list = new ArrayList<>();
         list.add(getString(R.string.Cairo));
@@ -306,9 +304,6 @@ public class SignupActivity extends AppCompatActivity {
         list.add(getString(R.string.Arish));
 
     }
-
-=======
->>>>>>> 4505d72b836c818670c94fe7486eaf208e192c01
     public void onSaveInstanceState(@NonNull Bundle outState)
     {
         super.onSaveInstanceState(outState);

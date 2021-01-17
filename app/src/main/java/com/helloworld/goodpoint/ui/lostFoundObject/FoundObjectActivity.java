@@ -50,6 +50,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.prepareList;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -89,13 +90,13 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 m++;
-                if (y > year || (m > month && y >= year)|| (d > Day && m >= month && y >= year)) {
-                    Toast.makeText(FoundObjectActivity.this, "Invalid date", Toast.LENGTH_LONG).show();
+                if (y > year || (m-1 > month && y >= year)|| (d > Day && m-1 >= month && y >= year)) {
+                    FancyToast.makeText(FoundObjectActivity.this,"Invalid date",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                     String todayDate = year + "/" + (month + 1) + "/" + Day;
                     DateFound.setText(todayDate);
                 } else {
 
-                    String Date = d + "/" + m + "/" + y;
+                    String Date = y + "/" + m + "/" + d;
                     DateFound.setText(Date);
                 }
             }
@@ -226,7 +227,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             Toast.makeText(this,"Specify where you found this object",Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(PName.isEmpty())
+        else if(PName.isEmpty())
         {
             PersonName.setError("Field can't be empty");
             return false;
@@ -414,7 +415,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
         Day = cal.get(Calendar.DAY_OF_MONTH);
-        String todayDate = Day + "/" + (month + 1) + "/" + year;
+        String todayDate = year + "/" + (month + 1) + "/" + Day;
         DateFound.setText(todayDate);
     }
 
