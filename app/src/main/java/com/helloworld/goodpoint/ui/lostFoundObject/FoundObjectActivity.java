@@ -199,20 +199,14 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.MatchFound:
                 if (!flagObject && !flagPerson) {
-                    Toast.makeText(this, "Specify the type of the missing object", Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(this,"Specify the type of the missing object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                 }
-                else if(flagObject) {
-                    if(CheckMatchObject())
-                    {
-                        Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
-                    }
+                else if(flagObject&&CheckMatchObject()) {
+                    FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                 }
-                else if(flagPerson)
+                else if(flagPerson&&CheckMatchPerson())
                 {
-                    if(CheckMatchPerson())
-                    {
-                        Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
-                    }
+                    FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                 }
                 break;
         }
@@ -224,17 +218,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         location = Location.getText().toString();
         if(location.isEmpty())
         {
-            Toast.makeText(this,"Specify where you found this object",Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        else if(PName.isEmpty())
-        {
-            PersonName.setError("Field can't be empty");
+            FancyToast.makeText(this,"Specify where you found this object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         else if(Person_Images.size() == 0)
         {
-            Toast.makeText(this,"You must put at least one picture!",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         return true;
@@ -254,11 +243,11 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         textArea_information = textArea_informationObject.getText().toString();
         if(location.isEmpty())
         {
-            Toast.makeText(this,"Specify where you found this object",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"Specify where you found this object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         else if (Type.equals("Type")) {
-            Toast.makeText(this,"You must Choose the Type!",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"You must Choose the Type!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         else if(Type.equals("Others"))
@@ -325,12 +314,13 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         else if(requestCode == 12 && (grantResults.length > 0) &&
                 grantResults[0] == PackageManager.PERMISSION_DENIED)
         {
-                Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
+
+            FancyToast.makeText(this,"Permission denied",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
         }
         else if(requestCode == 11 && (grantResults.length > 0) &&
                 grantResults[0] == PackageManager.PERMISSION_DENIED)
         {
-            Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"Permission denied",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
         }
 
     }

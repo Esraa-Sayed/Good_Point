@@ -99,20 +99,14 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                break;
            case R.id.Match:
                if (!flagObject && !flagPerson) {
-                   Toast.makeText(this, "Specify the type of the missing object", Toast.LENGTH_SHORT).show();
+                   FancyToast.makeText(this,"Specify the type of the missing object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                }
-               else if(flagObject) {
-                   if(CheckMatchObject())
-                   {
-                       Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
-                   }
+               else if(flagObject&&CheckMatchObject()) {
+                       FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                }
-               else if(flagPerson)
+               else if(flagPerson&&CheckMatchPerson())
                {
-                   if(CheckMatchPerson())
-                   {
-                       Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
-                   }
+                   FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                }
                 break;
         }
@@ -137,7 +131,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         }
         else if(Person_Images.size() == 0)
         {
-            Toast.makeText(this,"You must put at least one picture!",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         return true;
@@ -163,7 +157,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             return false;
         }
         else if (Type.equals("Type")) {
-            Toast.makeText(this,"You must Choose the Type!",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"You must Choose the Type!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         else if(Type.equals("Others"))
@@ -193,7 +187,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         }
         else if(CheckImageObeject && Bitmap_Image == null)
         {
-                Toast.makeText(this,"You should put the image to the item!",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"You should put the image to the item!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                 return false;
         }
         else if(textArea_information.isEmpty())

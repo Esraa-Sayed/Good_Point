@@ -26,6 +26,7 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.material.textfield.TextInputLayout;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.prepareList;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
 import java.util.List;
@@ -111,7 +112,7 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
                 if (gallery.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivityForResult(gallery, 1);
                 } else
-                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                    FancyToast.makeText(getActivity().getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
 
             }
         }
@@ -126,7 +127,7 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
                         Bitmap_Image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
                         ((objectDataType)getActivity()).getBitmap_Image( Bitmap_Image);
                     } catch (IOException e) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                        FancyToast.makeText(getActivity().getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                         e.printStackTrace();
                     }
                     objectImageView.setImageURI(imageUri);

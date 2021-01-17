@@ -28,6 +28,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 
 import com.helloworld.goodpoint.R;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +46,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private Button Close,add_new__photo;
     private int nmberOfImageSelected;
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -91,7 +91,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                                 if (i.resolveActivity(getActivity().getPackageManager()) != null) {
                                     startActivityForResult(i, 10);
                                 } else
-                                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                                    FancyToast.makeText(getActivity().getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                                 break;
                             case R.id.Gallery:
                                 Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT,
@@ -101,7 +101,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                                 if (pickPhoto.resolveActivity(getActivity().getPackageManager()) != null) {
                                     startActivityForResult(pickPhoto, 1);
                                 } else
-                                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                                    FancyToast.makeText(getActivity().getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
 
                                 break;
 
@@ -118,7 +118,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 if (pickPhoto.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivityForResult(pickPhoto, 1);
                 } else
-                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                    FancyToast.makeText(getActivity().getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             }
         }
         }
@@ -142,7 +142,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                         {
                             if(clipData.getItemCount()>10)
                             {
-                                Toast toast = Toast.makeText(getActivity().getApplicationContext(),"You cannot choose more than 10 images",Toast.LENGTH_LONG);
+                                Toast toast =  FancyToast.makeText(getActivity().getApplicationContext(),"You cannot choose more than 10 images",FancyToast.LENGTH_LONG, FancyToast.ERROR,false);
                                 toast.setGravity(Gravity.BOTTOM,0,0);
                                 toast.show();
                                 for(int i = 0; i<10;i++)
@@ -183,7 +183,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             {
                 if((linearLayout.getChildCount()+bitmap.size())>10)
                 {
-                   Toast toast = Toast.makeText(getActivity().getApplicationContext(),"You cannot choose more than 10 images",Toast.LENGTH_LONG);
+                   Toast toast = FancyToast.makeText(getActivity().getApplicationContext(),"You cannot choose more than 10 images",FancyToast.LENGTH_LONG, FancyToast.ERROR,false);
                    toast.setGravity(Gravity.BOTTOM,0,0);
                    toast.show();
                     for (int i = linearLayout.getChildCount(); i < 10; i++) {
