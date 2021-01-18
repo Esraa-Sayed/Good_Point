@@ -7,7 +7,12 @@
         android:bottomRightRadius="@dimen/_26sdp"
         />
     <stroke
-        android:width="@dimen/_3sdp"
         android:color="#878787"
         />
+    <gradient
+        android:angle="135"
+        android:centerColor="#FA5A28"
+        android:endColor="#FA3B00"
+        android:startColor="#FB815B"
+        android:type="linear" />
 </shape>
