@@ -18,6 +18,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -75,10 +76,11 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private String location;
     private String ObjectColor,Serial,brand,textArea_information,Type;
     private String PName;
+    WifiManager wifiManager;
+    private final static int PLACE_PICKER_REQUEST = 999;
     private List<Bitmap> Person_Images;
     double Latitude;
     double Longitude;
-    int place_picker_request = 1;
     FusedLocationProviderClient fusedLocationProviderClient;
     private boolean flagPerson,flagObject;
     @Override
@@ -161,15 +163,21 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                         }
                                         break;
                                     case R.id.DeteLocation:
+                                        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                                        wifiManager.setWifiEnabled(false);
                                         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                                         try {
                                             Intent intent = builder.build(FoundObjectActivity.this);
-                                            startActivityForResult(intent, place_picker_request);
-                                        } catch (GooglePlayServicesRepairableException e) {
+                                            startActivityForResult(intent, PLACE_PICKER_REQUEST);
+                                            wifiManager.setWifiEnabled(true);
+                                        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
                                             e.printStackTrace();
                                             Log.e("Crash", "onMenuItemClick: " + e.getMessage());
-                                        } catch (GooglePlayServicesNotAvailableException e) {
+                                        }
+                                        catch (Exception e)
+                                        {
                                             e.printStackTrace();
+                                            Log.e("Crash", "onMenuItemClick: " + e.getMessage());
                                         }
                                         break;
                                 }
@@ -209,6 +217,17 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                 }
                 break;
+        }
+    }
+    private void openPlacePicker() {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            Intent intent = builder.build(FoundObjectActivity.this);
+            startActivityForResult(intent, PLACE_PICKER_REQUEST);
+            wifiManager.setWifiEnabled(true);
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+            Log.e("Crash", "onMenuItemClick: " + e.getMessage());
         }
     }
     private boolean CheckMatchPerson()
@@ -284,7 +303,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == place_picker_request && resultCode == RESULT_OK)
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK)
         {
             Place place = PlacePicker.getPlace(data,this);
             StringBuilder stringBuilder = new  StringBuilder();
