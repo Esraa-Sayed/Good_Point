@@ -11,10 +11,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -23,27 +21,29 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.prepareList;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
 public class ObjectFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
    private Spinner spinner;
-   private List<String> list;
+   public List<String> list;
    private AutoCompleteTextView autoCom;
    private TextInputLayout other;
    private ImageButton objectImageView;
    private  Bitmap Bitmap_Image ;
    private CheckBox checkIcon;
    private Uri imageUri;
+   private prepareList List;
+   private String Type ;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +54,8 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
 
             }
         }
-        prepareList();
+        List= new prepareList();
+        list = List.prepareListColor(getActivity().getApplicationContext());
     }
 
     @Override
@@ -67,6 +68,7 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
         checkIcon = v.findViewById(R.id.checkIcon);
         objectImageView = v.findViewById(R.id.objectImageView);
         objectImageView.setOnClickListener(this);
+
         if (getActivity() instanceof LostObjectDetailsActivity) {
             checkIcon.setVisibility(View.VISIBLE);
             checkIcon.setOnClickListener(new View.OnClickListener() {
@@ -76,8 +78,10 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
                     //is chkIos checked?
                     if (((CheckBox) v).isChecked()) {
                         objectImageView.setVisibility(View.VISIBLE);
+                        ((objectDataType)getActivity()).getImageCheck(true);
                     } else {
                         objectImageView.setVisibility(View.GONE);
+                        ((objectDataType)getActivity()).getImageCheck(false);
                     }
 
                 }
@@ -108,7 +112,7 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
                 if (gallery.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivityForResult(gallery, 1);
                 } else
-                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                    FancyToast.makeText(getActivity().getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
 
             }
         }
@@ -121,8 +125,9 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
                     imageUri = data.getData();
                     try {
                         Bitmap_Image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                        ((objectDataType)getActivity()).getBitmap_Image( Bitmap_Image);
                     } catch (IOException e) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                        FancyToast.makeText(getActivity().getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                         e.printStackTrace();
                     }
                     objectImageView.setImageURI(imageUri);
@@ -132,6 +137,8 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         int posit = parent.getSelectedItemPosition();
+       Type = parent.getItemAtPosition(position).toString();
+       ((objectDataType)getActivity()).getType(Type);
         if(posit == 9)
         {
             other.setVisibility(View.VISIBLE);
@@ -146,23 +153,4 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
-    protected void prepareList() {
-        list = new ArrayList<>();
-        list.add(getString(R.string.Blue));
-        list.add(getString(R.string.Red));
-        list.add(getString(R.string.Yellow));
-        list.add(getString(R.string.Orange));
-        list.add(getString(R.string.Green));
-        list.add(getString(R.string.Violet));
-        list.add(getString(R.string.Brown));
-        list.add(getString(R.string.Magenta));
-        list.add(getString(R.string.Tan));
-        list.add(getString(R.string.Cyan));
-        list.add(getString(R.string.Olive));
-        list.add(getString(R.string.Pink));
-        list.add(getString(R.string.Black));
-        list.add(getString(R.string.White));
-        list.add(getString(R.string.Gray));
-        list.add(getString(R.string.Purple));
-    }
 }

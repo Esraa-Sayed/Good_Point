@@ -14,6 +14,7 @@
     <string name="Item">Item</string>
     <string name="AddImageOfPerson">Add image of person</string>
     <string name="AddItemDetails">Add item details</string>
+    <string name="AddPersonDetails">Add Person details</string>
     <string name="SerialID">Serial ID(optional)</string>
     <string name="Match">Match</string>
     <string name="Description">Description</string>
@@ -142,4 +143,5 @@
     <string name="find_your_missed">Find your missed</string>
     <string name="item_easy">item easy</string>
     <string name="ImageItem">Do you have a picture for this item?</string>
+    <string name="PersonName">Person name</string>
 </resources>
