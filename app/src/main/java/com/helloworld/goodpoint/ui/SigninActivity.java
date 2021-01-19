@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.forgetPasswordScreens.ForgetPassSuccessMessage;
+import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
 
 import java.util.Calendar;
 import java.util.regex.Pattern;
@@ -25,13 +27,13 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     private Button Sigin ,CreateNewAccount;
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^" +
-                    //"(?=.*[0-9])" +         //at least 1 digit
-                    //"(?=.*[a-z])" +         //at least 1 lower case letter
-                    //"(?=.*[A-Z])" +         //at least 1 upper case letter
-                    "(?=.*[a-zA-Z])" +      //any letter
-                    "(?=.*[@#$%^&+=])" +    //at least 1 special character
-                    "(?=\\S+$)" +           //no white spaces
-                    ".{4,}" +               //at least 4 characters
+                    "(?=.*[0-9])" +         //at least 1 digit
+                    "(?=.*[a-z])" +         //at least 1 lower case letter
+                    "(?=.*[A-Z])" +         //at least 1 upper case letter
+                   // "(?=.*[a-zA-Z])" +      //any letter
+                   // "(?=.*[@#$%^&+=])" +    //at least 1 special character
+                   // "(?=\\S+$)" +           //no white spaces
+                    ".{8,}" +               //at least 8 characters
                     "$");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
        //getActionBar().hide();
         setContentView(R.layout.activity_signin);
         inti();
+
     }
 
     protected void inti() {
@@ -48,9 +51,16 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         ForgetPass = findViewById(R.id.forgetPass);
         Sigin =findViewById(R.id.signin);
         CreateNewAccount = findViewById(R.id.NewAccount);
-
         Sigin.setOnClickListener(this);
         CreateNewAccount.setOnClickListener(this);
+        ForgetPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(SigninActivity.this, "you clicked me", Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(view.getContext(), MakeSelection.class);
+                startActivityForResult(myIntent, 0);
+            }
+        });
     }
 
     @Override
@@ -74,7 +84,15 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             Pass.setError("Field can't be empty");
             return false;
         } else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
-            Pass.setError("Password too weak");
+            Pass.setError("password to weak!");
+            /*if(!passwordInput.matches("[0-9]+"))
+                Pass.setError("must contain at least 1 digit");
+            else if(!passwordInput.matches("[a-z]+"))
+                Pass.setError("must contain at least 1 lower case letter");
+            else if(!passwordInput.matches("[A-Z]+"))
+                Pass.setError("must contain at least 1 upper case letter");
+            else
+                Pass.setError("must contain at least 8 characters");*/
             return false;
         } else {
             Pass.setError(null);

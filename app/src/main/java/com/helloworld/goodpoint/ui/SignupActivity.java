@@ -34,11 +34,14 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.helloworld.goodpoint.R;
 
 import java.io.IOException;
+import java.io.ObjectInputValidation;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
 import android.util.Patterns;
+
+import org.intellij.lang.annotations.RegExp;
 
 public class SignupActivity extends AppCompatActivity {
     private TextView DateT;
@@ -53,13 +56,13 @@ public class SignupActivity extends AppCompatActivity {
     Bitmap Bitmap_Image ; Uri imageUri;
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^" +
-                    //"(?=.*[0-9])" +         //at least 1 digit
-                    //"(?=.*[a-z])" +         //at least 1 lower case letter
-                    //"(?=.*[A-Z])" +         //at least 1 upper case letter
-                    "(?=.*[a-zA-Z])" +      //any letter
-                    "(?=.*[@#$%^&+=])" +    //at least 1 special character
-                    "(?=\\S+$)" +           //no white spaces
-                    ".{4,}" +               //at least 4 characters
+                    "(?=.*[0-9])" +         //at least 1 digit
+                    "(?=.*[a-z])" +         //at least 1 lower case letter
+                    "(?=.*[A-Z])" +         //at least 1 upper case letter
+                    //"(?=.*[a-zA-Z])" +      //any letter
+                    //"(?=.*[@#$%^&+=])" +    //at least 1 special character
+                    //"(?=\\S+$)" +           //no white spaces
+                    ".{8,}" +               //at least 4 characters
                     "$");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +96,9 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 m++;
-                if (y > year || (y == year && m > month) || (y == year && m > month && d > Day) ) {
-                    Toast.makeText(SignupActivity.this, "", Toast.LENGTH_SHORT).show();
+                if (y > year || (y == year && m - 1 > month)|| (y == year && m - 1 == month && d > Day) ) {
+                    String Date = d + "/" + m + "/" + y;
+                    Toast.makeText(SignupActivity.this, Date, Toast.LENGTH_SHORT).show();
                     String todayDate = Day + "/" + (month + 1) + "/" + year;
                     DateT.setText(todayDate);
                 }
@@ -112,9 +116,28 @@ public class SignupActivity extends AppCompatActivity {
             confirmInput(view);
         }
     });
-    /**/
+    /*
 
+        Password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Password.setSelection(0);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        */
     }
+
+
 
     protected void inti() {
         UserName = findViewById(R.id.edName);
@@ -195,13 +218,13 @@ public class SignupActivity extends AppCompatActivity {
     private boolean validateEmail() {
         String emailInput = Email.getText().toString().trim();
         if (emailInput.isEmpty()) {
-            tilEmail.setError("Field can't be empty");
+            Email.setError("Field can't be empty");
             return false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
-            tilEmail.setError("Please enter a valid email address");
+            Email.setError("Please enter a valid email address");
             return false;
         } else {
-            tilEmail.setError(null);
+            Email.setError(null);
             return true;
         }
     }
@@ -209,15 +232,26 @@ public class SignupActivity extends AppCompatActivity {
     private boolean validateUsername() {
         String usernameInput = UserName.getText().toString().trim();
         if (usernameInput.isEmpty()) {
-            tilUserName.setError("Field can't be empty");
+            UserName.setError("Field can't be empty");
             return false;
         } else if (usernameInput.length() > 15) {
-            tilUserName.setError("Username too long");
+            UserName.setError("Username too long");
             return false;
         } else {
-            tilUserName.setError(null);
+            UserName.setError(null);
             return true;
         }
+    }
+    private boolean find_Digit(String s){
+        String n ;
+
+        for(int i = 1; i < s.length(); i++){
+            n = s.substring(i-1,i);
+            if(n.matches("[0-9]"))
+                return true;
+        }
+
+        return false;
     }
     private boolean validatePassword() {
         String passwordInput = Password.getText().toString().trim();
@@ -225,7 +259,14 @@ public class SignupActivity extends AppCompatActivity {
             tilPassword.setError("Field can't be empty");
             return false;
         } else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
-            tilPassword.setError("Password too weak");
+            /*if(!find_Digit(passwordInput) )
+                tilPassword.setError("must contain at least 1 digit");
+            else if(!passwordInput.matches("[a-z]"))
+                tilPassword.setError("must contain at least 1 lower case letter");
+            else if(!passwordInput.matches("[A-Z]"))
+                tilPassword.setError("must contain at least 1 upper case letter");
+            else*/
+            tilPassword.setError("Must contains digits, lower&upper case letters and length > 8");
             return false;
         } else {
             tilPassword.setError(null);
@@ -235,38 +276,38 @@ public class SignupActivity extends AppCompatActivity {
     private boolean validateCity() {
         String cityInput = city.getText().toString().trim();
         if (cityInput.isEmpty()) {
-            tilCity.setError("Field can't be empty");
+            city.setError("Field can't be empty");
             return false;
         } else if (!list.contains(cityInput)) {
-            tilCity.setError("Please Enter valid city!");
+            city.setError("Please Enter valid city!");
             return false;
         } else {
-            tilCity.setError(null);
+            city.setError(null);
             return true;
         }
     }//
     private boolean validatePhone() {
         String pInput = Phone.getText().toString().trim();
         if (pInput.isEmpty()) {
-            tilPhone.setError("Field can't be empty");
+            Phone.setError("Field can't be empty");
             return false;
         } else if (pInput.length() != 11) {
-            tilPhone.setError("Please enter a valid phone number");
+            Phone.setError("Please enter a valid phone number");
             return false;
         } else {
-            try{
-                int i=Integer.parseInt(pInput);
+            /*try{
+                int i = Integer.parseInt(pInput);
                 tilPhone.setError("Please enter a valid phone number");
             }
             catch (Exception e){
                 tilPhone.setError(null);
-            }
-
+            }*/
+            Phone.setError(null);
             return true;
         }
     }//| !validatePhone()
     public void confirmInput(View v) {
-        if (!validateEmail() | !validateUsername() | !validatePassword()  |!validateCity()) {
+        if (!validateEmail() | !validateUsername() | !validatePassword() | !validatePhone() |!validateCity()) {
             return;
         }
         String input = "Email: " + Email.getText().toString();
@@ -276,7 +317,7 @@ public class SignupActivity extends AppCompatActivity {
         input += "Password: " + Password.getText().toString();
         Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
     }/**/
-<<<<<<< HEAD
+
 
     protected void prepareList() {
         list = new ArrayList<>();
@@ -307,8 +348,6 @@ public class SignupActivity extends AppCompatActivity {
 
     }
 
-=======
->>>>>>> 4505d72b836c818670c94fe7486eaf208e192c01
     public void onSaveInstanceState(@NonNull Bundle outState)
     {
         super.onSaveInstanceState(outState);

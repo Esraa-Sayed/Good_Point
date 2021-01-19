@@ -11,7 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="@dimen/_10sdp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="@dimen/_150sdp"
@@ -24,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_15sdp">
             <ImageView
 
@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="@dimen/_10sdp">
+            android:layout_marginTop="@dimen/_5sdp">
             <ImageView
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -63,7 +63,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tilEmail">
+                android:id="@+id/tilEmail"
+              >
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -77,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="@dimen/_10sdp">
+            android:layout_marginTop="@dimen/_5sdp">
             <ImageView
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -105,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="@dimen/_10sdp">
+            android:layout_marginTop="@dimen/_5sdp">
             <ImageView
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -121,6 +122,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:hint="@string/PhoneNumber"
+                    android:inputType="number"
                     android:id="@+id/edPhone"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -128,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="@dimen/_10sdp">
+            android:layout_marginTop="@dimen/_5sdp">
             <ImageView
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -152,8 +154,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/_10ssp"
-            android:layout_margin="@dimen/_10sdp">
+            android:padding="@dimen/_10ssp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
