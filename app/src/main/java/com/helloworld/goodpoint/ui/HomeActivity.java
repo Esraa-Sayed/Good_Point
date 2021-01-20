@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fhome = new HomeFragment();
         fmap = new MapFragment();
         fmatch = new MatchFragment();
-        //fprofile = new ProfileFragment();
+        fprofile = new ProfileFragment();
     }
 
     @Override

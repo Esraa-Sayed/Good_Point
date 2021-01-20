@@ -18,6 +18,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -28,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +53,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.prepareList;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -59,6 +63,8 @@ import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class FoundObjectActivity extends AppCompatActivity implements View.OnClickListener,objectDataType {
     private TextView DateFound;
@@ -74,10 +80,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private String location;
     private String ObjectColor,Serial,brand,textArea_information,Type;
     private String PName;
+    private ProgressBar progressbar;
+    private WifiManager wifiManager;
+    private final static int PLACE_PICKER_REQUEST = 999;
     private List<Bitmap> Person_Images;
     double Latitude;
     double Longitude;
-    int place_picker_request = 1;
     FusedLocationProviderClient fusedLocationProviderClient;
     private boolean flagPerson,flagObject;
     @Override
@@ -89,13 +97,13 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 m++;
-                if (y > year || (m > month && y >= year)|| (d > Day && m >= month && y >= year)) {
-                    Toast.makeText(FoundObjectActivity.this, "Invalid date", Toast.LENGTH_LONG).show();
+                if (y > year || (m-1 > month && y >= year)|| (d > Day && m-1 >= month && y >= year)) {
+                    FancyToast.makeText(FoundObjectActivity.this,"Invalid date",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                     String todayDate = year + "/" + (month + 1) + "/" + Day;
                     DateFound.setText(todayDate);
                 } else {
 
-                    String Date = d + "/" + m + "/" + y;
+                    String Date = y + "/" + m + "/" + d;
                     DateFound.setText(Date);
                 }
             }
@@ -142,33 +150,34 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                             ActivityCompat.requestPermissions(FoundObjectActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 12);
                         }
                         else {
-                           /* if (!isNetworkAvailable(FoundObjectActivity.this) || !isInternetAvailable()) {
-                                Toast.makeText(FoundObjectActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
-                            }*/
                             switch (item.getItemId()) {
                                     case R.id.TakeCurrLocation:
-                                        Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
-                                        try {
-                                            List<Address> addresses = geocoder.getFromLocation(Latitude, Longitude, 1);
-                                            String Country = addresses.get(0).getCountryName();
-                                            String City = addresses.get(0).getAdminArea();
-                                            String area = addresses.get(0).getLocality();
-                                            String Locate = area + "," + City + "," + Country + ".";
-                                            Location.setText(Locate);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
+                                        isInternetAvailable Available = new isInternetAvailable();
+                                        Available.execute();
+                                        CurrentLocation Locate = new CurrentLocation();
+                                        Locate.execute();
                                         break;
                                     case R.id.DeteLocation:
+                                        boolean flag = false;
+                                        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                                        if(wifiManager.isWifiEnabled())
+                                            wifiManager.setWifiEnabled(false);
+                                        else {
+                                            flag = true;
+                                        }
                                         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                                         try {
                                             Intent intent = builder.build(FoundObjectActivity.this);
-                                            startActivityForResult(intent, place_picker_request);
-                                        } catch (GooglePlayServicesRepairableException e) {
+                                            startActivityForResult(intent, PLACE_PICKER_REQUEST);
+                                           if(!flag) wifiManager.setWifiEnabled(true);
+                                        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
                                             e.printStackTrace();
                                             Log.e("Crash", "onMenuItemClick: " + e.getMessage());
-                                        } catch (GooglePlayServicesNotAvailableException e) {
+                                        }
+                                        catch (Exception e)
+                                        {
                                             e.printStackTrace();
+                                            Log.e("Crash", "onMenuItemClick: " + e.getMessage());
                                         }
                                         break;
                                 }
@@ -198,20 +207,14 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.MatchFound:
                 if (!flagObject && !flagPerson) {
-                    Toast.makeText(this, "Specify the type of the missing object", Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(this,"Specify the type of the missing object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                 }
-                else if(flagObject) {
-                    if(CheckMatchObject())
-                    {
-                        Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
-                    }
+                else if(flagObject&&CheckMatchObject()) {
+                    FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                 }
-                else if(flagPerson)
+                else if(flagPerson&&CheckMatchPerson())
                 {
-                    if(CheckMatchPerson())
-                    {
-                        Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
-                    }
+                    FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                 }
                 break;
         }
@@ -223,17 +226,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         location = Location.getText().toString();
         if(location.isEmpty())
         {
-            Toast.makeText(this,"Specify where you found this object",Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(PName.isEmpty())
-        {
-            PersonName.setError("Field can't be empty");
+            FancyToast.makeText(this,"Specify where you found this object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         else if(Person_Images.size() == 0)
         {
-            Toast.makeText(this,"You must put at least one picture!",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         return true;
@@ -253,11 +251,11 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         textArea_information = textArea_informationObject.getText().toString();
         if(location.isEmpty())
         {
-            Toast.makeText(this,"Specify where you found this object",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"Specify where you found this object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         else if (Type.equals("Type")) {
-            Toast.makeText(this,"You must Choose the Type!",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"You must Choose the Type!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         else if(Type.equals("Others"))
@@ -294,23 +292,16 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == place_picker_request && resultCode == RESULT_OK)
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK)
         {
             Place place = PlacePicker.getPlace(data,this);
             StringBuilder stringBuilder = new  StringBuilder();
             Latitude = place.getLatLng().latitude;
             Longitude = place.getLatLng().longitude;
-            Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
-            try {
-                List<Address> addresses = geocoder.getFromLocation(Latitude,Longitude,1);
-                String Country = addresses.get(0).getCountryName();
-                String City = addresses.get(0).getAdminArea();
-                String area = addresses.get(0).getLocality();
-                String Locate = area + ","+ City + "," + Country + ".";
-                Location.setText(Locate);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            isInternetAvailable Available = new isInternetAvailable();
+            Available.execute();
+            CurrentLocation Locate = new CurrentLocation();
+            Locate.execute();
         }
     }
 
@@ -324,12 +315,13 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         else if(requestCode == 12 && (grantResults.length > 0) &&
                 grantResults[0] == PackageManager.PERMISSION_DENIED)
         {
-                Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
+
+            FancyToast.makeText(this,"Permission denied",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
         }
         else if(requestCode == 11 && (grantResults.length > 0) &&
                 grantResults[0] == PackageManager.PERMISSION_DENIED)
         {
-            Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"Permission denied",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
         }
 
     }
@@ -379,23 +371,82 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
+    class CurrentLocation extends AsyncTask<Void,Void, String>
+    {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressbar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String Locate) {
+            super.onPostExecute(Locate);
+            if(Locate.isEmpty())
+                FancyToast.makeText(FoundObjectActivity.this,"An error has occurred , please try again",FancyToast.LENGTH_LONG, FancyToast.WARNING,false).show();
+            Location.setText(Locate);
+            progressbar.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
+            String Locate ="";
+            try {
+                List<Address> addresses = geocoder.getFromLocation(Latitude, Longitude, 1);
+                String Country = addresses.get(0).getCountryName();
+                String City = addresses.get(0).getAdminArea();
+                String area = addresses.get(0).getLocality();
+                 Locate = area + "," + City + "," + Country + ".";
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return Locate;
+        }
+
+    }
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo nInfo = cm.getActiveNetworkInfo();
         boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
         return connected;
     }
-    public boolean isInternetAvailable() {
-        try {
-            String command = "ping -c 1 google.com";
-            return (Runtime.getRuntime().exec(command).waitFor() == 0);
-        } catch (Exception e) {
-            return false;
+    class isInternetAvailable extends AsyncTask<Void,Void, Boolean>
+    {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressbar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            progressbar.setVisibility(View.GONE);
+            if(!aBoolean)
+                FancyToast.makeText(FoundObjectActivity.this,"No Internet Connection",FancyToast.LENGTH_LONG, FancyToast.WARNING,false).show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            Boolean flag;
+            try {
+                String command = "ping -c 1 google.com";
+                 flag =  (Runtime.getRuntime().exec(command).waitFor() == 0);
+            } catch (Exception e) {
+                Log.e("TAG", "run: False");
+                flag = false;
+            }
+            Log.e("TAG", "run:" + flag);
+            return flag;
         }
     }
     protected void inti() {
 
         DateFound = findViewById(R.id.DateFound);
+        progressbar = findViewById(R.id.ProgressBar);
         Button foundLocatin = findViewById(R.id.FoundLocatin);
         Person = findViewById(R.id.PersonFound);
         Object = findViewById(R.id.ObjectFound);
@@ -414,7 +465,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
         Day = cal.get(Calendar.DAY_OF_MONTH);
-        String todayDate = Day + "/" + (month + 1) + "/" + year;
+        String todayDate = year + "/" + (month + 1) + "/" + Day;
         DateFound.setText(todayDate);
     }
 

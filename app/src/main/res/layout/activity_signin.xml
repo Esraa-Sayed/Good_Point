@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
-    android:id="@+id/l1"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.SigninActivity"
-    android:background="@drawable/signin_background">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation = "vertical"
-        android:layout_gravity = "center"
-        >
+<LinearLayout
+    xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent"
+    tools:context = ".ui.SigninActivity"
+    android:background = "@drawable/signin_background"
+    android:orientation = "vertical">
 
    <RelativeLayout
        android:layout_width="match_parent"
-       android:layout_height="@dimen/_150sdp"
-       >
-   <ImageView
-       android:layout_marginTop="@dimen/_10sdp"
+       android:layout_height="@dimen/_120sdp" >
+   <!--<ImageView
        android:layout_width="@dimen/_100sdp"
        android:layout_height="@dimen/_100sdp"
        android:layout_marginLeft="@dimen/_25sdp"
        android:background="@drawable/location_signin"
-       />
+       />-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#ffffff"
-        android:textSize="@dimen/_30sdp"
+        android:textSize="@dimen/_28sdp"
         android:fontFamily="@font/muli_black"
-        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginLeft="@dimen/_110sdp"
         android:text="Good Point"/>
     </RelativeLayout>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -167,13 +167,13 @@
         android:background="@drawable/custom_button"
         android:id="@+id/NewAccount"/>
 
-   <!-- <ImageView
+<!-- <ImageView
         android:layout_width="@dimen/_200sdp"
         android:layout_height="@dimen/_150sdp"
         android:background="@drawable/q_circle"
         android:layout_marginStart="@dimen/_120sdp"
         android:layout_marginTop="@dimen/_50sdp"
-        />
--->
+        />-->
     </LinearLayout>
 </ScrollView>
+</LinearLayout>

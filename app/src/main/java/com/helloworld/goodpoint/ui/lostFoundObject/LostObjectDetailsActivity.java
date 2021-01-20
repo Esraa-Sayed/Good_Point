@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.prepareList;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.Calendar;
 import java.util.List;
@@ -50,13 +51,13 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 m++;
-                if (y > year || (m > month && y >= year)|| (d > Day && m >= month && y >= year)) {
-                    Toast.makeText(LostObjectDetailsActivity.this, "Invalid date", Toast.LENGTH_LONG).show();
+                if (y > year || (m-1 > month && y >= year)|| (d > Day && m-1 >= month && y >= year)) {
+                    FancyToast.makeText(LostObjectDetailsActivity.this,"Invalid date",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                     String todayDate = year + "/" + (month + 1) + "/" + Day;
                     DateT.setText(todayDate);
                 } else {
 
-                    String Date = d + "/" + m + "/" + y;
+                    String Date = y + "/" + m + "/" + d;
                     DateT.setText(Date);
                 }
             }
@@ -98,20 +99,14 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                break;
            case R.id.Match:
                if (!flagObject && !flagPerson) {
-                   Toast.makeText(this, "Specify the type of the missing object", Toast.LENGTH_SHORT).show();
+                   FancyToast.makeText(this,"Specify the type of the missing object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                }
-               else if(flagObject) {
-                   if(CheckMatchObject())
-                   {
-                       Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
-                   }
+               else if(flagObject&&CheckMatchObject()) {
+                       FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                }
-               else if(flagPerson)
+               else if(flagPerson&&CheckMatchPerson())
                {
-                   if(CheckMatchPerson())
-                   {
-                       Toast.makeText(this, "The data has been saved successfully", Toast.LENGTH_LONG).show();
-                   }
+                   FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                }
                 break;
         }
@@ -136,7 +131,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         }
         else if(Person_Images.size() == 0)
         {
-            Toast.makeText(this,"You must put at least one picture!",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         return true;
@@ -162,7 +157,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             return false;
         }
         else if (Type.equals("Type")) {
-            Toast.makeText(this,"You must Choose the Type!",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"You must Choose the Type!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
         else if(Type.equals("Others"))
@@ -192,7 +187,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         }
         else if(CheckImageObeject && Bitmap_Image == null)
         {
-                Toast.makeText(this,"You should put the image to the item!",Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(this,"You should put the image to the item!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                 return false;
         }
         else if(textArea_information.isEmpty())
@@ -238,7 +233,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
         Day = cal.get(Calendar.DAY_OF_MONTH);
-        String todayDate = Day + "/" + (month + 1) + "/" + year;
+        String todayDate = year + "/" + (month + 1) + "/" + Day ;
         DateT.setText(todayDate);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         autoCom.setThreshold(1);//start working from first char

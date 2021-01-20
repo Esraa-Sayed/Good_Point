@@ -55,9 +55,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/_30sdp"
+            android:layout_marginLeft="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginRight="@dimen/_30sdp"
+            android:layout_marginRight="@dimen/_15sdp"
             android:orientation="horizontal"
             >
             <Button
@@ -90,6 +90,12 @@
                     android:scrollbars="horizontal"
                     android:gravity="center"
                     />
+            <ProgressBar
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="wrap_content"
+                android:id="@+id/ProgressBar"
+                android:visibility="gone"
+                />
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"

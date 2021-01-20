@@ -13,7 +13,7 @@
         android:layout_weight=".5"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FD9727">
+        android:background="@drawable/nav_head_color">
 
         <Button
             android:id="@+id/button_lost"
@@ -23,7 +23,7 @@
             android:background="@drawable/buttons"
             android:shadowColor="#000000"
             android:text="@string/button_lost"
-            android:textColor="#FD9727"
+            android:textColor="#FA5F2F"
             android:textSize="@dimen/_25ssp"
             app:backgroundTint="#FFFFFF"
             android:onClick="lost_btn"/>
@@ -44,7 +44,6 @@
             android:text="@string/button_found"
             android:textColor="#ffffff"
             android:textSize="@dimen/_25ssp"
-            app:backgroundTint="#FD9727"
             android:onClick="found_btn"/>
     </RelativeLayout>
 </LinearLayout>
