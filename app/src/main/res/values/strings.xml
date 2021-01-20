@@ -95,7 +95,7 @@
     <string name="RememberMe">Remember Me</string>
     <string name="or">or</string>
     <string name="Signup">Sign up</string>
-    <string name="ForgetPassword"><a href="">Forget Password?</a></string>
+    <string name="ForgetPassword">Forget Password?</string>
 
     <string name="Home">Home</string>
     <string name="Matched">Matched</string>

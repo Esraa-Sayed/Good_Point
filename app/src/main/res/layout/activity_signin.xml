@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<ScrollView
     android:id="@+id/l1"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".ui.SigninActivity"
-    android:orientation = "vertical"
-   android:layout_gravity = "center">
+    android:background="@drawable/signin_background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation = "vertical"
+        android:layout_gravity = "center"
+        >
+
    <RelativeLayout
        android:layout_width="match_parent"
        android:layout_height="@dimen/_150sdp"
-       android:background="@drawable/halfcircle"
        >
    <ImageView
        android:layout_marginTop="@dimen/_10sdp"
@@ -72,7 +77,9 @@
             android:src = "@drawable/ic_baseline_lock_24"/>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:passwordToggleDrawable="@drawable/show_password"
+            app:passwordToggleEnabled="true">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -93,30 +100,7 @@
         android:background="@drawable/oval"
         android:textColor="#ffffff"
         android:id="@+id/signin"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:layout_gravity="center"
-        android:paddingLeft="@dimen/_15sdp"
-        android:paddingRight="@dimen/_15sdp">
-        <CheckBox
-            android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/RememberMe"/>
-        <TextView
-            android:layout_width = "wrap_content"
-            android:layout_height = "wrap_content"
-            android:text = "@string/ForgetPassword"
-            android:textColor = "#F49C3B"
-            android:textSize = "@dimen/_10sdp"
-            android:autoLink = "web"
-            android:id="@+id/forgetPass"
-            android:layout_centerInParent ="true"
-            android:linksClickable="true"
-            android:layout_marginRight="@dimen/_10sdp"/>
-    </LinearLayout>
+
     <!--<LinearLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
@@ -144,9 +128,37 @@
              android:layout_marginRight="@dimen/_20sdp"/>
 
      </LinearLayout>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:paddingLeft="@dimen/_15sdp"
+        android:paddingRight="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_23sdp">
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/RememberMe" />
+
+        <TextView
+            android:id="@+id/forgetPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:text="@string/ForgetPassword"
+            android:textColor="#F49C3B"
+            android:layout_marginLeft="@dimen/_60sdp"
+            android:textSize="@dimen/_12sdp" />
+    </LinearLayout>
+
     <Button
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:layout_width="@dimen/_190sdp"
         android:layout_height="@dimen/_40sdp"
         android:textSize="@dimen/_15sdp"
@@ -155,12 +167,13 @@
         android:background="@drawable/custom_button"
         android:id="@+id/NewAccount"/>
 
-    <ImageView
+   <!-- <ImageView
         android:layout_width="@dimen/_200sdp"
         android:layout_height="@dimen/_150sdp"
         android:background="@drawable/q_circle"
         android:layout_marginStart="@dimen/_120sdp"
         android:layout_marginTop="@dimen/_50sdp"
         />
-
-   </LinearLayout>
+-->
+    </LinearLayout>
+</ScrollView>
