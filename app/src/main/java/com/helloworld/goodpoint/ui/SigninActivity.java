@@ -114,7 +114,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     }
     private boolean validAccount() {
         //check validation
-        if(validateEmail() && validatePassword()) return true;
+        if(validateEmail()) return true;
         else return false;
     }
 }
