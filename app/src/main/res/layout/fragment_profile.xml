@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/_55sdp"
                     android:text="0"
-                    android:textColor="#00FF00"
+                    android:textColor="#C4207720"
                     android:textSize="@dimen/_20ssp"
                     android:textStyle="bold">
                 </TextView>

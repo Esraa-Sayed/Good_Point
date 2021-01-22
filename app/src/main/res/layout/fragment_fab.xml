@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     tools:context=".ui.FabFragment">
 
     <com.google.android.material.navigation.NavigationView
@@ -12,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:headerLayout="@layout/fab_header"
-        app:menu="@menu/fab_drawer_menu" />
+        app:menu="@menu/fab_drawer_menu"
+        android:background="@color/white"/>
 
 </FrameLayout>
