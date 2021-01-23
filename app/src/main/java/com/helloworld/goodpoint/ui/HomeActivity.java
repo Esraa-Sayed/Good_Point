@@ -170,6 +170,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, LostObjectDetailsActivity.class));
+                bottomSheetDialog.dismiss();
             }
         });
 
@@ -177,6 +178,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, FoundObjectActivity.class));
+                bottomSheetDialog.dismiss();
             }
         });
 
