@@ -1,11 +1,14 @@
 package com.helloworld.goodpoint.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
 
 public class ActionActivity extends AppCompatActivity {
     Button lost;
@@ -21,10 +24,11 @@ public class ActionActivity extends AppCompatActivity {
 
     }
     public void lost_btn(View v){
-        Toast.makeText(this, "Action lost", Toast.LENGTH_SHORT).show();
+
+        startActivity(new Intent(ActionActivity.this, LostObjectDetailsActivity.class));
     }
     public void found_btn(View v){
-        Toast.makeText(this, "Action found", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(ActionActivity.this, LostObjectDetailsActivity.class));
     }
 
 
