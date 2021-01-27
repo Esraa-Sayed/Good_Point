@@ -183,6 +183,7 @@
             android:textColor="#ffffff"
             android:layout_gravity="center"
             android:textSize="@dimen/_13ssp"
+            android:layout_marginBottom="@dimen/_20sdp"
             android:background="@drawable/custom_button"
             android:id="@+id/createAccount"/>
         <!---->

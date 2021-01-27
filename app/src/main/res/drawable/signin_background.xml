@@ -24,7 +24,7 @@
         android:drawable="@drawable/location_signin"
         >
     </item>
-    <item android:top="500dp" android:left="250dp" android:right="0dp" android:bottom="0dp">
+    <item android:top="@dimen/_450sdp" android:left="@dimen/_200sdp" >
         <shape android:shape="rectangle">
             <solid android:color="#F49C3B" />
             <size
