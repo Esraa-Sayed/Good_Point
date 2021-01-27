@@ -7,20 +7,23 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.widget.LinearLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.lostFoundObject.FoundObjectActivity;
+import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
@@ -150,9 +153,38 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
     }
 
-    public void showPopup(View v){ //Fab Action
-        FabFragment fabFragment = new FabFragment();
-        fabFragment.show(getSupportFragmentManager(), fabFragment.getTag());
+    public void showPopup(View v) { //Fab Action
+
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(HomeActivity.this, R.style.BottomSheetTheme);
+        View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                .inflate(R.layout.bottom_sheet_dialog, (LinearLayout)findViewById(R.id.bottom_sheet));
+
+        bottomSheetView.findViewById(R.id.hide_sheet).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetView.findViewById(R.id.ilost).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, LostObjectDetailsActivity.class));
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetView.findViewById(R.id.ifound).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, FoundObjectActivity.class));
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+
     }
 
 
