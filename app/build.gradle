@@ -51,5 +51,4 @@ dependencies {
 
     //circular image
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    compile 'com.android.support:design:25.1.0'
 }
