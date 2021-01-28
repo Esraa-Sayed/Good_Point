@@ -20,6 +20,10 @@
     <string name="Description">Description</string>
     <string name="ColorOfObject">Color</string>
     <string name="type">Type :</string>
+    <string name="signup_success">Sign up was successful.</string>
+
+    <string name="goToLogin">Go To Login</string>
+    <string name="text_start">You can start using the application now.</string>
 
     <string-array name="Types">
         <item>Type</item>

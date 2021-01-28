@@ -98,12 +98,12 @@ public class SignupActivity extends AppCompatActivity {
                 m++;
                 if (y > year || (y == year && m - 1 > month)|| (y == year && m - 1 == month && d > Day) ) {
                     String Date = d + "/" + m + "/" + y;
-                    Toast.makeText(SignupActivity.this, Date, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SignupActivity.this, Date, Toast.LENGTH_SHORT).show();
                     String todayDate = Day + "/" + (month + 1) + "/" + year;
                     DateT.setText(todayDate);
                 }
                 else {
-                    Toast.makeText(SignupActivity.this, "hi", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SignupActivity.this, "hi", Toast.LENGTH_SHORT).show();
                     String Date = d + "/" + m + "/" + y;
                     DateT.setText(Date);
                 }
@@ -113,28 +113,14 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
            // Toast.makeText(SignupActivity.this, "", Toast.LENGTH_SHORT).show();
-            confirmInput(view);
+            if( confirmInput(view) ){
+                startActivity(new Intent(SignupActivity.this,check_registration.class));
+                finish();
+            }
+            
         }
     });
-    /*
 
-        Password.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Password.setSelection(0);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        */
     }
 
 
@@ -306,16 +292,17 @@ public class SignupActivity extends AppCompatActivity {
             return true;
         }
     }//| !validatePhone()
-    public void confirmInput(View v) {
+    public boolean confirmInput(View v) {
         if (!validateEmail() | !validateUsername() | !validatePassword() | !validatePhone() |!validateCity()) {
-            return;
+            return true;
         }
-        String input = "Email: " + Email.getText().toString();
+        /*String input = "Email: " + Email.getText().toString();
         input += "\n";
         input += "Username: " + UserName.getText().toString();
         input += "\n";
         input += "Password: " + Password.getText().toString();
-        Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, input, Toast.LENGTH_SHORT).show();*/
+        return false;
     }/**/
 
 
