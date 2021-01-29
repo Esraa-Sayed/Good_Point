@@ -51,6 +51,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         ForgetPass = findViewById(R.id.forgetPass);
         Sigin =findViewById(R.id.signin);
         CreateNewAccount = findViewById(R.id.NewAccount);
+        RememberMe = findViewById(R.id.checkbox);
         Sigin.setOnClickListener(this);
         CreateNewAccount.setOnClickListener(this);
         ForgetPass.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +69,8 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()){
             case R.id.signin:
                 if(validAccount()) {
+                    if(RememberMe.isChecked())
+                        new PrefManager(getApplicationContext()).setLogin("Token");
                     startActivity(new Intent(this, HomeActivity.class));
                     finish();
                 }else
