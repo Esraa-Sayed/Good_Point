@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class MapFragment extends Fragment {
 
@@ -41,7 +42,7 @@ public class MapFragment extends Fragment {
     FusedLocationProviderClient client;
     Location curLocation;
     String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-    List<ObjectLocation> list = new ArrayList<>();
+    List<ObjectLocation> list;
     Map<Marker,Integer>marker_id;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -54,6 +55,8 @@ public class MapFragment extends Fragment {
             googleMap.setMyLocationEnabled(true);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLatLng, 15));
 
+            list = getLocations();
+
             for(ObjectLocation object: list) {
                 Marker marker = googleMap.addMarker(new MarkerOptions().position(object.getLatLng()));
                 marker_id.put(marker,object.getUserId());
@@ -64,13 +67,22 @@ public class MapFragment extends Fragment {
                 public boolean onMarkerClick(Marker marker) {
                     Intent intent = new Intent();//getContext(),ProfileActivity.class
                     intent.putExtra("ID",marker_id.get(marker));
-                    startActivity(intent);
+                    Toast.makeText(getContext(), ""+marker_id.get(marker), Toast.LENGTH_SHORT).show();
+                    //startActivity(intent);
                     return false;
                 }
             });
 
         }
     };
+
+    private List<ObjectLocation> getLocations() {
+        List<ObjectLocation>ret = new ArrayList<>();
+        Random random = new Random();
+        for(int i=0;i<100;i++)
+            ret.add(new ObjectLocation(25+random.nextDouble()*10,22+random.nextDouble()*10,i));
+        return ret;
+    }
 
     @Nullable
     @Override
