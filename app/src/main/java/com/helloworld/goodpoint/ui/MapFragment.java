@@ -65,10 +65,10 @@ public class MapFragment extends Fragment {
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    Intent intent = new Intent();//getContext(),ProfileActivity.class
+                    Intent intent = new Intent(getContext(),DetailsActivity.class);
                     intent.putExtra("ID",marker_id.get(marker));
                     Toast.makeText(getContext(), ""+marker_id.get(marker), Toast.LENGTH_SHORT).show();
-                    //startActivity(intent);
+                    startActivity(intent);
                     return false;
                 }
             });

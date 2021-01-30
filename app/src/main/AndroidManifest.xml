@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/application_icon2"
@@ -20,7 +19,8 @@
         android:roundIcon="@drawable/application_icon2"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.NotificationActivity"></activity>
+        <activity android:name=".ui.DetailsActivity"/>
+        <activity android:name=".ui.NotificationActivity"/>
         <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone" />
         <activity android:name=".ui.forgetPasswordScreens.VerifiyCode" />
         <activity android:name=".ui.forgetPasswordScreens.ForgetPassSuccessMessage" />
@@ -43,9 +43,10 @@
             android:name=".ui.lostFoundObject.FoundObjectActivity"
             android:label="@string/FoundItemDetails"
             android:parentActivityName=".ui.HomeActivity">
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" /></activity>
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/google_maps_key" />
+        </activity>
         <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithEmail" />
         <activity
             android:name=".ui.lostFoundObject.LostObjectDetailsActivity"
@@ -54,7 +55,7 @@
         <activity android:name=".ui.ActionActivity" />
         <activity
             android:name=".ui.HomeActivity"
-            android:theme="@style/NoActionBar" >
+            android:theme="@style/NoActionBar">
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/google_maps_key" />
