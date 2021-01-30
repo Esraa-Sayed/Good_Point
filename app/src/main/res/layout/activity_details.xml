@@ -11,7 +11,7 @@
             android:layout_height="@dimen/_100sdp"
             android:layout_gravity="center" android:src="@drawable/ic_home"
             android:layout_margin="@dimen/_15sdp"/>
-        <LinearLayout
+        <LinearLayout android:id="@+id/parent_table_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
