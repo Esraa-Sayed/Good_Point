@@ -25,6 +25,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
@@ -108,11 +109,16 @@ public class MapFragment extends Fragment {
             init();
             client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
-                public void onSuccess(Location location) {
+                public void onSuccess(@NonNull Location location) {
                     curLocation = location;
                     if (mapFragment != null) {
                         mapFragment.getMapAsync(callback);
                     }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
