@@ -178,7 +178,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_1sdp"
-                        android:background="#888888"/>
+                        android:background="#6FFF5722"/>
                 </LinearLayout>
                 <LinearLayout android:id="@+id/found_date"
                     android:orientation="horizontal" android:layout_width="match_parent"
@@ -232,7 +232,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_1sdp"
-                        android:background="#888888"/>
+                        android:background="#6FFF5722"/>
                 </LinearLayout>
                 <LinearLayout android:id="@+id/matched_mail"
                     android:orientation="horizontal" android:layout_width="match_parent"
@@ -261,7 +261,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_1sdp"
-                        android:background="#888888"/>
+                        android:background="#6FFF5722"/>
                 </LinearLayout>
                 <LinearLayout android:id="@+id/matched_phone"
                     android:orientation="horizontal" android:layout_width="match_parent"
