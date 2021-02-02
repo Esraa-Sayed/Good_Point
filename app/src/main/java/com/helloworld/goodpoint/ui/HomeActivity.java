@@ -43,9 +43,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setToolBarAndDrawer();
         setBottomNavigator();
 
-        //To make first fragment is home when opening the app
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fhome).commit();
-
+        if(savedInstanceState == null) {
+            //To make first fragment is home when opening the app
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fhome).commit();
+        }
     }
 
     private void setBottomNavigator() {
@@ -192,20 +193,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = null;
-
+                    Fragment selectedFragment = getSupportFragmentManager().getFragments().get(0);
                     switch (item.getItemId()) {
                         case R.id.miHome:
-                            selectedFragment = fhome;
+                            if(!(selectedFragment instanceof HomeFragment))
+                                selectedFragment = fhome;
                             break;
                         case R.id.miMatch:
-                            selectedFragment = fmatch;
+                            if(!(selectedFragment instanceof MatchFragment))
+                                selectedFragment = fmatch;
                             break;
                         case R.id.miProfile:
-                            selectedFragment = fprofile;
+                            if(!(selectedFragment instanceof ProfileFragment))
+                                selectedFragment = fprofile;
                             break;
                         case R.id.miLocation:
-                            selectedFragment = fmap;
+                            if(!(selectedFragment instanceof MapFragment))
+                                selectedFragment = fmap;
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();

@@ -62,10 +62,10 @@ public class NotificationActivity extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    startActivity(new Intent(NotificationActivity.this,DetailsActivity.class));
                     NotificationListAdapter adapter = (NotificationListAdapter)listView.getAdapter();
                     adapter.getItem(list.size()-i-1).setRead(true);
                     adapter.notifyDataSetChanged();
-                    startActivity(new Intent(NotificationActivity.this,DetailsActivity.class));
                 }
             });
 
