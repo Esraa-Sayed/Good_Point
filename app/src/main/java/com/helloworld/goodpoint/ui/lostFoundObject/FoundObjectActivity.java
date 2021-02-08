@@ -92,7 +92,21 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_found_object);
+        Calendar cal = Calendar.getInstance();//To get today's date
         inti();
+        if (savedInstanceState != null) {
+            year = savedInstanceState.getInt("year");
+            month = savedInstanceState.getInt("month");
+            Day = savedInstanceState.getInt("Day");
+        }
+       else {
+            year = cal.get(Calendar.YEAR);
+            month = cal.get(Calendar.MONTH);
+            Day = cal.get(Calendar.DAY_OF_MONTH);
+        }
+        String todayDate = year + "/" + (month + 1) + "/" + Day;
+        DateFound.setText(todayDate);
+
           DateSet = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
@@ -102,7 +116,9 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     String todayDate = year + "/" + (month + 1) + "/" + Day;
                     DateFound.setText(todayDate);
                 } else {
-
+                    year = y;
+                    month = m-1;
+                    Day = d;
                     String Date = y + "/" + m + "/" + d;
                     DateFound.setText(Date);
                 }
@@ -461,12 +477,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         ObjectF = new ObjectFragment();
         List = new prepareList();
         listColor = List.prepareListColor(this);
-        Calendar cal = Calendar.getInstance();//To get today's date
-        year = cal.get(Calendar.YEAR);
-        month = cal.get(Calendar.MONTH);
-        Day = cal.get(Calendar.DAY_OF_MONTH);
-        String todayDate = year + "/" + (month + 1) + "/" + Day;
-        DateFound.setText(todayDate);
+
     }
 
     @Override
@@ -477,4 +488,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     public void getBitmap_Image(Bitmap Bitmap_Image) { }
     @Override
     public void getBitmap_ImagePersonImages(java.util.List<Bitmap> PImages) { Person_Images = PImages; }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+            outState.putInt("year", year);
+            outState.putInt("month",  month);
+            outState.putInt("Day", Day);
+    }
 }
