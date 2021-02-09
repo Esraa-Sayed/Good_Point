@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.candidate.CandidatePage;
 import com.helloworld.goodpoint.ui.forgetPasswordScreens.ForgetPassSuccessMessage;
 import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
 
