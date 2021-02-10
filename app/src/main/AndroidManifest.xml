@@ -22,11 +22,20 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.DetailsActivity"/>
         <activity android:name=".ui.NotificationActivity"/>
-        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone" />
-        <activity android:name=".ui.forgetPasswordScreens.VerifiyCode" />
-        <activity android:name=".ui.forgetPasswordScreens.ForgetPassSuccessMessage" />
-        <activity android:name=".ui.forgetPasswordScreens.SetNewPassword" />
-        <activity android:name=".ui.forgetPasswordScreens.MakeSelection" />
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithEmail"
+            android:theme="@style/NoActionBar"/>
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone"
+            android:theme="@style/NoActionBar"/>
+        <activity android:name=".ui.forgetPasswordScreens.VerifiyCode"
+            android:theme="@style/NoActionBar"/>
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPassSuccessMessage"
+            android:theme="@style/NoActionBar"/>
+        <activity android:name=".ui.forgetPasswordScreens.SetNewPassword"
+            android:theme="@style/NoActionBar"/>
+        <activity android:name=".ui.forgetPasswordScreens.MakeSelection"
+            android:theme="@style/NoActionBar"/>
+        <activity android:name=".ui.candidate.CandidatePage"
+            android:theme="@style/NoActionBar"/>
         <activity
             android:name=".ui.WelcomeActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
@@ -48,7 +57,7 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/google_maps_key" />
         </activity>
-        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithEmail" />
+
         <activity
             android:name=".ui.lostFoundObject.LostObjectDetailsActivity"
             android:label="@string/LostItemDetails"

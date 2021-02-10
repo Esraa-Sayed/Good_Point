@@ -24,6 +24,7 @@ public class ForgetPasswordWithEmail extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ForgetPasswordWithEmail.this, VerifiyCode.class));
+                finish();
             }
         });
         back_btn.setOnClickListener(new View.OnClickListener() {

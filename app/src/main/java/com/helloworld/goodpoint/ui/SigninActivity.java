@@ -16,7 +16,9 @@ import android.widget.Toast;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.candidate.CandidatePage;
 import com.helloworld.goodpoint.ui.forgetPasswordScreens.ForgetPassSuccessMessage;
+import com.helloworld.goodpoint.ui.forgetPasswordScreens.ForgetPasswordWithEmail;
 import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
+import com.helloworld.goodpoint.ui.forgetPasswordScreens.VerifiyCode;
 
 import java.util.Calendar;
 import java.util.regex.Pattern;

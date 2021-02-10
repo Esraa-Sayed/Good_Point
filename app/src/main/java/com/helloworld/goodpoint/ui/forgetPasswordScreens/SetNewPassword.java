@@ -25,6 +25,7 @@ public class SetNewPassword extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SetNewPassword.this, ForgetPassSuccessMessage.class));
+                finish();
             }
         });
         back_btn.setOnClickListener(new View.OnClickListener() {
