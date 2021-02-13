@@ -19,26 +19,28 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
-        <activity android:name=".Match" android:label="@string/Match"></activity>
+        <activity android:name=".Match" android:label="@string/Match" android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.check_registration"
-            android:theme="@style/NoActionBar" />
-        <activity android:name=".ui.NotificationActivity" />
-        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone" />
-        <activity android:name=".ui.forgetPasswordScreens.VerifiyCode" />
-        <activity android:name=".ui.forgetPasswordScreens.ForgetPassSuccessMessage" />
-        <activity android:name=".ui.forgetPasswordScreens.SetNewPassword" />
-        <activity android:name=".ui.forgetPasswordScreens.MakeSelection" />
+            android:theme="@style/NoActionBar" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.NotificationActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.forgetPasswordScreens.VerifiyCode" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPassSuccessMessage" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.forgetPasswordScreens.SetNewPassword" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.forgetPasswordScreens.MakeSelection" android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.WelcomeActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"
+            />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -46,33 +48,40 @@
         <activity
             android:name=".ui.lostFoundObject.FoundObjectActivity"
             android:label="@string/FoundItemDetails"
-            android:parentActivityName=".ui.HomeActivity">
+            android:parentActivityName=".ui.HomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/google_maps_key" />
         </activity>
-        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithEmail" />
+        <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithEmail"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.lostFoundObject.LostObjectDetailsActivity"
             android:label="@string/LostItemDetails"
-            android:parentActivityName=".ui.HomeActivity" />
+            android:parentActivityName=".ui.HomeActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.ActionActivity" />
         <activity
             android:name=".ui.HomeActivity"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/google_maps_key" />
         </activity>
         <activity
             android:name=".ui.SignupActivity"
+            android:screenOrientation="portrait"
             android:label="@string/Signup" />
         <activity
             android:name=".ui.SigninActivity"
-            android:theme="@style/NoActionBar" />
+            android:theme="@style/NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

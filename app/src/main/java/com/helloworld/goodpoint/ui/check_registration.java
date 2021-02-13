@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -25,19 +26,20 @@ public class check_registration extends AppCompatActivity {
         setContentView(R.layout.activity_check_registration);
         gotoLogin = findViewById(R.id.goto_login);
         done =  findViewById(R.id.done);
+        Drawable drawable = done.getDrawable();
+        if(drawable instanceof AnimatedVectorDrawableCompat){
+            avd =(AnimatedVectorDrawableCompat) drawable;
+            avd.start();
+        }
+        else  if(drawable instanceof  AnimatedVectorDrawable){
+            avd2 = (AnimatedVectorDrawable) drawable;
+            avd2.start();
+        }
         gotoLogin.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
-                Drawable drawable = done.getDrawable();
-                if(drawable instanceof AnimatedVectorDrawableCompat){
-                    avd =(AnimatedVectorDrawableCompat) drawable;
-                    avd.start();
-                }
-                else  if(drawable instanceof  AnimatedVectorDrawable){
-                    avd2 = (AnimatedVectorDrawable) drawable;
-                    avd2.start();
-                }
+                startActivity(new Intent(check_registration.this,SigninActivity.class));
             }
         });
 

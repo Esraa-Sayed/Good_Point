@@ -113,7 +113,7 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
            // Toast.makeText(SignupActivity.this, "", Toast.LENGTH_SHORT).show();
-            if( confirmInput(view) ){
+            if(!confirmInput(view) ){
                 startActivity(new Intent(SignupActivity.this,check_registration.class));
                 finish();
             }
@@ -232,7 +232,7 @@ public class SignupActivity extends AppCompatActivity {
         } else if (usernameInput.length() > 15) {
             UserName.setError("Username too long");
             return false;
-        }else if (usernameInput.matches("[a-zA-Z]+")) {
+        }else if (!usernameInput.matches("[a-zA-Z]+")) {
             UserName.setError("Using only Letters");
             return false;
         } else {

@@ -23,9 +23,10 @@
                 android:layout_width="@dimen/_110sdp"
                 android:layout_height="@dimen/_110sdp"
                 android:layout_gravity="center"
-                android:background="@drawable/circle2"
+                android:background="@drawable/btn_login"
                 android:layout_marginBottom="@dimen/_10sdp"
-                android:id="@+id/circle"
+                android:id="@+id/done"
+                app:srcCompat="@drawable/avd_done"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -46,11 +47,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"/>
 
-            <ImageView
-                android:id="@+id/done"
-                android:layout_width="268dp"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/avd_done" />
+
 
         </LinearLayout>
 
