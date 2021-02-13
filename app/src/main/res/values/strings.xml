@@ -19,8 +19,13 @@
     <string name="Match">Match</string>
     <string name="Description">Description</string>
     <string name="ColorOfObject">Color</string>
-    <string name="type">Type :</string>
+    <string name="ObjStat">Object status</string>
     <string name="signup_success">Sign up was successful.</string>
+    <string name="type">Type :</string>
+    <string name="status">status</string>
+
+    <string name="hasfound">Has found</string>
+    <string name="objDetails"><a href="" >Object Details</a></string>
 
     <string name="goToLogin">Go To Login</string>
     <string name="text_start">You can start using the application now.</string>

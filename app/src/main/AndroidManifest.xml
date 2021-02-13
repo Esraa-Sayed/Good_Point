@@ -19,8 +19,9 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
-        <activity android:name=".ui.check_registration"
-            android:theme="@style/NoActionBar"></activity>
+        <activity
+            android:name=".ui.check_registration"
+            android:theme="@style/NoActionBar" />
         <activity android:name=".ui.NotificationActivity" />
         <activity android:name=".ui.forgetPasswordScreens.ForgetPasswordWithPhone" />
         <activity android:name=".ui.forgetPasswordScreens.VerifiyCode" />
