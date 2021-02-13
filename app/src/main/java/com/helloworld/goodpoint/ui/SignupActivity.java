@@ -117,7 +117,6 @@ public class SignupActivity extends AppCompatActivity {
                 startActivity(new Intent(SignupActivity.this,check_registration.class));
                 finish();
             }
-            
         }
     });
 
@@ -214,7 +213,17 @@ public class SignupActivity extends AppCompatActivity {
             return true;
         }
     }
+    /*public boolean isAlpha(String name) {
+        char[] chars = name.toCharArray();
 
+        for (char c : chars) {
+            if(!Character.isLetter(c)) {
+                return false;
+            }
+        }
+
+        return true;
+    }*/
     private boolean validateUsername() {
         String usernameInput = UserName.getText().toString().trim();
         if (usernameInput.isEmpty()) {
@@ -222,6 +231,9 @@ public class SignupActivity extends AppCompatActivity {
             return false;
         } else if (usernameInput.length() > 15) {
             UserName.setError("Username too long");
+            return false;
+        }else if (usernameInput.matches("[a-zA-Z]+")) {
+            UserName.setError("Using only Letters");
             return false;
         } else {
             UserName.setError(null);

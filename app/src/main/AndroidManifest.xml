@@ -19,6 +19,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
+        <activity android:name=".Match" android:label="@string/Match"></activity>
         <activity
             android:name=".ui.check_registration"
             android:theme="@style/NoActionBar" />
