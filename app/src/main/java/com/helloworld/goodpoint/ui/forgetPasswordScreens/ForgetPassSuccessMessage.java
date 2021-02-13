@@ -26,6 +26,7 @@ public class ForgetPassSuccessMessage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ForgetPassSuccessMessage.this, MainActivity.class));
+                finish();
             }
         });
         back_btn.setOnClickListener(new View.OnClickListener() {

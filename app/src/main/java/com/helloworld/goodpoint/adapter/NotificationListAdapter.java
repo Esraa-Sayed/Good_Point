@@ -54,7 +54,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         if(list.get(revposition).isRead())
             viewHolder.getLayout().setBackgroundColor(Color.WHITE);
         else
-            viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            viewHolder.getLayout().setBackgroundColor(context.getResources().getColor(R.color.table_detail));
 
         setItemDetails(viewHolder,revposition);
 

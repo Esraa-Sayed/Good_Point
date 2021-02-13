@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +27,26 @@ public class HomeFragment extends Fragment {
     Map<String, List<String>> objects; //To link group list with child list
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
+    TextView Daily_msg;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+
+        Daily_msg = v.findViewById(R.id.daily_message);
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+
+        if(timeOfDay >= 0 && timeOfDay < 12){
+            Daily_msg.setText("Good Morning");
+        }else if(timeOfDay >= 12 && timeOfDay < 16){
+            Daily_msg.setText("Good Afternoon");
+        }else if(timeOfDay >= 16 && timeOfDay < 21){
+            Daily_msg.setText("Good Evening");
+        }else if(timeOfDay >= 21 && timeOfDay < 24){
+            Daily_msg.setText("Good Night");
+        }
 
         // Inflate the layout for this fragment
         createGroupList();

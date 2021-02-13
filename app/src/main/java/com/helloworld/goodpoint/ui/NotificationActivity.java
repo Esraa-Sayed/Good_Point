@@ -2,6 +2,7 @@ package com.helloworld.goodpoint.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -61,6 +62,7 @@ public class NotificationActivity extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    startActivity(new Intent(NotificationActivity.this,DetailsActivity.class));
                     NotificationListAdapter adapter = (NotificationListAdapter)listView.getAdapter();
                     adapter.getItem(list.size()-i-1).setRead(true);
                     adapter.notifyDataSetChanged();

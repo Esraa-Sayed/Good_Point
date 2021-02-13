@@ -1,5 +1,6 @@
 package com.helloworld.goodpoint.ui.lostFoundObject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -9,6 +10,7 @@ import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -47,6 +49,20 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lost_object_details);
         inti();
+        Calendar cal = Calendar.getInstance();//To get today's date
+        inti();
+        if (savedInstanceState != null) {
+            year = savedInstanceState.getInt("year");
+            month = savedInstanceState.getInt("month");
+            Day = savedInstanceState.getInt("Day");
+        }
+        else {
+            year = cal.get(Calendar.YEAR);
+            month = cal.get(Calendar.MONTH);
+            Day = cal.get(Calendar.DAY_OF_MONTH);
+        }
+        String todayDate = year + "/" + (month + 1) + "/" + Day;
+        DateT.setText(todayDate);
         DateSet = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
@@ -56,7 +72,9 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     String todayDate = year + "/" + (month + 1) + "/" + Day;
                     DateT.setText(todayDate);
                 } else {
-
+                    year = y;
+                    month = m-1;
+                    Day = d;
                     String Date = y + "/" + m + "/" + d;
                     DateT.setText(Date);
                 }
@@ -229,16 +247,18 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         List = new prepareList();
         list = List.prepareList(this);
         listColor = List.prepareListColor(this);
-        Calendar cal = Calendar.getInstance();//To get today's date
-        year = cal.get(Calendar.YEAR);
-        month = cal.get(Calendar.MONTH);
-        Day = cal.get(Calendar.DAY_OF_MONTH);
-        String todayDate = year + "/" + (month + 1) + "/" + Day ;
-        DateT.setText(todayDate);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         autoCom.setThreshold(1);//start working from first char
         autoCom.setAdapter(adapter);
         flagPerson = false;
         flagObject = false;
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("year", year);
+        outState.putInt("month",  month);
+        outState.putInt("Day", Day);
     }
 }

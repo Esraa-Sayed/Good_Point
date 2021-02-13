@@ -23,6 +23,7 @@ private ImageView back_btn;
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(VerifiyCode.this, SetNewPassword.class));
+                finish();
             }
         });
         back_btn.setOnClickListener(new View.OnClickListener() {
