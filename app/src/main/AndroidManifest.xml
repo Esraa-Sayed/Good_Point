@@ -20,7 +20,6 @@
 
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
-        <activity android:name=".Match" android:label="@string/Match" android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.check_registration"
             android:theme="@style/NoActionBar" android:screenOrientation="portrait"/>
@@ -30,7 +29,6 @@
         <activity android:name=".ui.forgetPasswordScreens.ForgetPassSuccessMessage" android:screenOrientation="portrait"/>
         <activity android:name=".ui.forgetPasswordScreens.SetNewPassword" android:screenOrientation="portrait"/>
         <activity android:name=".ui.forgetPasswordScreens.MakeSelection" android:screenOrientation="portrait"/>
-
 
         <activity android:name=".ui.DetailsActivity"/>
 
