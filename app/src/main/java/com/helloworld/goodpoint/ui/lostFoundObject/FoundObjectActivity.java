@@ -231,6 +231,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 else if(flagPerson&&CheckMatchPerson())
                 {
                     FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
+                    finish();
                 }
                 break;
         }
