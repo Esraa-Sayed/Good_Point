@@ -2,6 +2,7 @@ package com.helloworld.goodpoint.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,15 +53,22 @@ public class AdapterOfMatchFragment  extends ArrayAdapter<String> {
         }
         viewholder.imageView.setImageResource(R.drawable.ic_baseline_gallery_24);
         viewholder.stat.setText(status[position]);
+        viewholder.details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, DetailsActivity.class));
+            }
+        });
 
         return r;
     }
     class viewHolder{
         private ImageView imageView;
-        private TextView stat;
+        private TextView stat, details;
         viewHolder(View v){
             imageView =  v.findViewById(R.id.obj);
             stat =  v.findViewById(R.id.status);
+            details = v.findViewById(R.id.details);
         }
     }
 }

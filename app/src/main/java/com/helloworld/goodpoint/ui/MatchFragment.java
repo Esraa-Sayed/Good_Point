@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.helloworld.goodpoint.R;
 
@@ -19,6 +20,7 @@ import com.helloworld.goodpoint.R;
 public class MatchFragment extends Fragment {
 
     ListView listView;
+    TextView details;
     //String ObjStat[] ={},ObjDetails;
     String status[]={"Has found" ,"Its owner has been found","Has found" ,"Its owner has been found",
             "Has found" ,"Its owner has been found","Has found" ,"Its owner has been found" }  ;
