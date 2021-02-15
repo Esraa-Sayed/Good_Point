@@ -52,7 +52,7 @@
         </LinearLayout>
 
         <Button
-            android:layout_width="@dimen/_300sdp"
+            android:layout_width="@dimen/_280sdp"
             android:layout_height="@dimen/_32sdp"
             android:text="@string/goToLogin"
             android:textColor="#ffffff"
@@ -61,7 +61,13 @@
             android:background="@drawable/btn_login"
             android:gravity="center"
             android:layout_margin="@dimen/_5sdp"
-            android:id="@+id/goto_login"/>
+            android:id="@+id/goto_login"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_60sdp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"/>
 
     </LinearLayout>
 </RelativeLayout>
