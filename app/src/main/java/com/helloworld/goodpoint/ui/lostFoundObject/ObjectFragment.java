@@ -94,7 +94,7 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, list);
+        adapter = new ArrayAdapter<>(getActivity().getApplicationContext(),R.layout.spinner_item , list);
         autoCom.setThreshold(1);//start working from first char
         autoCom.setAdapter(adapter);
         // Inflate the layout for this fragment
