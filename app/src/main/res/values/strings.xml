@@ -18,7 +18,8 @@
     <string name="SerialID">Serial ID(optional)</string>
     <string name="Match">Match</string>
     <string name="Description">Description</string>
-    <string name="ColorOfObject">Color<font color='#FF0000'> *</font></string>
+    <string name="ColorOfObject">Color</string>
+    <string name="ColorOfObject2">Color<font color='#FF0000'> *</font></string>
     <string name="ObjStat">Object status</string>
     <string name="signup_success">Sign up was successful.</string>
     <string name="type">Type :<font color='#FF0000'> *</font></string>
@@ -83,7 +84,8 @@
     <string name="White">White</string>
     <string name="Gray">Gray</string>
     <string name="Purple">Purple</string>
-    <string name="TheBrand">The brand<font color='#FF0000'> *</font></string>
+    <string name="TheBrand">The brand</string>
+    <string name="TheBrand2">The brand<font color='#FF0000'> *</font></string>
     <string name="ObjectFound">Object found</string>
     <string name="dateOfFound">Date of found</string>
     <string name="ObjectLocation">Location</string>
@@ -97,7 +99,8 @@
     <string name="Email2"> Email</string>
     <string name="Password"> Password<font color='#FF0000'> *</font></string>
     <string name="Password2"> Password</string>
-    <string name="PhoneNumber"> Phone Number<font color='#FF0000'> *</font></string>
+    <string name="PhoneNumber"> Phone Number</string>
+    <string name="PhoneNumber2"> Phone Number<font color='#FF0000'> *</font></string>
     <string name="BirthOfDate"> Birth of date</string>
     <string name="CreateAccount">Create Account</string>
     <string name="GoodPoint"> Good Point </string>

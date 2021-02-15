@@ -120,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:hint="@string/PhoneNumber"
+                    android:hint="@string/PhoneNumber2"
                     android:inputType="number"
                     android:id="@+id/edPhone"/>
             </com.google.android.material.textfield.TextInputLayout>
