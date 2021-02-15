@@ -119,6 +119,7 @@
     <string name="Daily_message">Good Evening</string>
     <string name="Losses"><b>The Losses</b></string>
     <string name="Founds">The Findings</string>
+    <string name="userName"> User Name</string>
 
     <string name="button_lost"><b><i>Lost</i></b></string>
     <string name="button_found"><b><i>Found</i></b></string>
