@@ -89,7 +89,7 @@ public class ObjectFragment extends Fragment implements AdapterView.OnItemSelect
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getActivity().getApplicationContext(),
-                android.R.layout.simple_list_item_1,
+                R.layout.spinner_item,
                 getResources().getStringArray(R.array.Types));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
