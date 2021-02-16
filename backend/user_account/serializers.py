@@ -1,13 +1,11 @@
 from rest_framework import serializers
-from .models import User
-from django.contrib import auth
-from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+from .models import User
 
 
 class SignupSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=150)
-    email = serializers.EmailField(max_length=62, min_length=4)
+    email = serializers.EmailField(max_length=65, min_length=4)
     password = serializers.CharField(max_length=65, min_length=8, write_only=True)
     first_name = serializers.CharField(max_length=255, min_length=2)
     phone = serializers.CharField(max_length=20, min_length=5)
@@ -30,39 +28,8 @@ class SignupSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
 
-class LoginSerializer(serializers.ModelSerializer):
-    # username = serializers.CharField(max_length=150)
-    password = serializers.CharField(max_length=65, min_length=8, write_only=True)
-    tokens = serializers.SerializerMethodField()
-
-    def get_tokens(self, obj):
-        user = User.objects.get(username=obj['username'])
-        return {
-            'refresh': user.tokens()['refresh'],
-            'access': user.tokens()['access']
-        }
-
-    class Meta:
-        model = User
-        fields = ['username', 'password', 'tokens']
-
-    def validate(self, attrs):
-        username = attrs.get('username', '')
-        password = attrs.get('password', '')
-        user = auth.authenticate(username=username, password=password)
-        if not user:
-            raise AuthenticationFailed('Invalid credentials, try again')
-        return {
-            'id': user.id,
-            'username': user.username,
-            'tokens': user.tokens
-        }
-
-
 class LogoutSerializer(serializers.Serializer):
     token = serializers.CharField()
-
-
 
     def validate(self, attrs):
         self.token = attrs['refresh']
