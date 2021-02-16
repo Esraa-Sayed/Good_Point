@@ -36,10 +36,10 @@ public class check_registration extends AppCompatActivity {
             avd2.start();
         }
         gotoLogin.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(check_registration.this,SigninActivity.class));
+                finish();
             }
         });
 
