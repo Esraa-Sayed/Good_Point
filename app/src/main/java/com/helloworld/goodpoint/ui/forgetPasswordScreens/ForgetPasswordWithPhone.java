@@ -34,7 +34,7 @@ public class ForgetPasswordWithPhone extends AppCompatActivity {
                     phone.requestFocus();
                 }
               else if (phone.length() < 11) {
-                        phone.setError("Password must contain 6 characters");
+                        phone.setError("Please enter a valid phone number");
                         phone.requestFocus();
                     }
                     else {
