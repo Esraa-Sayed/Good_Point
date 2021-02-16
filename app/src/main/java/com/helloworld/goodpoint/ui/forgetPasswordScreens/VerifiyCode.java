@@ -32,6 +32,11 @@ private PinView code;
                     code.requestFocus();
                     Toast.makeText(VerifiyCode.this, "Invalid Code", Toast.LENGTH_SHORT).show();
                 }
+                else if (Code.length()<6){
+                    code.setError("Complete the code");
+                    code.requestFocus();
+                    Toast.makeText(VerifiyCode.this, "Invalid Code", Toast.LENGTH_SHORT).show();
+                }
                 else {
                     startActivity(new Intent(VerifiyCode.this, SetNewPassword.class));
                     finish();
