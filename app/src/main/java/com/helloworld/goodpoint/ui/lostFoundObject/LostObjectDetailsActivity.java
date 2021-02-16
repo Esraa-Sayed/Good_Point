@@ -121,10 +121,12 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                }
                else if(flagObject&&CheckMatchObject()) {
                        FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
+                       finish();
                }
                else if(flagPerson&&CheckMatchPerson())
                {
                    FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
+                   finish();
                }
                 break;
         }

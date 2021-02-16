@@ -60,7 +60,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         ForgetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(SigninActivity.this, "you clicked me", Toast.LENGTH_SHORT).show();
                 Intent myIntent = new Intent(view.getContext(), MakeSelection.class);
                 startActivityForResult(myIntent, 0);
             }

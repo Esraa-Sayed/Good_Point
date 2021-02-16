@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.helloworld.goodpoint.R;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
 import java.io.ObjectInputValidation;
@@ -101,6 +102,7 @@ public class SignupActivity extends AppCompatActivity {
                     //Toast.makeText(SignupActivity.this, Date, Toast.LENGTH_SHORT).show();
                     String todayDate = Day + "/" + (month + 1) + "/" + year;
                     DateT.setText(todayDate);
+                    FancyToast.makeText(SignupActivity.this,"Invalid date",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                 }
                 else {
                     //Toast.makeText(SignupActivity.this, "hi", Toast.LENGTH_SHORT).show();
@@ -213,17 +215,17 @@ public class SignupActivity extends AppCompatActivity {
             return true;
         }
     }
-    /*public boolean isAlpha(String name) {
+    public boolean isAlpha(String name) {
         char[] chars = name.toCharArray();
 
         for (char c : chars) {
-            if(!Character.isLetter(c)) {
+            if(!Character.isLetter(c) | c !=' ' ) {
                 return false;
             }
         }
 
         return true;
-    }*/
+    }/**/
     private boolean validateUsername() {
         String usernameInput = UserName.getText().toString().trim();
         if (usernameInput.isEmpty()) {
@@ -232,7 +234,7 @@ public class SignupActivity extends AppCompatActivity {
         } else if (usernameInput.length() > 15) {
             UserName.setError("Username too long");
             return false;
-        }else if (!usernameInput.matches("[a-zA-Z]+")) {
+        }else if (isAlpha(usernameInput)) {
             UserName.setError("Using only Letters");
             return false;
         } else {
