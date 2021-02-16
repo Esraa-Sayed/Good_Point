@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     >
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
@@ -103,8 +101,8 @@
         android:id="@+id/imageView11"
         android:layout_width="@dimen/_35sdp"
         android:layout_height="@dimen/_39sdp"
-        android:layout_marginTop="@dimen/_93sdp"
         android:layout_marginStart="@dimen/_138sdp"
+        android:layout_marginTop="@dimen/_93sdp"
         app:srcCompat="@drawable/ic_baseline_person_24" />
 
 
