@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.MainActivity;
+import com.helloworld.goodpoint.ui.SigninActivity;
 
 public class ForgetPassSuccessMessage extends AppCompatActivity {
     private Button login_btn;
@@ -25,7 +26,6 @@ public class ForgetPassSuccessMessage extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ForgetPassSuccessMessage.this, MainActivity.class));
                 finish();
             }
         });

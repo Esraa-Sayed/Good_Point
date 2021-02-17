@@ -2,19 +2,27 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
 # Create your models here.
+
+def profile_pic_dir(instance, filename):
+    return 'profile/{0}/'.format(filename)
+
+
+def idcard_pic_dir(instance, filename):
+    return 'idcard/{0}/'.format(filename)
 
 
 class User(AbstractUser):
-    email = models.EmailField(max_length=65, unique=True, db_index=True)
-    phone = models.CharField(max_length=20, null=False, unique=True)
-    birthdate = models.DateField(null=False)
-    city = models.CharField(max_length=35, null=False)
-    profile_pic = models.ImageField(blank=True, null=True, upload_to='profileimg/')
-    id_card_pic = models.ImageField(blank=True, null=True, upload_to='idcardimg/')
+    email = models.EmailField(max_length=65, unique=True)  # , db_index=True)
+    phone = models.CharField(max_length=20, unique=True)
+    birthdate = models.DateField()
+    city = models.CharField(max_length=35)
+    profile_pic = models.ImageField(blank=True, null=True, upload_to=profile_pic_dir)
+    id_card_pic = models.ImageField(blank=True, null=True, upload_to=idcard_pic_dir)
 
     def __str__(self):
-        return self.email
+        return self.username
 
     def tokens(self):
         refresh = RefreshToken.for_user(self)

@@ -6,7 +6,9 @@
         <item name="colorPrimaryDark">#F38E3A</item>
         <item name="colorAccent">#F38E3A</item>
     </style>
-
+    <style name="Theme2" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/orange</item>
+    </style>
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#FF5722</item>
         <item name="colorPrimaryDark">#F38E3A</item>
