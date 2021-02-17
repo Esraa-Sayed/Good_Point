@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -55,16 +56,6 @@ public class HomeFragment extends Fragment {
         expandableListView = v.findViewById(R.id.expanded_menu);
         expandableListAdapter = new MyExpandableListAdapter(getActivity(), groupList, objects); //getActivity
         expandableListView.setAdapter(expandableListAdapter);
-        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            int lastExpandedPosition = -1;
-            @Override
-            public void onGroupExpand(int i) {
-                if(lastExpandedPosition != -1 && i != lastExpandedPosition){
-                    expandableListView.collapseGroup(lastExpandedPosition);
-                }
-                lastExpandedPosition = i;
-            }
-        });
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int i, int i1, long l) {
