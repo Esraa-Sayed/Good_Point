@@ -3,11 +3,14 @@ package com.helloworld.goodpoint.ui;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,8 +37,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
 
@@ -46,6 +54,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
 
     private static final int MAP_CODE = 1;
     private static final int CALL_CODE = 2;
+    private static final int CHECK_LOCATION_ENABLED_CODE = 3;
     SupportMapFragment mapFragment;
     FusedLocationProviderClient client;
     Location curLocation;
@@ -100,13 +109,38 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
         super.onViewCreated(view, savedInstanceState);
 
         runGoogleMap();
+    }
 
+    public boolean locationEnable() {
+        final LocationManager manager = (LocationManager) getContext().getSystemService(getContext().LOCATION_SERVICE);
+
+        return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS),CHECK_LOCATION_ENABLED_CODE);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void runGoogleMap() {
         if (ActivityCompat.checkSelfPermission(getContext(), permissions[0]) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getContext(), permissions[1]) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(permissions, MAP_CODE);
+        }else if(!locationEnable()){
+            buildAlertMessageNoGps();
         }else {
             init();
             client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -122,7 +156,30 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            });
+            })/*.addOnCompleteListener(new OnCompleteListener<Location>() {
+                @SuppressLint("MissingPermission")
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    Location location = task.getResult();
+                    if(location != null)
+                        curLocation = location;
+                    else{
+                        LocationRequest locationRequest = new LocationRequest()
+                                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                                .setInterval(10000)
+                                .setFastestInterval(1000)
+                                .setNumUpdates(1);
+                        LocationCallback locationCallback = new LocationCallback(){
+                            @Override
+                            public void onLocationResult(LocationResult locationResult) {
+                                Location location = locationResult.getLastLocation();
+                                curLocation = location;
+                            }
+                        };
+                        client.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
+                    }
+                }
+            })*/;
         }
     }
 
@@ -144,7 +201,11 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
                 }
                 break;
             case CALL_CODE:
-
+                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    callHim();
+                }else {
+                    Toast.makeText(getContext(), "You should allow to access call", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -198,6 +259,16 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
             startActivity(Intent.createChooser(emailIntent,"Send mail..."));
         }catch (ActivityNotFoundException e){
             Log.e("MY_TAG",e.getMessage());
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case CHECK_LOCATION_ENABLED_CODE:
+                runGoogleMap();
+                break;
         }
     }
 }
