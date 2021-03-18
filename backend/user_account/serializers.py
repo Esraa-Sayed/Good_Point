@@ -5,7 +5,7 @@ from .models import User
 
 class SignupSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=150)
-    email = serializers.EmailField(max_length=65, min_length=4)
+    # email = serializers.EmailField(max_length=65, min_length=4)
     password = serializers.CharField(max_length=65, min_length=8, write_only=True)
     first_name = serializers.CharField(max_length=255, min_length=2)
     phone = serializers.CharField(max_length=20, min_length=5)
@@ -15,11 +15,11 @@ class SignupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'username', 'first_name', 'phone', 'city', 'birthdate', 'profile_pic']
+        fields = ['username', 'password', 'first_name', 'phone', 'city', 'birthdate', 'profile_pic']
 
     def validate(self, attrs):
-        if User.objects.filter(email=attrs.get('email', '')).exists():
-            raise serializers.ValidationError({'email': {'Email already exists'}})
+        if User.objects.filter(username=attrs.get('username', '')).exists():
+            raise serializers.ValidationError({'username': {'Email already exists'}})
         if User.objects.filter(phone=attrs.get('phone', '')).exists():
             raise serializers.ValidationError({'phone': {'Phone number already exists'}})
         return super().validate(attrs)
