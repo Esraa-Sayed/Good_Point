@@ -20,7 +20,7 @@ class LoginView(APIView):
         user = request.user
         response = {
             'username': user.first_name,
-            'email': user.email,
+            'email': user.username,
             'phone': user.phone,
             'city': user.city,
             'birthdate': user.birthdate,
