@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,7 +115,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
     public boolean locationEnable() {
         final LocationManager manager = (LocationManager) getContext().getSystemService(getContext().LOCATION_SERVICE);
 
-        return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return manager.isProviderEnabled(LocationManager.GPS_PROVIDER) || manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     private void buildAlertMessageNoGps() {
@@ -124,6 +125,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {
                         startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS),CHECK_LOCATION_ENABLED_CODE);
+                        //startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -143,7 +145,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
             buildAlertMessageNoGps();
         }else {
             init();
-            client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            client.getLastLocation()/*.addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(@NonNull Location location) {
                     curLocation = location;
@@ -156,14 +158,17 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            })/*.addOnCompleteListener(new OnCompleteListener<Location>() {
+            })*/.addOnCompleteListener(new OnCompleteListener<Location>() {
                 @SuppressLint("MissingPermission")
                 @Override
                 public void onComplete(@NonNull Task<Location> task) {
                     Location location = task.getResult();
-                    if(location != null)
+                    if(location != null) {
                         curLocation = location;
-                    else{
+                        if (mapFragment != null) {
+                            mapFragment.getMapAsync(callback);
+                        }
+                    }else{
                         LocationRequest locationRequest = new LocationRequest()
                                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                                 .setInterval(10000)
@@ -174,12 +179,15 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
                             public void onLocationResult(LocationResult locationResult) {
                                 Location location = locationResult.getLastLocation();
                                 curLocation = location;
+                                if (mapFragment != null) {
+                                    mapFragment.getMapAsync(callback);
+                                }
                             }
                         };
                         client.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
                     }
                 }
-            })*/;
+            });
         }
     }
 
