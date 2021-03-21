@@ -32,7 +32,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     AlertDialog.Builder dialog;
     BottomNavigationView bottomNavigationView;
     FloatingActionButton fab;
-    Fragment fhome, fmap, fmatch, fprofile;
+    Fragment fhome, fmatch, fprofile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nv);
         navigationView.bringToFront();
         fhome = new HomeFragment();
-        fmap = new FoundMapFragment();
         fmatch = new MatchFragment();
         fprofile = new ProfileFragment();
     }
@@ -208,8 +207,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                 selectedFragment = fprofile;
                             break;
                         case R.id.miLocation:
-                            if(!(selectedFragment instanceof FoundMapFragment))
-                                selectedFragment = fmap;
+                            selectedFragment = new FoundMapFragment();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
