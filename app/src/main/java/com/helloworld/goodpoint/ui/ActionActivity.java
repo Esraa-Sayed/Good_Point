@@ -4,16 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
 
+import org.opencv.android.OpenCVLoader;
+
 public class ActionActivity extends AppCompatActivity {
     Button lost;
     Button found;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

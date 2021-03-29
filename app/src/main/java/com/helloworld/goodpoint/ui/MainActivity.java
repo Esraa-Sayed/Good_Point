@@ -2,18 +2,26 @@ package com.helloworld.goodpoint.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.helloworld.goodpoint.R;
 
+import org.opencv.android.OpenCVLoader;
+
 public class MainActivity extends AppCompatActivity {
 
     PrefManager prefManager;
     ImageView splash;
     Thread t;
-
+    static{
+        if(OpenCVLoader.initDebug())
+            Log.e("OpenCv" , "static initializer: YEs***************************************" );
+        else
+            Log.e("OpenCv" , "static initializer: NO****************************************" );
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
