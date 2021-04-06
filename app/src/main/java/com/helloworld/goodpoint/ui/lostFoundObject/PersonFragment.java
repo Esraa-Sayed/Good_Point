@@ -3,13 +3,16 @@ package com.helloworld.goodpoint.ui.lostFoundObject;
 import android.Manifest;
 import android.app.Fragment;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -40,7 +43,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private ImageButton imageView;
     private ImageView imageView2;
     private List<Bitmap> bitmap  = new ArrayList<>();
-    private Uri photoFromGallery;
+    private List<Uri> photoFromGallery = new ArrayList<>();
     private LinearLayout linearLayout,ADDP;
     private LayoutInflater inflater2;
     private View rootView;
@@ -60,7 +63,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
+        ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap,photoFromGallery);
         rootView = inflater.inflate(R.layout.fragment_person, container, false);
         imageView = rootView.findViewById(R.id.imageView);
         ADDP = rootView.findViewById(R.id.ADDP);
@@ -133,7 +136,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 case 10:
                     bitmap.add((Bitmap) data.getExtras().get("data"));
                     imageView.setImageBitmap(bitmap.get(bitmap.size()-1));
-                    ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
+                    ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap,photoFromGallery);
                     break;
                 case 1:
                     try {
@@ -147,20 +150,20 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                                 toast.show();
                                 for(int i = 0; i<10;i++)
                                 {
-                                    photoFromGallery = clipData.getItemAt(i).getUri();
-                                    bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
+                                    photoFromGallery.add(clipData.getItemAt(i).getUri());
+                                    bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery.get(i)));
                                 }
                             }
                             else {
                                 for (int i = 0; i < clipData.getItemCount(); i++) {
-                                    photoFromGallery = clipData.getItemAt(i).getUri();
-                                    bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
+                                    photoFromGallery.add(clipData.getItemAt(i).getUri());
+                                    bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery.get(i)));
                                 }
                             }
                         }
                         else{
-                            photoFromGallery = data.getData();
-                            bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
+                            photoFromGallery.add( data.getData());
+                            bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery.get(photoFromGallery.size()-1)));
                         }
 
                     } catch (IOException e) {
@@ -168,7 +171,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     }
                     break;
             }
-            ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
+            ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap,photoFromGallery);
             if(linearLayout.getChildCount() == 0) {
                 for (int i = 0; i < bitmap.size(); i++) {
                     View view = inflater2.inflate(R.layout.images, linearLayout, false);
@@ -211,6 +214,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         }
         setOnClickListeners();
     }
+
     private void setOnClickListeners() {
         for (int index = 0; index < linearLayout.getChildCount(); index++) {
             final int finalIndex1 = index;
@@ -221,7 +225,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onClick(View view) {
                     bitmap.remove(finalIndex1);
-                    ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
+                    ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap,photoFromGallery);
                     if(nmberOfImageSelected == finalIndex1)
                     {
                         imageView.setVisibility(View.GONE);

@@ -19,7 +19,6 @@
     <string name="Match">Match</string>
     <string name="Description">Description</string>
     <string name="ColorOfObject">Color</string>
-    <string name="ColorOfObject2">Color<font color='#FF0000'> *</font></string>
     <string name="ObjStat">Object status</string>
     <string name="signup_success">Sign up was successful.</string>
     <string name="type">Type :<font color='#FF0000'> *</font></string>
@@ -85,7 +84,6 @@
     <string name="Gray">Gray</string>
     <string name="Purple">Purple</string>
     <string name="TheBrand">The brand</string>
-    <string name="TheBrand2">The brand<font color='#FF0000'> *</font></string>
     <string name="ObjectFound">Object found</string>
     <string name="dateOfFound">Date of found</string>
     <string name="ObjectLocation">Location</string>

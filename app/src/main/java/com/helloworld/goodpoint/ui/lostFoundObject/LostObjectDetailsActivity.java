@@ -7,9 +7,14 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -24,6 +29,10 @@ import android.widget.TextView;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
+
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 
 import java.util.Calendar;
 import java.util.List;
@@ -43,6 +52,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private String PName;
     private Bitmap Bitmap_Image;
     private List<Bitmap> Person_Images;
+    private List<Uri> Person_Images_uri;
     private boolean flagPerson,flagObject,CheckImageObeject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +65,18 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             year = savedInstanceState.getInt("year");
             month = savedInstanceState.getInt("month");
             Day = savedInstanceState.getInt("Day");
+            flagPerson = savedInstanceState.getBoolean("flagPerson");
+            flagObject = savedInstanceState.getBoolean("flagObject");
+            if(flagPerson == true)
+            {
+                Person.setTextColor(0xFFF38E3A);
+                Object.setTextColor(Color.BLACK);
+            }
+            else if(flagObject== true)
+            {
+                Object.setTextColor(0xFFF38E3A);
+                Person.setTextColor(Color.BLACK);
+            }
         }
         else {
             year = cal.get(Calendar.YEAR);
@@ -126,7 +148,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                else if(flagPerson&&CheckMatchPerson())
                {
                    FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
-                   finish();
+                   //finish();
                }
                 break;
         }
@@ -154,7 +176,60 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
+        else if(Person_Images_uri.size()>0)
+        {
+           for (int i=0;i<Person_Images_uri.size();i++)
+           {
+               String path = getRealPathFromURI_API19(this,Person_Images_uri.get(i));
+               Log.e("Path", "CheckMatchPerson: "+path);
+           }
+        }
         return true;
+    }
+    public String getRealPathFromURI_API19(Context context, Uri uri) {
+        String filePath = "";
+        if (uri.getHost().contains("com.android.providers.media")) {
+            // Image pick from recent
+            String wholeID = DocumentsContract.getDocumentId(uri);
+
+            // Split at colon, use second item in the array
+            String id = wholeID.split(":")[1];
+
+            String[] column = {MediaStore.Images.Media.DATA};
+
+            // where id is equal to
+            String sel = MediaStore.Images.Media._ID + "=?";
+
+            Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    column, sel, new String[]{id}, null);
+
+            int columnIndex = cursor.getColumnIndex(column[0]);
+
+            if (cursor.moveToFirst()) {
+                filePath = cursor.getString(columnIndex);
+            }
+            cursor.close();
+            return filePath;
+        } else {
+            // image pick from gallery
+            return  getPath(uri);
+        }
+    }
+    public   String getPath(Uri uri)
+    {
+        if(uri != null)
+        {
+           String[] projection = {MediaStore.Images.Media.DATA};
+           Cursor cursor = getContentResolver().query(uri,projection,null,null,null);
+           if(cursor != null)
+           {
+              int col_in = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+              cursor.moveToFirst();
+              return  cursor.getString(col_in);
+           }
+        }
+        else return null;
+        return uri.getPath();
     }
     private boolean CheckMatchObject()
     {
@@ -233,7 +308,10 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         Bitmap_Image = BImage;
     }
     @Override
-    public void getBitmap_ImagePersonImages(List<Bitmap> PImages){ Person_Images = PImages;}
+    public void getBitmap_ImagePersonImages(List<Bitmap> PImages,List<Uri> Uri_images){ Person_Images = PImages;
+        Person_Images_uri = Uri_images;
+    }
+
     protected void inti() {
         DateT = findViewById(R.id.Date);
         autoCom = findViewById(R.id.auto);
@@ -262,5 +340,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         outState.putInt("year", year);
         outState.putInt("month",  month);
         outState.putInt("Day", Day);
+        outState.putBoolean("flagPerson",flagPerson);
+        outState.putBoolean("flagObject",flagObject);
     }
 }

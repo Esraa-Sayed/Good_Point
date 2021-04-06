@@ -18,6 +18,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -84,6 +85,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private WifiManager wifiManager;
     private final static int PLACE_PICKER_REQUEST = 999;
     private List<Bitmap> Person_Images;
+    private List<Uri> Person_Images_uri;
     double Latitude;
     double Longitude;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -489,7 +491,9 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void getBitmap_Image(Bitmap Bitmap_Image) { }
     @Override
-    public void getBitmap_ImagePersonImages(java.util.List<Bitmap> PImages) { Person_Images = PImages; }
+    public void getBitmap_ImagePersonImages(List<Bitmap> PImages,List<Uri> Uri_images){ Person_Images = PImages;
+        Person_Images_uri = Uri_images;
+    }
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
