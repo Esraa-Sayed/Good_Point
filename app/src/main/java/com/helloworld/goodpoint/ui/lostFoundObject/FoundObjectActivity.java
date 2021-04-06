@@ -100,6 +100,18 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             year = savedInstanceState.getInt("year");
             month = savedInstanceState.getInt("month");
             Day = savedInstanceState.getInt("Day");
+            flagPerson = savedInstanceState.getBoolean("flagPerson");
+            flagObject = savedInstanceState.getBoolean("flagObject");
+            if(flagPerson == true)
+            {
+                Person.setTextColor(0xFFF38E3A);
+                Object.setTextColor(Color.BLACK);
+            }
+            else if(flagObject== true)
+            {
+                Object.setTextColor(0xFFF38E3A);
+                Person.setTextColor(Color.BLACK);
+            }
         }
        else {
             year = cal.get(Calendar.YEAR);
@@ -234,7 +246,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 else if(flagPerson&&CheckMatchPerson())
                 {
                     FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
-                    finish();
+                    //finish();
                 }
                 break;
         }
@@ -253,6 +265,15 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         {
             FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
+        }
+        else if(Person_Images_uri.size()>0)
+        {
+            for (int i=0;i<Person_Images_uri.size();i++)
+            {
+                PathImg I = new PathImg();
+                String path = I.getRealPathFromURI_API19(this,Person_Images_uri.get(i));
+                Log.e("Path", "CheckMatchPerson: "+path);
+            }
         }
         return true;
     }
@@ -501,5 +522,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             outState.putInt("year", year);
             outState.putInt("month",  month);
             outState.putInt("Day", Day);
+        outState.putBoolean("flagPerson",flagPerson);
+        outState.putBoolean("flagObject",flagObject);
     }
 }
