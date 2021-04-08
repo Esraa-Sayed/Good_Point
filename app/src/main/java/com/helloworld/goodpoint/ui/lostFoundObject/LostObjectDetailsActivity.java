@@ -7,33 +7,38 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Display;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -153,9 +158,12 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 break;
         }
     }
+    Mat sampledImg;
     private boolean CheckMatchPerson()
     {
+        OpenCVLoader.initDebug();
         EditText PersonName =  PersonF.getView().findViewById(R.id.PersonName);
+        ImageView IV = PersonF.getView().findViewById(R.id.imageView);
         PName = PersonName.getText().toString();
         City = autoCom.getText().toString();
         if(City.isEmpty()) {
@@ -182,10 +190,56 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
            {
                PathImg I = new PathImg();
                String path = I.getRealPathFromURI_API19(this,Person_Images_uri.get(i));
+               Mat originalImg = Imgcodecs.imread(path);//BGR format
+               Mat rgbImg = new Mat();
+               //convert BGR to RGB
+               Imgproc.cvtColor(originalImg,rgbImg,Imgproc.COLOR_BGR2RGB);
+               Display display = getWindowManager().getDefaultDisplay();
+               Point size = new Point();
+               display.getSize(size);
+               int mobile_width = size.x;
+               int mobile_height = size.y;
+               sampledImg = new Mat();
+              double downSampleRatio = calculateSubSimpleSize(rgbImg,mobile_width,mobile_height);
+              Imgproc.resize(rgbImg,sampledImg,new Size(),downSampleRatio,downSampleRatio,Imgproc.INTER_AREA);
+               try {
+                   ExifInterface exifInterface = new ExifInterface(path);
+                   int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,1);
+                   switch (orientation)
+                   {
+                       case ExifInterface.ORIENTATION_ROTATE_90:
+                           sampledImg = sampledImg.t();
+                           Core.flip(sampledImg,sampledImg,1);
+                           break;
+                           case ExifInterface.ORIENTATION_ROTATE_270:
+                               sampledImg = sampledImg.t();
+                               Core.flip(sampledImg,sampledImg,0);
+                               break;
+                   }
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
+               Bitmap bitmap = Bitmap.createBitmap(sampledImg.cols(),sampledImg.rows(),Bitmap.Config.RGB_565);
+               Utils.matToBitmap(sampledImg,bitmap);
+               IV.setVisibility(View.VISIBLE);
+               IV.setImageBitmap(bitmap);
                Log.e("Path", "CheckMatchPerson: "+path);
            }
         }
         return true;
+    }
+
+    private double calculateSubSimpleSize(Mat rgbImg, int mobile_width, int mobile_height) {
+        final int width = rgbImg.width();
+        final int height = rgbImg.height();
+        double inSampleSize = 1;
+        if(width > mobile_width || height > mobile_height)
+        {
+            final double heightRatio = (double) mobile_height/(double)height;
+            final double widthRatio = (double) mobile_width/(double)width;
+            inSampleSize = heightRatio < width ? height : width;
+        }
+        return inSampleSize;
     }
 
     private boolean CheckMatchObject()
