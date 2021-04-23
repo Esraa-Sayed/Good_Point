@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Display;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -26,7 +27,11 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.face.Face;
+import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -70,7 +75,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private String PName;
     private Bitmap Bitmap_Image;
     private List<Bitmap> Person_Images;
-    private List<Uri> Person_Images_uri;
     private boolean flagPerson,flagObject,CheckImageObeject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +89,12 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             Day = savedInstanceState.getInt("Day");
             flagPerson = savedInstanceState.getBoolean("flagPerson");
             flagObject = savedInstanceState.getBoolean("flagObject");
-            if(flagPerson == true)
+            if(flagPerson)
             {
                 Person.setTextColor(0xFFF38E3A);
                 Object.setTextColor(Color.BLACK);
             }
-            else if(flagObject== true)
+            else if(flagObject)
             {
                 Object.setTextColor(0xFFF38E3A);
                 Person.setTextColor(Color.BLACK);
@@ -172,143 +176,49 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         }
     }
     Mat sampledImg;
-    private boolean CheckMatchPerson()
-    {
-        if(!OpenCVLoader.initDebug())
-        {
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0,this,baseCallback);
-        }
-        else
-        {
-            try {
-                baseCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        EditText PersonName =  PersonF.getView().findViewById(R.id.PersonName);
+    private boolean CheckMatchPerson() {
+        EditText PersonName = PersonF.getView().findViewById(R.id.PersonName);
         ImageView IV = PersonF.getView().findViewById(R.id.imageView);
         PName = PersonName.getText().toString();
         City = autoCom.getText().toString();
-        if(City.isEmpty()) {
+        if (City.isEmpty()) {
             autoCom.setError("Field can't be empty");
             return false;
-        }
-        else if (!list.contains(City.trim())) {
+        } else if (!list.contains(City.trim())) {
             autoCom.setError("Please Enter a valid city!");
             return false;
         }
-        if(PName.isEmpty())
-        {
+        if (PName.isEmpty()) {
             PersonName.setError("Field can't be empty");
             return false;
-        }
-        else if(Person_Images.size() == 0)
-        {
-            FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
+        } else if (Person_Images.size() == 0) {
+            FancyToast.makeText(this, "You must put at least one picture!", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
             return false;
-        }
-        else if(Person_Images_uri.size()>0)
-        {
-           for (int i=0;i<Person_Images_uri.size();i++)
-           {
-               PathImg I = new PathImg();
-               String path = I.getRealPathFromURI_API19(this,Person_Images_uri.get(i));
-               Mat originalImg = Imgcodecs.imread(path);//BGR format
-               Mat rgbImg = new Mat();
-               //convert BGR to RGB
-               Imgproc.cvtColor(originalImg,rgbImg,Imgproc.COLOR_BGR2RGB);
-               Display display = getWindowManager().getDefaultDisplay();
-               Point size = new Point();
-               display.getSize(size);
-               int mobile_width = size.x;
-               int mobile_height = size.y;
-               sampledImg = new Mat();
-              double downSampleRatio = calculateSubSimpleSize(rgbImg,mobile_width,mobile_height);
-//              Imgproc.resize(rgbImg,sampledImg,new Size(),downSampleRatio,downSampleRatio,Imgproc.INTER_AREA);
-               try {
-                   ExifInterface exifInterface = new ExifInterface(path);
-                   int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,1);
-                   switch (orientation)
-                   {
-                       case ExifInterface.ORIENTATION_ROTATE_90:
-                           sampledImg = sampledImg.t();
-                           Core.flip(sampledImg,sampledImg,1);
-                           break;
-                           case ExifInterface.ORIENTATION_ROTATE_270:
-                               sampledImg = sampledImg.t();
-                               Core.flip(sampledImg,sampledImg,0);
-                               break;
-                   }
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }
-               MatOfRect faceDetections = new MatOfRect();
-               faceDetector.detectMultiScale(rgbImg,faceDetections);
-               for(Rect rect:faceDetections.toArray())
-               {
+        } else {
+            for (int i = 0; i < Person_Images.size(); i++) {
+                Bitmap My = Person_Images.get(i);
+                FaceDetector faceDetector = new FaceDetector.Builder(this)
+                        .setTrackingEnabled(false)
+                        .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                        .setMode(FaceDetector.FAST_MODE).build();
+                Bitmap faceBitmap = Bitmap.createBitmap(My.getWidth(), My.getHeight(), Bitmap.Config.RGB_565);
+                if (!faceDetector.isOperational()) {
+                    Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
+                } else {
+                    Frame frame = new Frame.Builder().setBitmap(My).build();
+                    SparseArray<Face> sparseArray = faceDetector.detect(frame);
+                    for (int j = 0; j < sparseArray.size(); j++) {
+                        Face face = sparseArray.valueAt(j);
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
 
-                      Imgproc.rectangle(rgbImg,new org.opencv.core.Point(rect.x,rect.y),
-                              new org.opencv.core.Point(rect.x+rect.width,rect.y+rect.height),
-                              new Scalar(0,255,0));
-               }
-               Bitmap bitmap = Bitmap.createBitmap(rgbImg.cols(),rgbImg.rows(),Bitmap.Config.RGB_565);
-               Utils.matToBitmap(rgbImg,bitmap);
-               IV.setVisibility(View.VISIBLE);
-               IV.setImageBitmap(bitmap);
-               Log.e("Path", "CheckMatchPerson: "+path);
-           }
+                    }
+                    IV.setVisibility(View.VISIBLE);
+                    IV.setImageBitmap(faceBitmap);
+                }
+            }
         }
         return true;
     }
-private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
-    @Override
-    public void onManagerConnected(int status) throws IOException {
-        switch (status) {
-            case LoaderCallbackInterface.SUCCESS: {
-                InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalface_alt2);
-                File CasCadeDire = getDir("cascade", Context.MODE_PRIVATE);
-                 caseFile = new File(CasCadeDire,"haarcascade_frontalface_alt2.xml");
-                FileOutputStream fos = new FileOutputStream(caseFile);
-                byte[] buffer = new byte[4096];
-                int byteRead;
-                while((byteRead = is.read(buffer))!=-1)
-                {
-                    fos.write(buffer,0,byteRead);
-                }
-                is.close();
-                fos.close();
-                faceDetector = new CascadeClassifier(caseFile.getAbsolutePath());
-                if(faceDetector.empty())
-                {
-                    faceDetector = null;
-                }
-                else
-                {
-                    CasCadeDire.delete();
-                }
-            }
-            break;
-            default:
-                super.onManagerConnected(status);
-                break;
-        }
-
-    }
-};
-    private double calculateSubSimpleSize(Mat rgbImg, int mobile_width, int mobile_height) {
-        final int width = rgbImg.width();
-        final int height = rgbImg.height();
-        double inSampleSize = 1;
-        if(width > mobile_width || height > mobile_height)
-        {
-            final double heightRatio = (double) mobile_height/(double)height;
-            final double widthRatio = (double) mobile_width/(double)width;
-            inSampleSize = heightRatio < width ? height : width;
-        }
-        return inSampleSize;
-    }
-
     private boolean CheckMatchObject()
     {
         AutoCompleteTextView V =  ObjectF.getView().findViewById(R.id.ColorOfObject);
@@ -386,8 +296,7 @@ private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
         Bitmap_Image = BImage;
     }
     @Override
-    public void getBitmap_ImagePersonImages(List<Bitmap> PImages,List<Uri> Uri_images){ Person_Images = PImages;
-        Person_Images_uri = Uri_images;
+    public void getBitmap_ImagePersonImages(List<Bitmap> PImages){ Person_Images = PImages;
     }
 
     protected void inti() {

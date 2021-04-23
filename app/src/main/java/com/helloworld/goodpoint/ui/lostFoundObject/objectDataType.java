@@ -9,5 +9,5 @@ public interface objectDataType {
     public void getType(String Type);
     public void getImageCheck(Boolean check);
     public void getBitmap_Image(Bitmap Bitmap_Image);
-    public void getBitmap_ImagePersonImages(List<Bitmap> Bitmap_Images,List<Uri> Uri_images);
+    public void getBitmap_ImagePersonImages(List<Bitmap> Bitmap_Images);
 }

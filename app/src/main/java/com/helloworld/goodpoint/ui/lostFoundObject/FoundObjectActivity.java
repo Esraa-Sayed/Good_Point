@@ -10,7 +10,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -25,12 +31,14 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +60,9 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.face.Face;
+import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -66,6 +77,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 public class FoundObjectActivity extends AppCompatActivity implements View.OnClickListener,objectDataType {
     private TextView DateFound;
@@ -85,7 +97,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private WifiManager wifiManager;
     private final static int PLACE_PICKER_REQUEST = 999;
     private List<Bitmap> Person_Images;
-    private List<Uri> Person_Images_uri;
     double Latitude;
     double Longitude;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -245,7 +256,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 }
                 else if(flagPerson&&CheckMatchPerson())
                 {
-                    FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
+                    //FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                     //finish();
                 }
                 break;
@@ -253,6 +264,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     }
     private boolean CheckMatchPerson()
     {
+        ImageView IV = PersonF.getView().findViewById(R.id.imageView);
         EditText PersonName =  PersonF.getView().findViewById(R.id.PersonName);
         PName = PersonName.getText().toString();
         location = Location.getText().toString();
@@ -266,13 +278,29 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
-        else if(Person_Images_uri.size()>0)
+        else
         {
-            for (int i=0;i<Person_Images_uri.size();i++)
-            {
-                PathImg I = new PathImg();
-                String path = I.getRealPathFromURI_API19(this,Person_Images_uri.get(i));
-                Log.e("Path", "CheckMatchPerson: "+path);
+            for (int i=0;i<Person_Images.size();i++) {
+                Bitmap My = Person_Images.get(i);
+                FaceDetector faceDetector = new FaceDetector.Builder(this)
+                        .setTrackingEnabled(false)
+                        .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                        .setMode(FaceDetector.FAST_MODE).build();
+                Bitmap faceBitmap = Bitmap.createBitmap(My.getWidth(), My.getHeight(), Bitmap.Config.RGB_565);
+                if (!faceDetector.isOperational()) {
+                    Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Frame frame = new Frame.Builder().setBitmap(My).build();
+                    SparseArray<Face> sparseArray = faceDetector.detect(frame);
+                    for (int j = 0; j < sparseArray.size(); j++) {
+                        Face face = sparseArray.valueAt(j);
+                      faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
+
+                }
+                IV.setVisibility(View.VISIBLE);
+                IV.setImageBitmap(faceBitmap);
+              }
             }
         }
         return true;
@@ -512,8 +540,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void getBitmap_Image(Bitmap Bitmap_Image) { }
     @Override
-    public void getBitmap_ImagePersonImages(List<Bitmap> PImages,List<Uri> Uri_images){ Person_Images = PImages;
-        Person_Images_uri = Uri_images;
+    public void getBitmap_ImagePersonImages(List<Bitmap> PImages){ Person_Images = PImages;
     }
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
