@@ -278,31 +278,45 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
-        else
-        {
-            for (int i=0;i<Person_Images.size();i++) {
-                Bitmap My = Person_Images.get(i);
-                FaceDetector faceDetector = new FaceDetector.Builder(this)
-                        .setTrackingEnabled(false)
-                        .setLandmarkType(FaceDetector.ALL_LANDMARKS)
-                        .setMode(FaceDetector.FAST_MODE).build();
-                Bitmap faceBitmap = Bitmap.createBitmap(My.getWidth(), My.getHeight(), Bitmap.Config.RGB_565);
-                if (!faceDetector.isOperational()) {
-                    Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Frame frame = new Frame.Builder().setBitmap(My).build();
-                    SparseArray<Face> sparseArray = faceDetector.detect(frame);
-                    for (int j = 0; j < sparseArray.size(); j++) {
-                        Face face = sparseArray.valueAt(j);
-                      faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
+        for (int i=0;i<Person_Images.size();i++) {
+            Bitmap My = Person_Images.get(i);
+            Log.e("img", My.getWidth()+ "  "+ My.getHeight());
+            FaceDetector faceDetector = new FaceDetector.Builder(this)
+                    .setTrackingEnabled(false)
+                    .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                    .setMode(FaceDetector.FAST_MODE).build();
+            Bitmap faceBitmap = Bitmap.createBitmap(My.getWidth(), My.getHeight(), Bitmap.Config.RGB_565);
 
-                }
-                IV.setVisibility(View.VISIBLE);
-                IV.setImageBitmap(faceBitmap);
-              }
+            if (!faceDetector.isOperational()) {
+                Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
             }
-        }
+            else {
+                Frame frame = new Frame.Builder().setBitmap(My).build();
+                SparseArray<Face> sparseArray = faceDetector.detect(frame);
+                for (int j = 0; j < sparseArray.size(); j++) {
+                    Face face = sparseArray.valueAt(j);
+                    if (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())
+                    {
+                        int H = My.getHeight() - (int) face.getPosition().y;
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), H);
+                    } else if (((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth())
+                    {
+                        int W = My.getWidth() - (int) face.getPosition().x;
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, (int) face.getHeight());
+                    }
+                    else if ((((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) && (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())) {
+                        int H = My.getHeight() - (int) face.getPosition().y;
+                        int W = My.getWidth() - (int) face.getPosition().x;
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, H);
+                    } else {
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
+
+                    }
+                }
+            }
+            IV.setVisibility(View.VISIBLE);
+            IV.setImageBitmap(faceBitmap);
+            }
         return true;
     }
     private boolean CheckMatchObject()
@@ -541,6 +555,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     public void getBitmap_Image(Bitmap Bitmap_Image) { }
     @Override
     public void getBitmap_ImagePersonImages(List<Bitmap> PImages){ Person_Images = PImages;
+        Log.e("img", "CheckMatchPerson: ******"+  Person_Images.size());
     }
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {

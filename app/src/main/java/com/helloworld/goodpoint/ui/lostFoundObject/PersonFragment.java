@@ -97,15 +97,15 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                                     FancyToast.makeText(getActivity().getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                                 break;
                             case R.id.Gallery:
-                                Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT,
-                                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                                pickPhoto.setType("image/*");//accept any type of images
-                                if (pickPhoto.resolveActivity(getActivity().getPackageManager()) != null) {
-                                    startActivityForResult(pickPhoto, 1);
-                                } else
-                                    FancyToast.makeText(getActivity().getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
 
+                                   Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT,
+                                           MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                   pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                                   pickPhoto.setType("image/*");//accept any type of images
+                                   if (pickPhoto.resolveActivity(getActivity().getPackageManager()) != null) {
+                                       startActivityForResult(pickPhoto, 1);
+                                   } else
+                                       FancyToast.makeText(getActivity().getApplicationContext(), "Error", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                                 break;
 
                         }
@@ -167,8 +167,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                             bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
                         }
 
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
+                        Log.e("img", e.getMessage() );
                     }
                     break;
             }

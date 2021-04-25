@@ -209,8 +209,23 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     SparseArray<Face> sparseArray = faceDetector.detect(frame);
                     for (int j = 0; j < sparseArray.size(); j++) {
                         Face face = sparseArray.valueAt(j);
-                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
+                        if (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())
+                        {
+                            int H = My.getHeight() - (int) face.getPosition().y;
+                            faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), H);
+                        } else if (((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth())
+                        {
+                            int W = My.getWidth() - (int) face.getPosition().x;
+                            faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, (int) face.getHeight());
+                        }
+                        else if ((((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) && (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())) {
+                            int H = My.getHeight() - (int) face.getPosition().y;
+                            int W = My.getWidth() - (int) face.getPosition().x;
+                            faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, H);
+                        } else {
+                            faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
 
+                        }
                     }
                     IV.setVisibility(View.VISIBLE);
                     IV.setImageBitmap(faceBitmap);
