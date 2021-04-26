@@ -1,5 +1,7 @@
 package com.helloworld.goodpoint.ui.candidate;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -19,7 +21,7 @@ public class CandidatePage extends AppCompatActivity {
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
 
-
+    Bitmap image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,22 +38,25 @@ public class CandidatePage extends AppCompatActivity {
 
     private List<com.helloworld.goodpoint.ui.candidate.Item> buildItemList() {
         List<com.helloworld.goodpoint.ui.candidate.Item> itemList = new ArrayList<>();
-        for (int i=0; i<9; i++) {
-            com.helloworld.goodpoint.ui.candidate.Item item = new com.helloworld.goodpoint.ui.candidate.Item("Item "+i, buildSubItemList());
-            itemList.add(item);
-        }
+
+
+        image = BitmapFactory.decodeResource(getResources(), R.drawable.ellipse);
+        com.helloworld.goodpoint.ui.candidate.Item item = new com.helloworld.goodpoint.ui.candidate.Item("Ahmed ", image, buildSubItemList());
+        itemList.add(item);
+
         return itemList;
     }
 
     private List<com.helloworld.goodpoint.ui.candidate.SubItem> buildSubItemList() {
         List<com.helloworld.goodpoint.ui.candidate.SubItem> subItemList = new ArrayList<>();
-        for (int i=0; i<3; i++) {
-            com.helloworld.goodpoint.ui.candidate.SubItem subItem = new com.helloworld.goodpoint.ui.candidate.SubItem("Sub Item "+i);
+        for (int i = 0; i < 3; i++) {
+            com.helloworld.goodpoint.ui.candidate.SubItem subItem = new com.helloworld.goodpoint.ui.candidate.SubItem("Filter No. " + (i + 1));
             subItemList.add(subItem);
         }
         return subItemList;
     }
-    private void getImages(){
+
+    private void getImages() {
         Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
 
         mImageUrls.add("https://c1.staticflickr.com/5/4636/25316407448_de5fbf183d_o.jpg");
@@ -82,7 +87,6 @@ public class CandidatePage extends AppCompatActivity {
 
         mImageUrls.add("https://i.imgur.com/ZcLLrkY.jpg");
         mNames.add("Washington");
-
 
 
     }
