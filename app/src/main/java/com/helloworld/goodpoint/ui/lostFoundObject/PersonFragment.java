@@ -1,9 +1,12 @@
 package com.helloworld.goodpoint.ui.lostFoundObject;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -26,6 +29,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -132,21 +136,20 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         }
     }
     int NumOfImgSelected ;
-    boolean flag = true;
+   int BitMapSize = bitmap.size();
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        BitMapSize = bitmap.size();
         ADDP.setVisibility(View.VISIBLE);
         if(resultCode==RESULT_OK&&data!=null)
         {
             switch(requestCode) {
                 case 10: {
                     if (bitmap.size() >= 10) {
-                        flag = false;
                         FancyToast.makeText(getActivity().getApplicationContext(), "You cannot choose more than 10 images", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                     }
                     else {
-                        flag = true;
                         bitmap.add((Bitmap) data.getExtras().get("data"));
                         imageView.setImageBitmap(bitmap.get(bitmap.size() - 1));
                         ((objectDataType) getActivity()).getBitmap_ImagePersonImages(bitmap);
@@ -166,11 +169,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                                     Toast toast = FancyToast.makeText(getActivity().getApplicationContext(), "You cannot choose more than 10 images", FancyToast.LENGTH_LONG, FancyToast.ERROR, false);
                                     toast.setGravity(Gravity.BOTTOM, 0, 0);
                                     toast.show();
-                                    flag = false;
+
                                     break;
                                 }
                                 bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
-                               flag = true;
                             }
                         }
                         else{
@@ -180,11 +182,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                                 Toast toast =  FancyToast.makeText(getActivity().getApplicationContext(),"You cannot choose more than 10 images",FancyToast.LENGTH_LONG, FancyToast.ERROR,false);
                                 toast.setGravity(Gravity.BOTTOM,0,0);
                                 toast.show();
-                                flag = false;
                             }
                             else {
                                 bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
-                                flag = true;
                             }
                         }
 
@@ -205,7 +205,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             }
 
         }
-        if(flag) {
+        if(BitMapSize != bitmap.size()) {
             checkIfAllImagesContainFacesOrNot N = new checkIfAllImagesContainFacesOrNot();
             N.execute(bitmap);
         }
@@ -219,24 +219,49 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         protected void onPreExecute() {
             super.onPreExecute();
         }
-
         @Override
         protected void onPostExecute(List<Bitmap> ImgNotHaveFaces) {
             super.onPostExecute(ImgNotHaveFaces);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+            @SuppressLint({"NewApi", "LocalSuppress"})
+            View view = getLayoutInflater().inflate(R.layout.images_be_removed,null);
+            LinearLayout RemovedImg =  view.findViewById(R.id.RemovedImg);
+            if(ImgNotHaveFaces.size()>1)
+                builder.setMessage("These " +ImgNotHaveFaces.size() +" images do not contain any faces so they will be removed");
+            else
+                builder.setMessage("This image do not contain any faces so it will be removed");
+
+            for(int i = 0 ; i < ImgNotHaveFaces.size();i++) {
+                @SuppressLint({"NewApi", "LocalSuppress"})
+                View view2 = getLayoutInflater().inflate(R.layout.images,null);
+                imageView2 = view2.findViewById(R.id.imageView2);
+                Close =   (Button)view2.findViewById(R.id.Close);
+                Close.setVisibility(View.GONE);
+                imageView2.setImageBitmap(ImgNotHaveFaces.get(i));
+                RemovedImg.addView(view2);
+            }
+            builder.setView(view).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
             for(int i=0;i<INdexesOFImgNotHaveFaces.size();i++)
             {
                 linearLayout.removeViewAt(INdexesOFImgNotHaveFaces.get(i));
             }
             INdexesOFImgNotHaveFaces.clear();
-            Log.e("img","  Finished I Now Have "+ImgNotHaveFaces.size() +"img " +INdexesOFImgNotHaveFaces.size());
+            ImgNotHaveFaces.clear();
+            Log.e("img","  Finished I Now Have "+ImgNotHaveFaces.size() +" img ");
         }
         @Override
         protected List<Bitmap> doInBackground(List<Bitmap>... bitmap) {
             List<Bitmap> ImgNotHaveFaces = new ArrayList<>();
             int counter = NumOfImgSelected;
             int index = bitmap[0].size();
-            while(counter>0) {
+            while(counter > 0 && index > 0) {
                 Bitmap My = bitmap[0].get(index-1);
                 FaceDetector faceDetector = new FaceDetector.Builder(getActivity())
                         .setTrackingEnabled(false)
