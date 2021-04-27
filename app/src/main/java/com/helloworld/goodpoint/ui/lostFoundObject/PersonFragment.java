@@ -9,12 +9,14 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,6 +32,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.face.Face;
+import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
@@ -126,6 +131,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         }
         }
     }
+    int NumOfImgSelected ;
+    boolean flag = true;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -133,90 +140,127 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         if(resultCode==RESULT_OK&&data!=null)
         {
             switch(requestCode) {
-                case 10:
-                    bitmap.add((Bitmap) data.getExtras().get("data"));
-                    imageView.setImageBitmap(bitmap.get(bitmap.size()-1));
-                    ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
-                    break;
+                case 10: {
+                    if (bitmap.size() >= 10) {
+                        flag = false;
+                        FancyToast.makeText(getActivity().getApplicationContext(), "You cannot choose more than 10 images", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                    }
+                    else {
+                        flag = true;
+                        bitmap.add((Bitmap) data.getExtras().get("data"));
+                        imageView.setImageBitmap(bitmap.get(bitmap.size() - 1));
+                        ((objectDataType) getActivity()).getBitmap_ImagePersonImages(bitmap);
+                    }
+
+                break;
+                  }
                 case 1:
                     try {
                         ClipData clipData = data.getClipData();
                         if(clipData != null)
                         {
-                            if(clipData.getItemCount()>10)
-                            {
-                                Toast toast =  FancyToast.makeText(getActivity().getApplicationContext(),"You cannot choose more than 10 images",FancyToast.LENGTH_LONG, FancyToast.ERROR,false);
-                                toast.setGravity(Gravity.BOTTOM,0,0);
-                                toast.show();
-
-                                for(int i = 0; i<10;i++)
-                                {
-                                    photoFromGallery = clipData.getItemAt(i).getUri();
-                                    bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
+                            NumOfImgSelected = clipData.getItemCount();
+                            for (int i = 0; i < clipData.getItemCount(); i++) {
+                                photoFromGallery = clipData.getItemAt(i).getUri();
+                                if (bitmap.size() >= 10) {
+                                    Toast toast = FancyToast.makeText(getActivity().getApplicationContext(), "You cannot choose more than 10 images", FancyToast.LENGTH_LONG, FancyToast.ERROR, false);
+                                    toast.setGravity(Gravity.BOTTOM, 0, 0);
+                                    toast.show();
+                                    flag = false;
+                                    break;
                                 }
-                            }
-                            else {
-                                for (int i = 0; i < clipData.getItemCount(); i++) {
-                                    photoFromGallery = clipData.getItemAt(i).getUri();
-                                    bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
-                                }
+                                bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
+                               flag = true;
                             }
                         }
                         else{
+                            NumOfImgSelected = 1;
                             photoFromGallery = data.getData();
-                            bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
+                            if(bitmap.size()>=10) {
+                                Toast toast =  FancyToast.makeText(getActivity().getApplicationContext(),"You cannot choose more than 10 images",FancyToast.LENGTH_LONG, FancyToast.ERROR,false);
+                                toast.setGravity(Gravity.BOTTOM,0,0);
+                                toast.show();
+                                flag = false;
+                            }
+                            else {
+                                bitmap.add(MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoFromGallery));
+                                flag = true;
+                            }
                         }
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.e("img", e.getMessage() );
                     }
                     break;
             }
             ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
-            if(linearLayout.getChildCount() == 0) {
-                for (int i = 0; i < bitmap.size(); i++) {
-                    View view = inflater2.inflate(R.layout.images, linearLayout, false);
-                    imageView2 = (ImageView) view.findViewById(R.id.imageView2);
-                    Close =  (Button)view.findViewById(R.id.Close);
-                    Close.setBackgroundColor(0x80F38E3A);
-                    imageView2.setImageBitmap(bitmap.get(i));
-                    linearLayout.addView(view);
-                }
-            }
-            else
-            {
-                if((linearLayout.getChildCount()+bitmap.size())>10)
-                {
-                   Toast toast = FancyToast.makeText(getActivity().getApplicationContext(),"You cannot choose more than 10 images",FancyToast.LENGTH_LONG, FancyToast.ERROR,false);
-                   toast.setGravity(Gravity.BOTTOM,0,0);
-                   toast.show();
-                    for (int i = linearLayout.getChildCount(); i < 10; i++) {
-                        View view = inflater2.inflate(R.layout.images, linearLayout, false);
-                        imageView2 = view.findViewById(R.id.imageView2);
-                        Close =   (Button)view.findViewById(R.id.Close);
-                        Close.setBackgroundColor(0x80F38E3A);
-                        imageView2.setImageBitmap(bitmap.get(i));
-                        linearLayout.addView(view);
+            for (int i = linearLayout.getChildCount(); i < bitmap.size(); i++) {
+                View view = inflater2.inflate(R.layout.images, linearLayout, false);
+                imageView2 = view.findViewById(R.id.imageView2);
+                Close =   (Button)view.findViewById(R.id.Close);
+                Close.setBackgroundColor(0x80F38E3A);
+                imageView2.setImageBitmap(bitmap.get(i));
+                linearLayout.addView(view);
 
-                    }
-                }
-                else {
-                    for (int i = linearLayout.getChildCount(); i < bitmap.size(); i++) {
-                        View view = inflater2.inflate(R.layout.images, linearLayout, false);
-                        imageView2 = view.findViewById(R.id.imageView2);
-                        Close = (Button) view.findViewById(R.id.Close);
-                        Close.setBackgroundColor(0x80F38E3A);
-                        imageView2.setImageBitmap(bitmap.get(i));
-                        linearLayout.addView(view);
-
-                    }
-                }
             }
+
         }
+        if(flag) {
+            checkIfAllImagesContainFacesOrNot N = new checkIfAllImagesContainFacesOrNot();
+            N.execute(bitmap);
+        }
+
         setOnClickListeners();
     }
+    List<Integer> INdexesOFImgNotHaveFaces = new ArrayList<>();
+    class checkIfAllImagesContainFacesOrNot extends AsyncTask<List<Bitmap>,Void, List<Bitmap>>
+    {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
 
+        @Override
+        protected void onPostExecute(List<Bitmap> ImgNotHaveFaces) {
+            super.onPostExecute(ImgNotHaveFaces);
+
+            for(int i=0;i<INdexesOFImgNotHaveFaces.size();i++)
+            {
+                linearLayout.removeViewAt(INdexesOFImgNotHaveFaces.get(i));
+            }
+            INdexesOFImgNotHaveFaces.clear();
+            Log.e("img","  Finished I Now Have "+ImgNotHaveFaces.size() +"img " +INdexesOFImgNotHaveFaces.size());
+        }
+        @Override
+        protected List<Bitmap> doInBackground(List<Bitmap>... bitmap) {
+            List<Bitmap> ImgNotHaveFaces = new ArrayList<>();
+            int counter = NumOfImgSelected;
+            int index = bitmap[0].size();
+            while(counter>0) {
+                Bitmap My = bitmap[0].get(index-1);
+                FaceDetector faceDetector = new FaceDetector.Builder(getActivity())
+                        .setTrackingEnabled(false)
+                        .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                        .setMode(FaceDetector.FAST_MODE).build();
+                if (!faceDetector.isOperational()) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Frame frame = new Frame.Builder().setBitmap(My).build();
+                    SparseArray<Face> sparseArray = faceDetector.detect(frame);
+                    if(sparseArray.size()==0) {
+                        ImgNotHaveFaces.add(bitmap[0].get(index-1));
+                        bitmap[0].remove(index-1);
+                        INdexesOFImgNotHaveFaces.add(index-1);
+                        Log.e("img", "I removed Image number " + (index) );
+                    }
+                }
+                counter--;
+                index--;
+            }
+            return ImgNotHaveFaces;
+        }
+    }
     private void setOnClickListeners() {
         for (int index = 0; index < linearLayout.getChildCount(); index++) {
             final int finalIndex1 = index;

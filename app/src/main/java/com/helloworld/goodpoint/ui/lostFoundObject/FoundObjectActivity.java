@@ -10,13 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -24,13 +18,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,15 +60,10 @@ import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 
 public class FoundObjectActivity extends AppCompatActivity implements View.OnClickListener,objectDataType {
@@ -213,12 +200,10 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                            if(!flag) wifiManager.setWifiEnabled(true);
                                         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
                                             e.printStackTrace();
-                                            Log.e("Crash", "onMenuItemClick: " + e.getMessage());
                                         }
                                         catch (Exception e)
                                         {
                                             e.printStackTrace();
-                                            Log.e("Crash", "onMenuItemClick: " + e.getMessage());
                                         }
                                         break;
                                 }
@@ -280,7 +265,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         }
         for (int i=0;i<Person_Images.size();i++) {
             Bitmap My = Person_Images.get(i);
-            Log.e("img", My.getWidth()+ "  "+ My.getHeight());
             FaceDetector faceDetector = new FaceDetector.Builder(this)
                     .setTrackingEnabled(false)
                     .setLandmarkType(FaceDetector.ALL_LANDMARKS)
@@ -519,10 +503,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 String command = "ping -c 1 google.com";
                  flag =  (Runtime.getRuntime().exec(command).waitFor() == 0);
             } catch (Exception e) {
-                Log.e("TAG", "run: False");
                 flag = false;
             }
-            Log.e("TAG", "run:" + flag);
             return flag;
         }
     }
@@ -555,7 +537,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     public void getBitmap_Image(Bitmap Bitmap_Image) { }
     @Override
     public void getBitmap_ImagePersonImages(List<Bitmap> PImages){ Person_Images = PImages;
-        Log.e("img", "CheckMatchPerson: ******"+  Person_Images.size());
     }
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
