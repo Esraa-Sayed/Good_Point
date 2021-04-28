@@ -8,6 +8,8 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -22,7 +24,6 @@ import android.widget.EditText;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,10 +31,10 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.ActionActivity;
+import com.helloworld.goodpoint.ui.GlobalVar;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
-import org.opencv.objdetect.CascadeClassifier;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -52,7 +53,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private Bitmap Bitmap_Image;
     private FaceDetector faceDetector;
     private List<Bitmap> Person_Images;
-    private List<Bitmap> FinialFacesThatWillGoToDataBase = new ArrayList<>();
     private boolean flagPerson,flagObject,CheckImageObeject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +154,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                    if (!faceDetector.isOperational()) {
                        Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
                    }
-                   checkFaces N = new checkFaces();
+                   checkFaces N = new checkFaces(this);
                    N.execute();
                }
                 break;
@@ -242,12 +242,15 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         return true;
 
     }
-    List<List<Bitmap>> allFaces = new ArrayList<>();
-    List<Bitmap> ImgThatHaveMoreThanOneFace = new ArrayList<>();
     class checkFaces extends AsyncTask<Void,Void,Void>
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LostObjectDetailsActivity.this);
+        AlertDialog.Builder builder ;
         AlertDialog dialog;
+        Context context;
+        private checkFaces(Context context) {
+            this.context = context.getApplicationContext();
+            builder = new AlertDialog.Builder(LostObjectDetailsActivity.this);
+        }
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -260,10 +263,10 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         @Override
         protected void onPostExecute(Void a) {
             super.onPostExecute(a);
-            if(allFaces.size()>0)
+            if( GlobalVar.allFaces.size()>0)
             {
-                Log.e("img" , "Num Of img have one face  : " +FinialFacesThatWillGoToDataBase.size() );
-                Log.e("img" , " Num of img have more than one face " + allFaces.size());
+                Intent intent = new Intent(context, ActionActivity.class);
+                context.startActivity(intent);
             }
             else
             {
@@ -275,7 +278,9 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         }
         @Override
         protected Void doInBackground(Void... voids) {
-            ImgThatHaveMoreThanOneFace.clear();
+            GlobalVar.ImgThatHaveMoreThanOneFace.clear();
+            GlobalVar.FinialFacesThatWillGoToDataBase.clear();
+            GlobalVar.allFaces.clear();
             boolean flag = false;
             for (int i = 0; i < Person_Images.size(); i++) {
                 Bitmap My = Person_Images.get(i);
@@ -302,7 +307,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     }
                     if(sparseArray.size() == 1)
                     {
-                        FinialFacesThatWillGoToDataBase.add(faceBitmap);
+                        GlobalVar.FinialFacesThatWillGoToDataBase.add(faceBitmap);
                         flag = true;
                     }
                     else
@@ -311,8 +316,8 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     }
                 }
                 if(!flag) {
-                    ImgThatHaveMoreThanOneFace.add(My);
-                    allFaces.add(faces);
+                    GlobalVar.ImgThatHaveMoreThanOneFace.add(My);
+                    GlobalVar.allFaces.add(faces);
                 }
 
             }
