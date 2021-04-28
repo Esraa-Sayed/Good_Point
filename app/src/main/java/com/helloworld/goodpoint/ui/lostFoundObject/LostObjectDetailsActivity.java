@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.util.SparseArray;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -161,7 +162,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     }
     private boolean CheckMatchPerson() {
         EditText PersonName = PersonF.getView().findViewById(R.id.PersonName);
-        ImageView IV = PersonF.getView().findViewById(R.id.imageView);
         PName = PersonName.getText().toString();
         City = autoCom.getText().toString();
         if (City.isEmpty()) {
@@ -262,7 +262,8 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             super.onPostExecute(a);
             if(allFaces.size()>0)
             {
-
+                Log.e("img" , "Num Of img have one face  : " +FinialFacesThatWillGoToDataBase.size() );
+                Log.e("img" , " Num of img have more than one face " + allFaces.size());
             }
             else
             {

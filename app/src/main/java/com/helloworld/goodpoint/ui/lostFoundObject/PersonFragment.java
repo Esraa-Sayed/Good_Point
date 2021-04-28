@@ -5,18 +5,13 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ClipData;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.SparseArray;
@@ -30,10 +25,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 
@@ -42,8 +35,6 @@ import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
 import com.shashank.sony.fancytoastlib.FancyToast;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -274,7 +265,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             int counter = NumOfImgSelected;
             int index = bitmap[0].size();
             while(counter > 0 && index > 0) {
-                Bitmap My = bitmap[0].get(index-1);
+                Bitmap My = bitmap[0].get(--index);
                 FaceDetector faceDetector = new FaceDetector.Builder(getActivity())
                         .setTrackingEnabled(false)
                         .setLandmarkType(FaceDetector.ALL_LANDMARKS)
@@ -286,14 +277,14 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     Frame frame = new Frame.Builder().setBitmap(My).build();
                     SparseArray<Face> sparseArray = faceDetector.detect(frame);
                     if(sparseArray.size()==0) {
-                        ImgNotHaveFaces.add(bitmap[0].get(index-1));
-                        bitmap[0].remove(index-1);
-                        INdexesOFImgNotHaveFaces.add(index-1);
+                        ImgNotHaveFaces.add(bitmap[0].get(index));
+                        bitmap[0].remove(index);
+                        INdexesOFImgNotHaveFaces.add(index);
                         Log.e("img", "I removed Image number " + (index) );
                     }
                 }
                 counter--;
-                index--;
+
             }
             ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap[0]);
             return ImgNotHaveFaces;
