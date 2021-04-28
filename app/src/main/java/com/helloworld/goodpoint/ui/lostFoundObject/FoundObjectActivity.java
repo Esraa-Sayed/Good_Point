@@ -162,7 +162,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     }
 
     List<List<Bitmap>> allFaces = new ArrayList<>();
-    List<Integer> IndexesOfImgThatHaveMoreThanOneFace = new ArrayList<>();
+    List<Bitmap> ImgThatHaveMoreThanOneFace = new ArrayList<>();
     @Override
     public void onClick(View view) {
         FragmentManager FM = getFragmentManager();
@@ -253,6 +253,13 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 }
                 else if(flagPerson&&CheckMatchPerson())
                 {
+                    faceDetector = new FaceDetector.Builder(this)
+                            .setTrackingEnabled(false)
+                            .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                            .setMode(FaceDetector.FAST_MODE).build();
+                    if (!faceDetector.isOperational()) {
+                        Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
+                    }
                     checkFaces N = new checkFaces();
                     N.execute();
                 }
@@ -275,20 +282,21 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
-        faceDetector = new FaceDetector.Builder(this)
-                .setTrackingEnabled(false)
-                .setLandmarkType(FaceDetector.ALL_LANDMARKS)
-                .setMode(FaceDetector.FAST_MODE).build();
-        if (!faceDetector.isOperational()) {
-            Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
-        }
         return true;
     }
+
     class checkFaces extends AsyncTask<Void,Void,Void>
     {
+        AlertDialog.Builder builder = new AlertDialog.Builder(FoundObjectActivity.this);
+        AlertDialog dialog;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            builder.setCancelable(false);
+            View view = getLayoutInflater().inflate(R.layout.progress_bar_alert, null);
+            builder.setView(view);
+            dialog = builder.create();
+            dialog.show();
         }
         @Override
         protected void onPostExecute(Void a) {
@@ -302,11 +310,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 FancyToast.makeText(FoundObjectActivity.this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                 finish();
             }
+            dialog.dismiss();
 
         }
         @Override
         protected Void doInBackground(Void... voids) {
-            IndexesOfImgThatHaveMoreThanOneFace.clear();
+            ImgThatHaveMoreThanOneFace.clear();
             boolean flag = false;
             for (int i = 0; i < Person_Images.size(); i++) {
                 Bitmap My = Person_Images.get(i);
@@ -342,9 +351,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     }
                 }
                 if(!flag) {
-                    IndexesOfImgThatHaveMoreThanOneFace.add(i);
+                    ImgThatHaveMoreThanOneFace.add(My);
                     allFaces.add(faces);
-                    Log.e("img", "Image Num "+ (i+1) + " Has  "+faces.size()+"  faces" + " Now we have "+allFaces.size()+" Images");
                 }
 
             }

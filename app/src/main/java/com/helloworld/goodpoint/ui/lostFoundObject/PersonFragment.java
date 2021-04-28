@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private Uri photoFromGallery;
     private View rootView;
     private Button Close,add_new__photo;
+    private ProgressBar CheckImages;
     private int nmberOfImageSelected;
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -77,6 +79,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         imageView = rootView.findViewById(R.id.imageView);
         ADDP = rootView.findViewById(R.id.ADDP);
         add_new__photo= rootView.findViewById(R.id.add_new__photo);
+        CheckImages = rootView.findViewById(R.id.CheckImages);
+        CheckImages.setVisibility(View.GONE);
         linearLayout = (LinearLayout) rootView.findViewById(R.id.Gallery2);
         inflater2 = LayoutInflater.from(getActivity());
         add_new__photo.setOnClickListener(this);
@@ -218,10 +222,14 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            CheckImages.setVisibility(View.VISIBLE);
+            add_new__photo.setVisibility(View.GONE);
         }
         @Override
         protected void onPostExecute(List<Bitmap> ImgNotHaveFaces) {
             super.onPostExecute(ImgNotHaveFaces);
+            CheckImages.setVisibility(View.GONE);
+            add_new__photo.setVisibility(View.VISIBLE);
             if(ImgNotHaveFaces.size()>0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setCancelable(false);

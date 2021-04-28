@@ -47,6 +47,12 @@
         android:layout_marginBottom="@dimen/_10sdp"
         android:gravity="center"
         android:text="@string/AddImageOfPerson" />
+    <ProgressBar
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:layout_gravity="center"
+        android:id="@+id/CheckImages"
+        />
     <Button
         android:id="@+id/add_new__photo"
         android:layout_width="@dimen/_70sdp"
