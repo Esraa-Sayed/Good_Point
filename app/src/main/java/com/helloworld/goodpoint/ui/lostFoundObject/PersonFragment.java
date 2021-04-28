@@ -227,6 +227,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 builder.setCancelable(false);
                 @SuppressLint({"NewApi", "LocalSuppress"})
                 View view = getLayoutInflater().inflate(R.layout.images_be_removed, null);
+                (view.findViewById(R.id.ImgThatHaveFaces)).setVisibility(View.GONE);
                 LinearLayout RemovedImg = view.findViewById(R.id.RemovedImg);
                 if (ImgNotHaveFaces.size() > 1)
                     builder.setMessage("These " + ImgNotHaveFaces.size() + " images do not contain any faces so they will be removed");
@@ -236,9 +237,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 for (int i = 0; i < ImgNotHaveFaces.size(); i++) {
                     @SuppressLint({"NewApi", "LocalSuppress"})
                     View view2 = getLayoutInflater().inflate(R.layout.images, null);
-                    imageView2 = view2.findViewById(R.id.imageView2);
-                    Close = (Button) view2.findViewById(R.id.Close);
-                    Close.setVisibility(View.GONE);
+                    (view2.findViewById(R.id.imageView2)).setVisibility(View.GONE);
+                    (view2.findViewById(R.id.Close)).setVisibility(View.GONE);
+                    ImageView imageView = view2.findViewById(R.id.faces);
+                    imageView.setImageBitmap(ImgNotHaveFaces.get(i));
                     imageView2.setImageBitmap(ImgNotHaveFaces.get(i));
                     RemovedImg.addView(view2);
                 }

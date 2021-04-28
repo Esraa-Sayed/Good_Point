@@ -12,8 +12,6 @@
         android:layout_height="@dimen/_50sdp"
         android:scaleType="fitStart"
         android:layout_marginTop="13dp"
-        android:layout_marginLeft="@dimen/_5sdp"
-        android:layout_marginRight="@dimen/_5sdp"
         app:srcCompat="@drawable/ic_baseline_add_a_photo_24" />
 
     <Button
@@ -26,5 +24,13 @@
         android:gravity="center"
         android:layout_toRightOf="@+id/imageView2"
         android:drawableTop="@drawable/ic_close"
+        />
+    <ImageView
+        android:id="@+id/faces"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         />
 </RelativeLayout>

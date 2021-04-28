@@ -2,11 +2,13 @@ package com.helloworld.goodpoint.ui.lostFoundObject;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -32,7 +34,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +66,7 @@ import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -85,8 +91,10 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private WifiManager wifiManager;
     private final static int PLACE_PICKER_REQUEST = 999;
     private List<Bitmap> Person_Images;
+    private List<Bitmap> FinialFacesThatWillGoToDataBase = new ArrayList<>();
     double Latitude;
     double Longitude;
+    private FaceDetector faceDetector;
     FusedLocationProviderClient fusedLocationProviderClient;
     private boolean flagPerson,flagObject;
     @Override
@@ -153,6 +161,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    List<List<Bitmap>> allFaces = new ArrayList<>();
+    List<Integer> IndexesOfImgThatHaveMoreThanOneFace = new ArrayList<>();
     @Override
     public void onClick(View view) {
         FragmentManager FM = getFragmentManager();
@@ -233,6 +243,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 FT.commit();
                 break;
             case R.id.MatchFound:
+                allFaces.clear();
                 if (!flagObject && !flagPerson) {
                     FancyToast.makeText(this,"Specify the type of the missing object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                 }
@@ -242,15 +253,16 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 }
                 else if(flagPerson&&CheckMatchPerson())
                 {
+
                     //FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
                     //finish();
                 }
                 break;
         }
     }
+
     private boolean CheckMatchPerson()
     {
-        ImageView IV = PersonF.getView().findViewById(R.id.imageView);
         EditText PersonName =  PersonF.getView().findViewById(R.id.PersonName);
         PName = PersonName.getText().toString();
         location = Location.getText().toString();
@@ -264,32 +276,100 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
-        for (int i=0;i<Person_Images.size();i++) {
-            Bitmap My = Person_Images.get(i);
-            FaceDetector faceDetector = new FaceDetector.Builder(this)
-                    .setTrackingEnabled(false)
-                    .setLandmarkType(FaceDetector.ALL_LANDMARKS)
-                    .setMode(FaceDetector.FAST_MODE).build();
-            Bitmap faceBitmap = Bitmap.createBitmap(My.getWidth(), My.getHeight(), Bitmap.Config.RGB_565);
+        faceDetector = new FaceDetector.Builder(this)
+                .setTrackingEnabled(false)
+                .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                .setMode(FaceDetector.FAST_MODE).build();
+        if (!faceDetector.isOperational()) {
+            Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            checkFaces N = new checkFaces();
+            N.execute();
+        }
+        return true;
+    }
+    class checkFaces extends AsyncTask<Void,Void,Void>
+    {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected void onPostExecute(Void a) {
+            super.onPostExecute(a);
+            View FinalView= getLayoutInflater().inflate(R.layout.alert_faces_in_image2, null);
+            LinearLayout FinialLayout = FinalView.findViewById(R.id.FinialLayout);
+            if(allFaces.size()>0) {
+               for(int j=0;j<allFaces.size();j++) {
+                   View facesInImage = getLayoutInflater().inflate(R.layout.faces_in_image, null);
+                   LinearLayout LayoutContainFaces = facesInImage.findViewById(R.id.LayoutContainFaces);
 
-            if (!faceDetector.isOperational()) {
-                Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
+                   RadioGroup group = (RadioGroup) facesInImage.findViewById(R.id.radioGroup);
+                   RadioButton button;
+                   for (int i = 0; i < allFaces.get(j).size(); i++) {
+
+                       View images = getLayoutInflater().inflate(R.layout.images, null);
+                       (images.findViewById(R.id.imageView2)).setVisibility(View.GONE);
+                       (images.findViewById(R.id.Close)).setVisibility(View.GONE);
+                       ImageView imageView = images.findViewById(R.id.faces);
+                       imageView.setImageBitmap(allFaces.get(j).get(i));
+                       LayoutContainFaces.addView(images);
+
+                       button = new RadioButton(FoundObjectActivity.this);
+                       button.setWidth(210);
+                       group.addView(button);
+
+                   }
+                   View view = getLayoutInflater().inflate(R.layout.images_be_removed, null);
+                   LinearLayout showFaces = view.findViewById(R.id.RemovedImg);
+                   ImageView fullIm = view.findViewById(R.id.ImgThatHaveFaces);
+                   Log.e("img", "onPostExecute: "+"J: "+j+"   "+ IndexesOfImgThatHaveMoreThanOneFace.get(j) );
+                   fullIm.setImageBitmap(Person_Images.get(IndexesOfImgThatHaveMoreThanOneFace.get(j)));
+                   showFaces.addView(facesInImage);
+                   FinialLayout.addView(view);
+
+               }
+                Log.e("img", "ShowAlert: finished  ");
+                AlertDialog.Builder builder = new AlertDialog.Builder(FoundObjectActivity.this);
+               // builder.setCancelable(false);
+
+                if (allFaces.size() > 1)
+                    builder.setMessage("These " + allFaces.size() + " images contain more than one face.");
+                else
+                    builder.setMessage("This image contain more than one face.");
+
+
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).setView(FinalView);
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
-            else {
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            IndexesOfImgThatHaveMoreThanOneFace.clear();
+            boolean flag = false;
+            for (int i = 0; i < Person_Images.size(); i++) {
+                Bitmap My = Person_Images.get(i);
+                Bitmap faceBitmap;
+                List<Bitmap>faces = new ArrayList<>();//In one Img;
                 Frame frame = new Frame.Builder().setBitmap(My).build();
                 SparseArray<Face> sparseArray = faceDetector.detect(frame);
                 for (int j = 0; j < sparseArray.size(); j++) {
+                    flag = false;
                     Face face = sparseArray.valueAt(j);
-                    if (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())
-                    {
+                    if (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight()) {
                         int H = My.getHeight() - (int) face.getPosition().y;
                         faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), H);
-                    } else if (((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth())
-                    {
+                    } else if (((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) {
                         int W = My.getWidth() - (int) face.getPosition().x;
                         faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, (int) face.getHeight());
-                    }
-                    else if ((((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) && (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())) {
+                    } else if ((((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) && (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())) {
                         int H = My.getHeight() - (int) face.getPosition().y;
                         int W = My.getWidth() - (int) face.getPosition().x;
                         faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, H);
@@ -297,12 +377,25 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                         faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
 
                     }
+                    if(sparseArray.size() == 1)
+                    {
+                        FinialFacesThatWillGoToDataBase.add(faceBitmap);
+                        flag = true;
+                    }
+                   else
+                    {
+                        faces.add(faceBitmap);
+                    }
                 }
+                if(!flag) {
+                    IndexesOfImgThatHaveMoreThanOneFace.add(i);
+                    allFaces.add(faces);
+                    Log.e("img", "Image Num "+ (i+1) + " Has  "+faces.size()+"  faces" + " Now we have "+allFaces.size()+" Images");
+                }
+
             }
-            IV.setVisibility(View.VISIBLE);
-            IV.setImageBitmap(faceBitmap);
-            }
-        return true;
+            return null;
+        }
     }
     private boolean CheckMatchObject()
     {
@@ -550,4 +643,5 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         outState.putBoolean("flagPerson",flagPerson);
         outState.putBoolean("flagObject",flagObject);
     }
+
 }
