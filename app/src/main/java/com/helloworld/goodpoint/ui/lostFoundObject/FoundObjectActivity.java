@@ -253,9 +253,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 }
                 else if(flagPerson&&CheckMatchPerson())
                 {
-
-                    //FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
-                    //finish();
+                    checkFaces N = new checkFaces();
+                    N.execute();
                 }
                 break;
         }
@@ -283,10 +282,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         if (!faceDetector.isOperational()) {
             Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
         }
-        else {
-            checkFaces N = new checkFaces();
-            N.execute();
-        }
         return true;
     }
     class checkFaces extends AsyncTask<Void,Void,Void>
@@ -298,57 +293,16 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(Void a) {
             super.onPostExecute(a);
-            View FinalView= getLayoutInflater().inflate(R.layout.alert_faces_in_image2, null);
-            LinearLayout FinialLayout = FinalView.findViewById(R.id.FinialLayout);
-            if(allFaces.size()>0) {
-               for(int j=0;j<allFaces.size();j++) {
-                   View facesInImage = getLayoutInflater().inflate(R.layout.faces_in_image, null);
-                   LinearLayout LayoutContainFaces = facesInImage.findViewById(R.id.LayoutContainFaces);
+            if(allFaces.size()>0)
+            {
 
-                   RadioGroup group = (RadioGroup) facesInImage.findViewById(R.id.radioGroup);
-                   RadioButton button;
-                   for (int i = 0; i < allFaces.get(j).size(); i++) {
-
-                       View images = getLayoutInflater().inflate(R.layout.images, null);
-                       (images.findViewById(R.id.imageView2)).setVisibility(View.GONE);
-                       (images.findViewById(R.id.Close)).setVisibility(View.GONE);
-                       ImageView imageView = images.findViewById(R.id.faces);
-                       imageView.setImageBitmap(allFaces.get(j).get(i));
-                       LayoutContainFaces.addView(images);
-
-                       button = new RadioButton(FoundObjectActivity.this);
-                       button.setWidth(210);
-                       group.addView(button);
-
-                   }
-                   View view = getLayoutInflater().inflate(R.layout.images_be_removed, null);
-                   LinearLayout showFaces = view.findViewById(R.id.RemovedImg);
-                   ImageView fullIm = view.findViewById(R.id.ImgThatHaveFaces);
-                   Log.e("img", "onPostExecute: "+"J: "+j+"   "+ IndexesOfImgThatHaveMoreThanOneFace.get(j) );
-                   fullIm.setImageBitmap(Person_Images.get(IndexesOfImgThatHaveMoreThanOneFace.get(j)));
-                   showFaces.addView(facesInImage);
-                   FinialLayout.addView(view);
-
-               }
-                Log.e("img", "ShowAlert: finished  ");
-                AlertDialog.Builder builder = new AlertDialog.Builder(FoundObjectActivity.this);
-               // builder.setCancelable(false);
-
-                if (allFaces.size() > 1)
-                    builder.setMessage("These " + allFaces.size() + " images contain more than one face.");
-                else
-                    builder.setMessage("This image contain more than one face.");
-
-
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).setView(FinalView);
-                AlertDialog dialog = builder.create();
-                dialog.show();
             }
+            else
+            {
+                FancyToast.makeText(FoundObjectActivity.this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
+                finish();
+            }
+
         }
         @Override
         protected Void doInBackground(Void... voids) {

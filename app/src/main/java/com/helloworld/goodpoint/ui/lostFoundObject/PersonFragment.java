@@ -227,7 +227,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 builder.setCancelable(false);
                 @SuppressLint({"NewApi", "LocalSuppress"})
                 View view = getLayoutInflater().inflate(R.layout.images_be_removed, null);
-                (view.findViewById(R.id.ImgThatHaveFaces)).setVisibility(View.GONE);
                 LinearLayout RemovedImg = view.findViewById(R.id.RemovedImg);
                 if (ImgNotHaveFaces.size() > 1)
                     builder.setMessage("These " + ImgNotHaveFaces.size() + " images do not contain any faces so they will be removed");
