@@ -222,39 +222,42 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(List<Bitmap> ImgNotHaveFaces) {
             super.onPostExecute(ImgNotHaveFaces);
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            @SuppressLint({"NewApi", "LocalSuppress"})
-            View view = getLayoutInflater().inflate(R.layout.images_be_removed,null);
-            LinearLayout RemovedImg =  view.findViewById(R.id.RemovedImg);
-            if(ImgNotHaveFaces.size()>1)
-                builder.setMessage("These " +ImgNotHaveFaces.size() +" images do not contain any faces so they will be removed");
-            else
-                builder.setMessage("This image do not contain any faces so it will be removed");
-
-            for(int i = 0 ; i < ImgNotHaveFaces.size();i++) {
+            if(ImgNotHaveFaces.size()>0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(false);
                 @SuppressLint({"NewApi", "LocalSuppress"})
-                View view2 = getLayoutInflater().inflate(R.layout.images,null);
-                imageView2 = view2.findViewById(R.id.imageView2);
-                Close =   (Button)view2.findViewById(R.id.Close);
-                Close.setVisibility(View.GONE);
-                imageView2.setImageBitmap(ImgNotHaveFaces.get(i));
-                RemovedImg.addView(view2);
-            }
-            builder.setView(view).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                View view = getLayoutInflater().inflate(R.layout.images_be_removed, null);
+                LinearLayout RemovedImg = view.findViewById(R.id.RemovedImg);
+                if (ImgNotHaveFaces.size() > 1)
+                    builder.setMessage("These " + ImgNotHaveFaces.size() + " images do not contain any faces so they will be removed");
+                else
+                    builder.setMessage("This image do not contain any faces so it will be removed");
+
+                for (int i = 0; i < ImgNotHaveFaces.size(); i++) {
+                    @SuppressLint({"NewApi", "LocalSuppress"})
+                    View view2 = getLayoutInflater().inflate(R.layout.images, null);
+                    imageView2 = view2.findViewById(R.id.imageView2);
+                    Close = (Button) view2.findViewById(R.id.Close);
+                    Close.setVisibility(View.GONE);
+                    imageView2.setImageBitmap(ImgNotHaveFaces.get(i));
+                    RemovedImg.addView(view2);
                 }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            for(int i=0;i<INdexesOFImgNotHaveFaces.size();i++)
-            {
-                linearLayout.removeViewAt(INdexesOFImgNotHaveFaces.get(i));
+                builder.setView(view).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.e("img","  Finished I Now Have "+ImgNotHaveFaces.size() +" img ");
+                        for (int i = 0; i < INdexesOFImgNotHaveFaces.size(); i++) {
+                            linearLayout.removeViewAt(INdexesOFImgNotHaveFaces.get(i));
+                        }
+                        INdexesOFImgNotHaveFaces.clear();
+                        ImgNotHaveFaces.clear();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
             }
-            INdexesOFImgNotHaveFaces.clear();
-            ImgNotHaveFaces.clear();
-            Log.e("img","  Finished I Now Have "+ImgNotHaveFaces.size() +" img ");
+
         }
         @Override
         protected List<Bitmap> doInBackground(List<Bitmap>... bitmap) {
@@ -283,6 +286,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 counter--;
                 index--;
             }
+            ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap[0]);
             return ImgNotHaveFaces;
         }
     }

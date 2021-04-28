@@ -23,6 +23,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -537,6 +538,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     public void getBitmap_Image(Bitmap Bitmap_Image) { }
     @Override
     public void getBitmap_ImagePersonImages(List<Bitmap> PImages){ Person_Images = PImages;
+        Log.e("img", "getBitmap_ImagePersonImages: Hi "+Person_Images.size() );
     }
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
