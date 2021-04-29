@@ -3,20 +3,19 @@ package com.helloworld.goodpoint.ui.lostFoundObject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.media.ExifInterface;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.Display;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,7 +24,6 @@ import android.widget.EditText;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,39 +31,18 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.ActionActivity;
+import com.helloworld.goodpoint.ui.GlobalVar;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
-
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfRect;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.objdetect.CascadeClassifier;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class LostObjectDetailsActivity extends AppCompatActivity implements View.OnClickListener,objectDataType{
     private TextView DateT ;
-    private File caseFile ;
-    private CascadeClassifier faceDetector;
     private Button Person , Object,Match;
     private Fragment PersonF,ObjectF;
-    private FragmentManager FM ;
-    private FragmentTransaction FT;
     private DatePickerDialog.OnDateSetListener DateSet;
     private AutoCompleteTextView autoCom;
     private int year, month, Day;
@@ -74,6 +51,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private String City,ObjectColor,Serial,brand,textArea_information,Type;
     private String PName;
     private Bitmap Bitmap_Image;
+    private FaceDetector faceDetector;
     private List<Bitmap> Person_Images;
     private boolean flagPerson,flagObject,CheckImageObeject;
     @Override
@@ -128,8 +106,8 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     }
     @Override
     public void onClick(View view) {
-         FM = getFragmentManager();
-         FT= FM.beginTransaction();
+        FragmentManager FM = getFragmentManager();
+        FragmentTransaction FT = FM.beginTransaction();
        switch (view.getId() ) {
            case R.id.Person:
                FT.replace(R.id.FragmentID, PersonF, null);
@@ -169,16 +147,21 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                }
                else if(flagPerson&&CheckMatchPerson())
                {
-                   FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
-                   //finish();
+                   faceDetector = new FaceDetector.Builder(this)
+                           .setTrackingEnabled(false)
+                           .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                           .setMode(FaceDetector.FAST_MODE).build();
+                   if (!faceDetector.isOperational()) {
+                       Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
+                   }
+                   checkFaces N = new checkFaces(this);
+                   N.execute();
                }
                 break;
         }
     }
-    Mat sampledImg;
     private boolean CheckMatchPerson() {
         EditText PersonName = PersonF.getView().findViewById(R.id.PersonName);
-        ImageView IV = PersonF.getView().findViewById(R.id.imageView);
         PName = PersonName.getText().toString();
         City = autoCom.getText().toString();
         if (City.isEmpty()) {
@@ -194,43 +177,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         } else if (Person_Images.size() == 0) {
             FancyToast.makeText(this, "You must put at least one picture!", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
             return false;
-        } else {
-            for (int i = 0; i < Person_Images.size(); i++) {
-                Bitmap My = Person_Images.get(i);
-                FaceDetector faceDetector = new FaceDetector.Builder(this)
-                        .setTrackingEnabled(false)
-                        .setLandmarkType(FaceDetector.ALL_LANDMARKS)
-                        .setMode(FaceDetector.FAST_MODE).build();
-                Bitmap faceBitmap = Bitmap.createBitmap(My.getWidth(), My.getHeight(), Bitmap.Config.RGB_565);
-                if (!faceDetector.isOperational()) {
-                    Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
-                } else {
-                    Frame frame = new Frame.Builder().setBitmap(My).build();
-                    SparseArray<Face> sparseArray = faceDetector.detect(frame);
-                    for (int j = 0; j < sparseArray.size(); j++) {
-                        Face face = sparseArray.valueAt(j);
-                        if (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())
-                        {
-                            int H = My.getHeight() - (int) face.getPosition().y;
-                            faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), H);
-                        } else if (((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth())
-                        {
-                            int W = My.getWidth() - (int) face.getPosition().x;
-                            faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, (int) face.getHeight());
-                        }
-                        else if ((((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) && (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())) {
-                            int H = My.getHeight() - (int) face.getPosition().y;
-                            int W = My.getWidth() - (int) face.getPosition().x;
-                            faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, H);
-                        } else {
-                            faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
-
-                        }
-                    }
-                    IV.setVisibility(View.VISIBLE);
-                    IV.setImageBitmap(faceBitmap);
-                }
-            }
         }
         return true;
     }
@@ -295,6 +241,88 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         }
         return true;
 
+    }
+    class checkFaces extends AsyncTask<Void,Void,Void>
+    {
+        AlertDialog.Builder builder ;
+        AlertDialog dialog;
+        Context context;
+        private checkFaces(Context context) {
+            this.context = context.getApplicationContext();
+            builder = new AlertDialog.Builder(LostObjectDetailsActivity.this);
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            builder.setCancelable(false);
+            View view = getLayoutInflater().inflate(R.layout.progress_bar_alert, null);
+            builder.setView(view);
+            dialog = builder.create();
+            dialog.show();
+        }
+        @Override
+        protected void onPostExecute(Void a) {
+            super.onPostExecute(a);
+            if( GlobalVar.allFaces.size()>0)
+            {
+                Intent intent = new Intent(context, ActionActivity.class);
+                context.startActivity(intent);
+            }
+            else
+            {
+                FancyToast.makeText(LostObjectDetailsActivity.this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
+                finish();
+            }
+            dialog.dismiss();
+
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            GlobalVar.ImgThatHaveMoreThanOneFace.clear();
+            GlobalVar.FinialFacesThatWillGoToDataBase.clear();
+            GlobalVar.allFaces.clear();
+            boolean flag = false;
+            for (int i = 0; i < Person_Images.size(); i++) {
+                Bitmap My = Person_Images.get(i);
+                Bitmap faceBitmap;
+                List<Bitmap>faces = new ArrayList<>();//In one Img;
+                Frame frame = new Frame.Builder().setBitmap(My).build();
+                SparseArray<Face> sparseArray = faceDetector.detect(frame);
+                for (int j = 0; j < sparseArray.size(); j++) {
+                    flag = false;
+                    Face face = sparseArray.valueAt(j);
+                    if (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight()) {
+                        int H = My.getHeight() - (int) face.getPosition().y;
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), H);
+                    } else if (((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) {
+                        int W = My.getWidth() - (int) face.getPosition().x;
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, (int) face.getHeight());
+                    } else if ((((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) && (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())) {
+                        int H = My.getHeight() - (int) face.getPosition().y;
+                        int W = My.getWidth() - (int) face.getPosition().x;
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, H);
+                    } else {
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
+
+                    }
+                    if(sparseArray.size() == 1)
+                    {
+                        GlobalVar.FinialFacesThatWillGoToDataBase.add(faceBitmap);
+                        flag = true;
+                    }
+                    else
+                    {
+                        faces.add(faceBitmap);
+                    }
+                }
+                if(!flag) {
+                    GlobalVar.ImgThatHaveMoreThanOneFace.add(My);
+                    GlobalVar.allFaces.add(faces);
+                }
+
+            }
+            return null;
+        }
     }
     @Override
     public void getType(String T) {

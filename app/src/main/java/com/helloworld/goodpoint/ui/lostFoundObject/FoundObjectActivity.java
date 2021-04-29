@@ -2,21 +2,17 @@ package com.helloworld.goodpoint.ui.lostFoundObject;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -24,11 +20,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseArray;
@@ -39,7 +35,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,19 +63,17 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.ActionActivity;
+import com.helloworld.goodpoint.ui.GlobalVar;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 
 public class FoundObjectActivity extends AppCompatActivity implements View.OnClickListener,objectDataType {
@@ -99,6 +96,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private List<Bitmap> Person_Images;
     double Latitude;
     double Longitude;
+    private FaceDetector faceDetector;
     FusedLocationProviderClient fusedLocationProviderClient;
     private boolean flagPerson,flagObject;
     @Override
@@ -164,7 +162,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             getCurrentLocation();
         }
     }
-
     @Override
     public void onClick(View view) {
         FragmentManager FM = getFragmentManager();
@@ -213,12 +210,10 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                            if(!flag) wifiManager.setWifiEnabled(true);
                                         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
                                             e.printStackTrace();
-                                            Log.e("Crash", "onMenuItemClick: " + e.getMessage());
                                         }
                                         catch (Exception e)
                                         {
                                             e.printStackTrace();
-                                            Log.e("Crash", "onMenuItemClick: " + e.getMessage());
                                         }
                                         break;
                                 }
@@ -247,6 +242,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 FT.commit();
                 break;
             case R.id.MatchFound:
+                GlobalVar.allFaces.clear();
                 if (!flagObject && !flagPerson) {
                     FancyToast.makeText(this,"Specify the type of the missing object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                 }
@@ -256,15 +252,22 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 }
                 else if(flagPerson&&CheckMatchPerson())
                 {
-                    //FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
-                    //finish();
+                    faceDetector = new FaceDetector.Builder(this)
+                            .setTrackingEnabled(false)
+                            .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                            .setMode(FaceDetector.FAST_MODE).build();
+                    if (!faceDetector.isOperational()) {
+                        Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
+                    }
+                    checkFaces N = new checkFaces(this);
+                    N.execute();
                 }
                 break;
         }
     }
+
     private boolean CheckMatchPerson()
     {
-        ImageView IV = PersonF.getView().findViewById(R.id.imageView);
         EditText PersonName =  PersonF.getView().findViewById(R.id.PersonName);
         PName = PersonName.getText().toString();
         location = Location.getText().toString();
@@ -278,33 +281,67 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
             return false;
         }
-        for (int i=0;i<Person_Images.size();i++) {
-            Bitmap My = Person_Images.get(i);
-            Log.e("img", My.getWidth()+ "  "+ My.getHeight());
-            FaceDetector faceDetector = new FaceDetector.Builder(this)
-                    .setTrackingEnabled(false)
-                    .setLandmarkType(FaceDetector.ALL_LANDMARKS)
-                    .setMode(FaceDetector.FAST_MODE).build();
-            Bitmap faceBitmap = Bitmap.createBitmap(My.getWidth(), My.getHeight(), Bitmap.Config.RGB_565);
+        return true;
+    }
 
-            if (!faceDetector.isOperational()) {
-                Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
+    class checkFaces extends AsyncTask<Void,Void,Void>
+    {
+        AlertDialog.Builder builder;
+        AlertDialog dialog;
+        Context context;
+        private checkFaces(Context context) {
+            this.context = context.getApplicationContext();
+            builder = new AlertDialog.Builder(FoundObjectActivity.this);
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            builder.setCancelable(false);
+            View view = getLayoutInflater().inflate(R.layout.progress_bar_alert, null);
+            builder.setView(view);
+            dialog = builder.create();
+            dialog.show();
+        }
+        @Override
+        protected void onPostExecute(Void a) {
+            super.onPostExecute(a);
+            Log.e("img", "onPostExecute: " +GlobalVar.ImgThatHaveMoreThanOneFace.size() +"  "+  GlobalVar.FinialFacesThatWillGoToDataBase.size());
+            if(GlobalVar.allFaces.size()>0)
+            {
+                Intent intent = new Intent(context, ActionActivity.class);
+                context.startActivity(intent);
+
             }
-            else {
+            else
+            {
+                FancyToast.makeText(FoundObjectActivity.this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
+                finish();
+            }
+            dialog.dismiss();
+
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            GlobalVar.ImgThatHaveMoreThanOneFace.clear();
+            GlobalVar.FinialFacesThatWillGoToDataBase.clear();
+            GlobalVar.allFaces.clear();
+            boolean flag = false;
+            for (int i = 0; i < Person_Images.size(); i++) {
+                Bitmap My = Person_Images.get(i);
+                Bitmap faceBitmap;
+                List<Bitmap>faces = new ArrayList<>();//In one Img;
                 Frame frame = new Frame.Builder().setBitmap(My).build();
                 SparseArray<Face> sparseArray = faceDetector.detect(frame);
                 for (int j = 0; j < sparseArray.size(); j++) {
+                    flag = false;
                     Face face = sparseArray.valueAt(j);
-                    if (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())
-                    {
+                    if (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight()) {
                         int H = My.getHeight() - (int) face.getPosition().y;
                         faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), H);
-                    } else if (((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth())
-                    {
+                    } else if (((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) {
                         int W = My.getWidth() - (int) face.getPosition().x;
                         faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, (int) face.getHeight());
-                    }
-                    else if ((((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) && (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())) {
+                    } else if ((((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) && (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())) {
                         int H = My.getHeight() - (int) face.getPosition().y;
                         int W = My.getWidth() - (int) face.getPosition().x;
                         faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, H);
@@ -312,12 +349,24 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                         faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
 
                     }
+                    if(sparseArray.size() == 1)
+                    {
+                        GlobalVar.FinialFacesThatWillGoToDataBase.add(faceBitmap);
+                        flag = true;
+                    }
+                   else
+                    {
+                        faces.add(faceBitmap);
+                    }
                 }
+                if(!flag) {
+                    GlobalVar.ImgThatHaveMoreThanOneFace.add(My);
+                    GlobalVar.allFaces.add(faces);
+                }
+
             }
-            IV.setVisibility(View.VISIBLE);
-            IV.setImageBitmap(faceBitmap);
-            }
-        return true;
+            return null;
+        }
     }
     private boolean CheckMatchObject()
     {
@@ -519,10 +568,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 String command = "ping -c 1 google.com";
                  flag =  (Runtime.getRuntime().exec(command).waitFor() == 0);
             } catch (Exception e) {
-                Log.e("TAG", "run: False");
                 flag = false;
             }
-            Log.e("TAG", "run:" + flag);
             return flag;
         }
     }
@@ -555,7 +602,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     public void getBitmap_Image(Bitmap Bitmap_Image) { }
     @Override
     public void getBitmap_ImagePersonImages(List<Bitmap> PImages){ Person_Images = PImages;
-        Log.e("img", "CheckMatchPerson: ******"+  Person_Images.size());
+        Log.e("img", "getBitmap_ImagePersonImages: Hi "+Person_Images.size() );
     }
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -567,4 +614,5 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         outState.putBoolean("flagPerson",flagPerson);
         outState.putBoolean("flagObject",flagObject);
     }
+
 }

@@ -12,7 +12,7 @@
     <string name="TypeOfTheObject">Type of the object</string>
     <string name="Person">Person</string>
     <string name="Item">Item</string>
-    <string name="AddImageOfPerson">Add image of person</string>
+    <string name="AddImageOfPerson">Add images of person</string>
     <string name="AddItemDetails">Add item details</string>
     <string name="AddPersonDetails">Add Person details</string>
     <string name="SerialID">Serial ID(optional)</string>
