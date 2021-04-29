@@ -24,6 +24,7 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseArray;
@@ -62,6 +63,8 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.ActionActivity;
+import com.helloworld.goodpoint.ui.GlobalVar;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
@@ -91,7 +94,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private WifiManager wifiManager;
     private final static int PLACE_PICKER_REQUEST = 999;
     private List<Bitmap> Person_Images;
-    private List<Bitmap> FinialFacesThatWillGoToDataBase = new ArrayList<>();
     double Latitude;
     double Longitude;
     private FaceDetector faceDetector;
@@ -160,9 +162,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             getCurrentLocation();
         }
     }
-
-    List<List<Bitmap>> allFaces = new ArrayList<>();
-    List<Bitmap> ImgThatHaveMoreThanOneFace = new ArrayList<>();
     @Override
     public void onClick(View view) {
         FragmentManager FM = getFragmentManager();
@@ -243,7 +242,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 FT.commit();
                 break;
             case R.id.MatchFound:
-                allFaces.clear();
+                GlobalVar.allFaces.clear();
                 if (!flagObject && !flagPerson) {
                     FancyToast.makeText(this,"Specify the type of the missing object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                 }
@@ -260,7 +259,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     if (!faceDetector.isOperational()) {
                         Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
                     }
-                    checkFaces N = new checkFaces();
+                    checkFaces N = new checkFaces(this);
                     N.execute();
                 }
                 break;
@@ -287,8 +286,13 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
     class checkFaces extends AsyncTask<Void,Void,Void>
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(FoundObjectActivity.this);
+        AlertDialog.Builder builder;
         AlertDialog dialog;
+        Context context;
+        private checkFaces(Context context) {
+            this.context = context.getApplicationContext();
+            builder = new AlertDialog.Builder(FoundObjectActivity.this);
+        }
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -301,8 +305,11 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(Void a) {
             super.onPostExecute(a);
-            if(allFaces.size()>0)
+            Log.e("img", "onPostExecute: " +GlobalVar.ImgThatHaveMoreThanOneFace.size() +"  "+  GlobalVar.FinialFacesThatWillGoToDataBase.size());
+            if(GlobalVar.allFaces.size()>0)
             {
+                Intent intent = new Intent(context, ActionActivity.class);
+                context.startActivity(intent);
 
             }
             else
@@ -315,7 +322,9 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         }
         @Override
         protected Void doInBackground(Void... voids) {
-            ImgThatHaveMoreThanOneFace.clear();
+            GlobalVar.ImgThatHaveMoreThanOneFace.clear();
+            GlobalVar.FinialFacesThatWillGoToDataBase.clear();
+            GlobalVar.allFaces.clear();
             boolean flag = false;
             for (int i = 0; i < Person_Images.size(); i++) {
                 Bitmap My = Person_Images.get(i);
@@ -342,7 +351,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     }
                     if(sparseArray.size() == 1)
                     {
-                        FinialFacesThatWillGoToDataBase.add(faceBitmap);
+                        GlobalVar.FinialFacesThatWillGoToDataBase.add(faceBitmap);
                         flag = true;
                     }
                    else
@@ -351,8 +360,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     }
                 }
                 if(!flag) {
-                    ImgThatHaveMoreThanOneFace.add(My);
-                    allFaces.add(faces);
+                    GlobalVar.ImgThatHaveMoreThanOneFace.add(My);
+                    GlobalVar.allFaces.add(faces);
                 }
 
             }

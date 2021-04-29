@@ -16,6 +16,8 @@ class LostObject(models.Model):
         db_table = 'lost_object'
 
 
+
+
 class LostPerson(models.Model):
     id = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id')
     name = models.CharField(max_length=150)
@@ -40,7 +42,7 @@ class LostItem(models.Model):
     brand = models.CharField(max_length=50)
     description = models.CharField(max_length=700)
     serial_number = models.CharField(max_length=100, blank=True, null=True)
-    image = models.ImageField(unique=True, blank=True, null=True)
+    image = models.ImageField(blank=True, null=True)
 
     class Meta:
         db_table = 'lost_item'
