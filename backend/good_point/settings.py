@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'find_losts',
     'notification',
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist'
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 REST_FRAMEWORK = {
@@ -96,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Good_Point',
         'USER': 'postgres',
-        'PASSWORD': '[,]f,dkj2020',
+        'PASSWORD': '20111998',
         'HOST': 'localhost',
         'PORT': '5432'
     }
@@ -146,9 +146,9 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-
-"""
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,'static')
-)
-"""
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+#"""
+#STATICFILES_DIRS = (
+ #   os.path.join(BASE_DIR,'static')
+#)
+#"""

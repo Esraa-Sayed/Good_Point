@@ -1,6 +1,10 @@
 from django.urls import path
 from . import views
 
-urlpatterns = [
 
+urlpatterns = [
+    path('lostobject/', views.LostObjectView.as_view(), name='lost_object'),
+    path('lostitem/',views.LostItemView.as_view(), name='lost_item'),
+    #path('lostobject/<int:id>/',views.LostItemView.as_view(), name='lost_item'),
+    #path('lostcomb/', views.CombineListView.as_view(), name='lost_object'),
 ]
