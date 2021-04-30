@@ -35,6 +35,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i) {
         com.helloworld.goodpoint.ui.candidate.Item item = itemList.get(i);
         itemViewHolder.tvItemTitle.setText(item.getItemTitle());
+        itemViewHolder.tvItemImage.setImageBitmap(item.getItemImage());
 
         // Create layout manager with initial prefetch item count
         LinearLayoutManager layoutManager = new LinearLayoutManager(
@@ -66,7 +67,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         ItemViewHolder(View itemView) {
             super(itemView);
-            tvItemImage = itemView.findViewById(R.id.image_view);
+            tvItemImage = itemView.findViewById(R.id.tvItemImage);
             tvItemTitle = itemView.findViewById(R.id.tv_item_title);
             rvSubItem = itemView.findViewById(R.id.rv_sub_item);
         }

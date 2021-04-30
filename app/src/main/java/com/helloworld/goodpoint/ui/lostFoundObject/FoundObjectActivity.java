@@ -2,6 +2,7 @@ package com.helloworld.goodpoint.ui.lostFoundObject;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -24,6 +25,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -51,22 +53,23 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.face.Face;
+import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.GlobalVar;
 import com.helloworld.goodpoint.ui.prepareList;
+import com.helloworld.goodpoint.ui.select_multiple_faces.Selection;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class FoundObjectActivity extends AppCompatActivity implements View.OnClickListener,objectDataType {
+
+public class FoundObjectActivity extends AppCompatActivity implements View.OnClickListener, objectDataType {
     private TextView DateFound;
     private EditText Location;
     private DatePickerDialog.OnDateSetListener DateSet;
@@ -74,11 +77,11 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private Button Person;
     private Button Object;
     private Button MatchFound;
-    private prepareList List ;
-    private List<String> listColor ;
+    private prepareList List;
+    private List<String> listColor;
     private Fragment PersonF, ObjectF;
     private String location;
-    private String ObjectColor,Serial,brand,textArea_information,Type;
+    private String ObjectColor, Serial, brand, textArea_information, Type;
     private String PName;
     private ProgressBar progressbar;
     private WifiManager wifiManager;
@@ -86,8 +89,10 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private List<Bitmap> Person_Images;
     double Latitude;
     double Longitude;
+    private FaceDetector faceDetector;
     FusedLocationProviderClient fusedLocationProviderClient;
-    private boolean flagPerson,flagObject;
+    private boolean flagPerson, flagObject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,8 +103,16 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             year = savedInstanceState.getInt("year");
             month = savedInstanceState.getInt("month");
             Day = savedInstanceState.getInt("Day");
-        }
-       else {
+            flagPerson = savedInstanceState.getBoolean("flagPerson");
+            flagObject = savedInstanceState.getBoolean("flagObject");
+            if (flagPerson == true) {
+                Person.setTextColor(0xFFF38E3A);
+                Object.setTextColor(Color.BLACK);
+            } else if (flagObject == true) {
+                Object.setTextColor(0xFFF38E3A);
+                Person.setTextColor(Color.BLACK);
+            }
+        } else {
             year = cal.get(Calendar.YEAR);
             month = cal.get(Calendar.MONTH);
             Day = cal.get(Calendar.DAY_OF_MONTH);
@@ -107,17 +120,17 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         String todayDate = year + "/" + (month + 1) + "/" + Day;
         DateFound.setText(todayDate);
 
-          DateSet = new DatePickerDialog.OnDateSetListener() {
+        DateSet = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 m++;
-                if (y > year || (m-1 > month && y >= year)|| (d > Day && m-1 >= month && y >= year)) {
-                    FancyToast.makeText(FoundObjectActivity.this,"Invalid date",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
+                if (y > year || (m - 1 > month && y >= year) || (d > Day && m - 1 >= month && y >= year)) {
+                    FancyToast.makeText(FoundObjectActivity.this, "Invalid date", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                     String todayDate = year + "/" + (month + 1) + "/" + Day;
                     DateFound.setText(todayDate);
                 } else {
                     year = y;
-                    month = m-1;
+                    month = m - 1;
                     Day = d;
                     String Date = y + "/" + m + "/" + d;
                     DateFound.setText(Date);
@@ -132,10 +145,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(FoundObjectActivity.this);
         if (ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(FoundObjectActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},12);
-        }
-        else
-        {
+            ActivityCompat.requestPermissions(FoundObjectActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 12);
+        } else {
             getCurrentLocation();
         }
     }
@@ -144,7 +155,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         FragmentManager FM = getFragmentManager();
         FragmentTransaction FT = FM.beginTransaction();
-        switch (view.getId() ) {
+        switch (view.getId()) {
             case R.id.DateFound:
                 DatePickerDialog dialog = new DatePickerDialog(
                         FoundObjectActivity.this,
@@ -164,49 +175,44 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                         if (ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                                 && ActivityCompat.checkSelfPermission(FoundObjectActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(FoundObjectActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 12);
-                        }
-                        else {
+                        } else {
                             switch (item.getItemId()) {
-                                    case R.id.TakeCurrLocation:
-                                        isInternetAvailable Available = new isInternetAvailable();
-                                        Available.execute();
-                                        CurrentLocation Locate = new CurrentLocation();
-                                        Locate.execute();
-                                        break;
-                                    case R.id.DeteLocation:
-                                        boolean flag = false;
-                                        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                                        if(wifiManager.isWifiEnabled())
-                                            wifiManager.setWifiEnabled(false);
-                                        else {
-                                            flag = true;
-                                        }
-                                        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                                        try {
-                                            Intent intent = builder.build(FoundObjectActivity.this);
-                                            startActivityForResult(intent, PLACE_PICKER_REQUEST);
-                                           if(!flag) wifiManager.setWifiEnabled(true);
-                                        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-                                            e.printStackTrace();
-                                            Log.e("Crash", "onMenuItemClick: " + e.getMessage());
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            e.printStackTrace();
-                                            Log.e("Crash", "onMenuItemClick: " + e.getMessage());
-                                        }
-                                        break;
-                                }
+                                case R.id.TakeCurrLocation:
+                                    isInternetAvailable Available = new isInternetAvailable();
+                                    Available.execute();
+                                    CurrentLocation Locate = new CurrentLocation();
+                                    Locate.execute();
+                                    break;
+                                case R.id.DeteLocation:
+                                    boolean flag = false;
+                                    wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                                    if (wifiManager.isWifiEnabled())
+                                        wifiManager.setWifiEnabled(false);
+                                    else {
+                                        flag = true;
+                                    }
+                                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                                    try {
+                                        Intent intent = builder.build(FoundObjectActivity.this);
+                                        startActivityForResult(intent, PLACE_PICKER_REQUEST);
+                                        if (!flag) wifiManager.setWifiEnabled(true);
+                                    } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                                        e.printStackTrace();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
                             }
+                        }
                         return true;
-                     }
+                    }
                 });
                 popupMenu.show();
                 break;
             case R.id.PersonFound:
                 flagPerson = true;
                 flagObject = false;
-                FT.replace(R.id.FragmentFoundID,PersonF,null);
+                FT.replace(R.id.FragmentFoundID, PersonF, null);
                 Person.setTextColor(0xFFF38E3A);
                 Object.setTextColor(Color.BLACK);
 
@@ -215,105 +221,177 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             case R.id.ObjectFound:
                 flagObject = true;
                 flagPerson = false;
-                FT.replace(R.id.FragmentFoundID,ObjectF,null);
+                FT.replace(R.id.FragmentFoundID, ObjectF, null);
                 Object.setTextColor(0xFFF38E3A);
                 Person.setTextColor(Color.BLACK);
 
                 FT.commit();
                 break;
             case R.id.MatchFound:
+                GlobalVar.allFaces.clear();
                 if (!flagObject && !flagPerson) {
-                    FancyToast.makeText(this,"Specify the type of the missing object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
-                }
-                else if(flagObject&&CheckMatchObject()) {
-                    FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
+                    FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                } else if (flagObject && CheckMatchObject()) {
+                    FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     finish();
-                }
-                else if(flagPerson&&CheckMatchPerson())
-                {
-                    FancyToast.makeText(this,"The data has been saved successfully",FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
-                    finish();
+                } else if (flagPerson && CheckMatchPerson()) {
+                    faceDetector = new FaceDetector.Builder(this)
+                            .setTrackingEnabled(false)
+                            .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                            .setMode(FaceDetector.FAST_MODE).build();
+                    if (!faceDetector.isOperational()) {
+                        Toast.makeText(this, "Face Detection can't be setup", Toast.LENGTH_SHORT).show();
+                    }
+                    checkFaces N = new checkFaces(this);
+                    N.execute();
                 }
                 break;
         }
     }
-    private boolean CheckMatchPerson()
-    {
-        EditText PersonName =  PersonF.getView().findViewById(R.id.PersonName);
+
+    private boolean CheckMatchPerson() {
+        EditText PersonName = PersonF.getView().findViewById(R.id.PersonName);
         PName = PersonName.getText().toString();
         location = Location.getText().toString();
-        if(location.isEmpty())
-        {
-            FancyToast.makeText(this,"Specify where you found this object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
+        if (location.isEmpty()) {
+            FancyToast.makeText(this, "Specify where you found this object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
             return false;
-        }
-        else if(Person_Images.size() == 0)
-        {
-            FancyToast.makeText(this,"You must put at least one picture!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
+        } else if (Person_Images.size() == 0) {
+            FancyToast.makeText(this, "You must put at least one picture!", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
             return false;
         }
         return true;
     }
-    private boolean CheckMatchObject()
-    {
+
+    class checkFaces extends AsyncTask<Void, Void, Void> {
+        AlertDialog.Builder builder;
+        AlertDialog dialog;
+        Context context;
+
+        private checkFaces(Context context) {
+            this.context = context.getApplicationContext();
+            builder = new AlertDialog.Builder(FoundObjectActivity.this);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            builder.setCancelable(false);
+            View view = getLayoutInflater().inflate(R.layout.progress_bar_alert, null);
+            builder.setView(view);
+            dialog = builder.create();
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void a) {
+            super.onPostExecute(a);
+            Log.e("img", "onPostExecute: " + GlobalVar.ImgThatHaveMoreThanOneFace.size() + "  " + GlobalVar.FinialFacesThatWillGoToDataBase.size());
+            if (GlobalVar.allFaces.size() > 0) {
+                startActivity(new Intent(FoundObjectActivity.this, Selection.class));
+                finish();
+
+            } else {
+                FancyToast.makeText(FoundObjectActivity.this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                finish();
+            }
+            dialog.dismiss();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            GlobalVar.ImgThatHaveMoreThanOneFace.clear();
+            GlobalVar.FinialFacesThatWillGoToDataBase.clear();
+            GlobalVar.allFaces.clear();
+            boolean flag = false;
+            for (int i = 0; i < Person_Images.size(); i++) {
+                Bitmap My = Person_Images.get(i);
+                Bitmap faceBitmap;
+                List<Bitmap> faces = new ArrayList<>();//In one Img;
+                Frame frame = new Frame.Builder().setBitmap(My).build();
+                SparseArray<Face> sparseArray = faceDetector.detect(frame);
+                for (int j = 0; j < sparseArray.size(); j++) {
+                    flag = false;
+                    Face face = sparseArray.valueAt(j);
+                    if (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight()) {
+                        int H = My.getHeight() - (int) face.getPosition().y;
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), H);
+                    } else if (((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) {
+                        int W = My.getWidth() - (int) face.getPosition().x;
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, (int) face.getHeight());
+                    } else if ((((int) face.getPosition().x + (int) face.getWidth()) > My.getWidth()) && (((int) face.getPosition().y + (int) face.getHeight()) > My.getHeight())) {
+                        int H = My.getHeight() - (int) face.getPosition().y;
+                        int W = My.getWidth() - (int) face.getPosition().x;
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, W, H);
+                    } else {
+                        faceBitmap = Bitmap.createBitmap(My, (int) face.getPosition().x, (int) face.getPosition().y, (int) face.getWidth(), (int) face.getHeight());
+
+                    }
+                    if (sparseArray.size() == 1) {
+                        GlobalVar.FinialFacesThatWillGoToDataBase.add(faceBitmap);
+                        flag = true;
+                    } else {
+                        faces.add(faceBitmap);
+                    }
+                }
+                if (!flag) {
+                    GlobalVar.ImgThatHaveMoreThanOneFace.add(My);
+                    GlobalVar.allFaces.add(faces);
+                }
+
+            }
+            return null;
+        }
+    }
+
+    private boolean CheckMatchObject() {
         location = Location.getText().toString();
-        AutoCompleteTextView V =  ObjectF.getView().findViewById(R.id.ColorOfObject);
-        EditText serialObject =  ObjectF.getView().findViewById(R.id.Serial);
-        EditText brandObject =  ObjectF.getView().findViewById(R.id.brand);
-        EditText textArea_informationObject =  ObjectF.getView().findViewById(R.id.textArea_information);
+        AutoCompleteTextView V = ObjectF.getView().findViewById(R.id.ColorOfObject);
+        EditText serialObject = ObjectF.getView().findViewById(R.id.Serial);
+        EditText brandObject = ObjectF.getView().findViewById(R.id.brand);
+        EditText textArea_informationObject = ObjectF.getView().findViewById(R.id.textArea_information);
         EditText TypeObject;
 
         ObjectColor = V.getText().toString();
         Serial = serialObject.getText().toString();
         brand = brandObject.getText().toString();
         textArea_information = textArea_informationObject.getText().toString();
-        if(location.isEmpty())
-        {
-            FancyToast.makeText(this,"Specify where you found this object",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
+        if (location.isEmpty()) {
+            FancyToast.makeText(this, "Specify where you found this object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
             return false;
-        }
-        else if (Type.equals("Type")) {
-            FancyToast.makeText(this,"You must Choose the Type!",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
+        } else if (Type.equals("Type")) {
+            FancyToast.makeText(this, "You must Choose the Type!", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
             return false;
-        }
-        else if(Type.equals("Others"))
-        {
-            TypeObject =  ObjectF.getView().findViewById(R.id.Other);
+        } else if (Type.equals("Others")) {
+            TypeObject = ObjectF.getView().findViewById(R.id.Other);
             Type = TypeObject.getText().toString();
-            if(Type.isEmpty())
-            {
+            if (Type.isEmpty()) {
                 TypeObject.setError("Field can't be empty");
                 return false;
             }
-        }
-        else if(brand.isEmpty())
-        {
+        } else if (brand.isEmpty()) {
             brandObject.setError("Field can't be empty");
             return false;
-        }
-        else if(ObjectColor.isEmpty())
-        {
+        } else if (ObjectColor.isEmpty()) {
             V.setError("Field can't be empty");
             return false;
-        }
-        else if (!listColor.contains(ObjectColor.trim())) {
+        } else if (!listColor.contains(ObjectColor.trim())) {
             V.setError("Color isn't known!");
             return false;
-        }
-        else if(textArea_information.isEmpty())
-        {
+        } else if (textArea_information.isEmpty()) {
             textArea_informationObject.setError("Field can't be empty");
             return false;
         }
         return true;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK)
-        {
-            Place place = PlacePicker.getPlace(data,this);
-            StringBuilder stringBuilder = new  StringBuilder();
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
+            Place place = PlacePicker.getPlace(data, this);
+            StringBuilder stringBuilder = new StringBuilder();
             Latitude = place.getLatLng().latitude;
             Longitude = place.getLatLng().longitude;
             isInternetAvailable Available = new isInternetAvailable();
@@ -325,49 +403,42 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == 12 && (grantResults.length > 0) &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED)
-        {
+        if (requestCode == 12 && (grantResults.length > 0) &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             getCurrentLocation();
-        }
-        else if(requestCode == 12 && (grantResults.length > 0) &&
-                grantResults[0] == PackageManager.PERMISSION_DENIED)
-        {
+        } else if (requestCode == 12 && (grantResults.length > 0) &&
+                grantResults[0] == PackageManager.PERMISSION_DENIED) {
 
-            FancyToast.makeText(this,"Permission denied",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
-        }
-        else if(requestCode == 11 && (grantResults.length > 0) &&
-                grantResults[0] == PackageManager.PERMISSION_DENIED)
-        {
-            FancyToast.makeText(this,"Permission denied",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
+            FancyToast.makeText(this, "Permission denied", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+        } else if (requestCode == 11 && (grantResults.length > 0) &&
+                grantResults[0] == PackageManager.PERMISSION_DENIED) {
+            FancyToast.makeText(this, "Permission denied", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
         }
 
     }
+
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
         LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
-        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        )
-        {
+        ) {
             fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                 @SuppressLint("MissingPermission")
                 @Override
                 public void onComplete(@NonNull Task<Location> task) {
                     Location location = task.getResult();
-                    if(location != null) {
+                    if (location != null) {
                         Longitude = location.getLongitude();
                         Latitude = location.getLatitude();
-                    }
-                    else
-                    {
+                    } else {
                         @SuppressLint("RestrictedApi") LocationRequest locationRequest = new LocationRequest()
                                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                                 .setInterval(10000)
                                 .setFastestInterval(1000)
                                 .setNumUpdates(1);
-                        LocationCallback locationCallback = new LocationCallback(){
+                        LocationCallback locationCallback = new LocationCallback() {
                             @Override
                             public void onLocationResult(LocationResult locationResult) {
                                 Location location1 = locationResult.getLastLocation();
@@ -375,22 +446,19 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                 Latitude = location1.getLatitude();
                             }
                         };
-                        fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
+                        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
 
                     }
                 }
             });
-        }
-
-        else
-        {
+        } else {
             //when location servies is not enabled
             //open location setting
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
-    class CurrentLocation extends AsyncTask<Void,Void, String>
-    {
+
+    class CurrentLocation extends AsyncTask<Void, Void, String> {
 
         @Override
         protected void onPreExecute() {
@@ -401,8 +469,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String Locate) {
             super.onPostExecute(Locate);
-            if(Locate.isEmpty())
-                FancyToast.makeText(FoundObjectActivity.this,"An error has occurred , please try again",FancyToast.LENGTH_LONG, FancyToast.WARNING,false).show();
+            if (Locate.isEmpty())
+                FancyToast.makeText(FoundObjectActivity.this, "An error has occurred , please try again", FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
             Location.setText(Locate);
             progressbar.setVisibility(View.GONE);
         }
@@ -410,13 +478,13 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected String doInBackground(Void... voids) {
             Geocoder geocoder = new Geocoder(FoundObjectActivity.this, new Locale("en"));
-            String Locate ="";
+            String Locate = "";
             try {
                 List<Address> addresses = geocoder.getFromLocation(Latitude, Longitude, 1);
                 String Country = addresses.get(0).getCountryName();
                 String City = addresses.get(0).getAdminArea();
                 String area = addresses.get(0).getLocality();
-                 Locate = area + "," + City + "," + Country + ".";
+                Locate = area + "," + City + "," + Country + ".";
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -424,14 +492,15 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         }
 
     }
+
     public boolean isNetworkAvailable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo nInfo = cm.getActiveNetworkInfo();
         boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
         return connected;
     }
-    class isInternetAvailable extends AsyncTask<Void,Void, Boolean>
-    {
+
+    class isInternetAvailable extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -443,8 +512,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             progressbar.setVisibility(View.GONE);
-            if(!aBoolean)
-                FancyToast.makeText(FoundObjectActivity.this,"No Internet Connection",FancyToast.LENGTH_LONG, FancyToast.WARNING,false).show();
+            if (!aBoolean)
+                FancyToast.makeText(FoundObjectActivity.this, "No Internet Connection", FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
         }
 
         @Override
@@ -452,15 +521,14 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             Boolean flag;
             try {
                 String command = "ping -c 1 google.com";
-                 flag =  (Runtime.getRuntime().exec(command).waitFor() == 0);
+                flag = (Runtime.getRuntime().exec(command).waitFor() == 0);
             } catch (Exception e) {
-                Log.e("TAG", "run: False");
                 flag = false;
             }
-            Log.e("TAG", "run:" + flag);
             return flag;
         }
     }
+
     protected void inti() {
 
         DateFound = findViewById(R.id.DateFound);
@@ -483,19 +551,33 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void getType(String T) { Type = T; }
+    public void getType(String T) {
+        Type = T;
+    }
+
     @Override
-    public void getImageCheck(Boolean check) { }
+    public void getImageCheck(Boolean check) {
+    }
+
     @Override
-    public void getBitmap_Image(Bitmap Bitmap_Image) { }
+    public void getBitmap_Image(Bitmap Bitmap_Image) {
+    }
+
     @Override
-    public void getBitmap_ImagePersonImages(java.util.List<Bitmap> PImages) { Person_Images = PImages; }
+    public void getBitmap_ImagePersonImages(List<Bitmap> PImages) {
+        Person_Images = PImages;
+        Log.e("img", "getBitmap_ImagePersonImages: Hi " + Person_Images.size());
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-            outState.putInt("year", year);
-            outState.putInt("month",  month);
-            outState.putInt("Day", Day);
+        outState.putInt("year", year);
+        outState.putInt("month", month);
+        outState.putInt("Day", Day);
+        outState.putBoolean("flagPerson", flagPerson);
+        outState.putBoolean("flagObject", flagObject);
     }
+
 }

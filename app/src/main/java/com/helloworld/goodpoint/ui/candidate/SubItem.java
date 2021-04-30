@@ -1,18 +1,20 @@
 package com.helloworld.goodpoint.ui.candidate;
 
+import android.graphics.Bitmap;
+
 public class SubItem {
-    private int subItemImage;
+    private Bitmap subItemImage;
     private String subItemTitle;
 
     public SubItem(String subItemTitle) {
         this.subItemTitle = subItemTitle;
     }
 
-    public int getSubItemImage() {
+    public Bitmap getSubItemImage() {
         return subItemImage;
     }
 
-    public void setSubItemImage(int subItemImage) {
+    public void setSubItemImage(Bitmap subItemImage) {
         this.subItemImage = subItemImage;
     }
 

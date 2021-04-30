@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.util.Log;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * Basic implementation of LoaderCallbackInterface.
  */
@@ -16,8 +19,7 @@ public abstract class BaseLoaderCallback implements LoaderCallbackInterface {
         mAppContext = AppContext;
     }
 
-    public void onManagerConnected(int status)
-    {
+    public void onManagerConnected(int status) throws IOException {
         switch (status)
         {
             /** OpenCV initialization was successful. **/
