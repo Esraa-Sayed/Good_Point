@@ -198,7 +198,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
 
         setOnClickListeners();
     }
-    List<Integer> INdexesOFImgNotHaveFaces = new ArrayList<>();
     class checkIfAllImagesContainFacesOrNot extends AsyncTask<List<Bitmap>,Void, List<Bitmap>>
     {
         @Override
@@ -245,7 +244,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                             linearLayout.addView(view);
 
                         }
-                        INdexesOFImgNotHaveFaces.clear();
                         ImgNotHaveFaces.clear();
                     }
                 });
@@ -287,7 +285,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     if(sparseArray.size()==0) {
                         ImgNotHaveFaces.add(bitmap[0].get(index));
                         bitmap[0].remove(index);
-                        INdexesOFImgNotHaveFaces.add(index);
                         Log.e("img", "I removed Image number " + (index) );
                     }
                 }
