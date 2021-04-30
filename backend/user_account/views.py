@@ -40,3 +40,5 @@ class LogoutView(GenericAPIView):
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+

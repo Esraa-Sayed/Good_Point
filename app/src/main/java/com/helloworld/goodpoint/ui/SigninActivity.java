@@ -14,16 +14,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.ui.candidate.CandidatePage;
-import com.helloworld.goodpoint.ui.forgetPasswordScreens.ForgetPassSuccessMessage;
-import com.helloworld.goodpoint.ui.forgetPasswordScreens.ForgetPasswordWithEmail;
+import com.helloworld.goodpoint.pojo.Token;
+import com.helloworld.goodpoint.retrofit.ApiClient;
+import com.helloworld.goodpoint.retrofit.ApiInterface;
+import com.helloworld.goodpoint.retrofit.TokenManager;
 import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
-import com.helloworld.goodpoint.ui.forgetPasswordScreens.VerifiyCode;
 
-import java.util.Calendar;
 import java.util.regex.Pattern;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SigninActivity extends AppCompatActivity implements View.OnClickListener {
+    TokenManager tokenManager;
     private EditText Email,Pass;
     private TextView ForgetPass;
     private CheckBox RememberMe;
@@ -70,14 +74,20 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.signin:
-                if(validAccount()) {
-                    if(RememberMe.isChecked())
+                if(validAccount() && validatePassword()) {
+                    if(RememberMe.isChecked()) {
                         new PrefManager(getApplicationContext()).setLogin("Token");
-                    startActivity(new Intent(this, HomeActivity.class));
-                    finish();
+                        //loginUser();
+                    }
+                    else
+                        //loginUser();
+                        startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+
                 }else
                     Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
                 break;
+
+
             case R.id.NewAccount:
                     startActivity(new Intent(this, SignupActivity.class));
                     break;
@@ -121,5 +131,39 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         //check validation
         if(validateEmail()) return true;
         else return false;
+    }
+
+    public void loginUser()
+    {
+        String emailInput = Email.getText().toString().trim();
+        String passwordInput = Pass.getText().toString().trim();
+
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+
+        Call<Token> call = apiInterface.getToken(emailInput,passwordInput);
+
+        call.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if(response.isSuccessful())
+                {
+                    tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
+                    if(tokenManager.getToken().getAccess() != null){
+                        tokenManager.saveToken(response.body());
+                    }
+
+                    startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                    finish();
+                }
+                else
+                    Toast.makeText(SigninActivity.this, "Invalid account", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                Toast.makeText(SigninActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }

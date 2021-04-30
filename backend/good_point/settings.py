@@ -27,7 +27,7 @@ SECRET_KEY = 'o$!0f@2-*+x-m9-=h*0-2q25jvx(&2+z)6%7ir)@y_7nvlg9f('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -146,6 +146,17 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+#SMTP Configuration
+#New
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '' #os.environ.get('username') sender
+EMAIL_HOST_PASSWORD = ''
+
+
 
 """
 STATICFILES_DIRS = (

@@ -1,5 +1,6 @@
 package com.helloworld.goodpoint.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ public class HomeFragment extends Fragment {
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
     TextView Daily_msg;
+    TextView Hi_msg;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +50,9 @@ public class HomeFragment extends Fragment {
         }else if(timeOfDay >= 21 && timeOfDay < 24){
             Daily_msg.setText("Good Night");
         }
+
+        //Hi_msg = v.findViewById(R.id.hi_message);
+        //String hi = getIntent().get
 
         // Inflate the layout for this fragment
         createGroupList();
