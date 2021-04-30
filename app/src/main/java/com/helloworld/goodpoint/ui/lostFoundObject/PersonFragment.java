@@ -189,15 +189,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     break;
             }
             ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
-            for (int i = linearLayout.getChildCount(); i < bitmap.size(); i++) {
-                View view = inflater2.inflate(R.layout.images, linearLayout, false);
-                imageView2 = view.findViewById(R.id.imageView2);
-                Close =   (Button)view.findViewById(R.id.Close);
-                Close.setBackgroundColor(0x80F38E3A);
-                imageView2.setImageBitmap(bitmap.get(i));
-                linearLayout.addView(view);
-
-            }
 
         }
         if(BitMapSize != bitmap.size()) {
@@ -239,15 +230,20 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     (view2.findViewById(R.id.Close)).setVisibility(View.GONE);
                     ImageView imageView = view2.findViewById(R.id.faces);
                     imageView.setImageBitmap(ImgNotHaveFaces.get(i));
-                    imageView2.setImageBitmap(ImgNotHaveFaces.get(i));
                     RemovedImg.addView(view2);
                 }
                 builder.setView(view).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.e("img","  Finished I Now Have "+ImgNotHaveFaces.size() +" img ");
-                        for (int i = 0; i < INdexesOFImgNotHaveFaces.size(); i++) {
-                            linearLayout.removeViewAt(INdexesOFImgNotHaveFaces.get(i));
+                        for (int i = linearLayout.getChildCount(); i < bitmap.size(); i++) {
+                            View view = inflater2.inflate(R.layout.images, linearLayout, false);
+                            imageView2 = view.findViewById(R.id.imageView2);
+                            Close =   (Button)view.findViewById(R.id.Close);
+                            Close.setBackgroundColor(0x80F38E3A);
+                            imageView2.setImageBitmap(bitmap.get(i));
+                            linearLayout.addView(view);
+
                         }
                         INdexesOFImgNotHaveFaces.clear();
                         ImgNotHaveFaces.clear();
@@ -256,6 +252,18 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
+            }
+            else
+            {
+                for (int i = linearLayout.getChildCount(); i < bitmap.size(); i++) {
+                    View view = inflater2.inflate(R.layout.images, linearLayout, false);
+                    imageView2 = view.findViewById(R.id.imageView2);
+                    Close =   (Button)view.findViewById(R.id.Close);
+                    Close.setBackgroundColor(0x80F38E3A);
+                    imageView2.setImageBitmap(bitmap.get(i));
+                    linearLayout.addView(view);
+
+                }
             }
 
         }
