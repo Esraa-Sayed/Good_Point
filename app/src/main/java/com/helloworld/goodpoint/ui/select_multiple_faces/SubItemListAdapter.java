@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +40,8 @@ public class SubItemListAdapter extends RecyclerView.Adapter<SubItemListAdapter.
         com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList subItem = subItemList.get(i);
         subItemViewHolder.tvItemImage.setImageBitmap(subItem.getSubItemImage());
         subItemViewHolder.rb.setChecked(lastSelectedPosition == i);
+        subItemViewHolder.rb.setClickable(false);
+            //Toast.makeText(cxt, "size="+item.getSubItemList().size(),Toast.LENGTH_LONG).show();
 
     }
 
@@ -65,9 +66,7 @@ public class SubItemListAdapter extends RecyclerView.Adapter<SubItemListAdapter.
                     lastSelectedPosition = getAdapterPosition();
                     notifyDataSetChanged();
 
-                    Toast.makeText(SubItemListAdapter.this.context,
-                            "selected offer is " +lastSelectedPosition,
-                            Toast.LENGTH_LONG).show();
+
                 }
             });
         }

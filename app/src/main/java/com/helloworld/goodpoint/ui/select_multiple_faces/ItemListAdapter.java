@@ -52,6 +52,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         itemViewHolder.rvSubItem.setLayoutManager(layoutManager);
         itemViewHolder.rvSubItem.setAdapter(subItemAdapter);
         itemViewHolder.rvSubItem.setRecycledViewPool(viewPool);
+
+
     }
 
     @Override
@@ -68,6 +70,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             super(itemView);
             tvItemImage = itemView.findViewById(R.id.ItemImage);
             rvSubItem = itemView.findViewById(R.id.recycler_view_sub_items);
+
         }
     }
 }

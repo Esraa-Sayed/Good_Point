@@ -1,16 +1,21 @@
 package com.helloworld.goodpoint.ui.select_multiple_faces;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.RadioGroup;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.GlobalVar;
+import com.helloworld.goodpoint.ui.HomeActivity;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,45 +26,56 @@ public class Selection extends AppCompatActivity {
     //vars
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
-    RadioGroup mRgAllButtons;
-    Bitmap image;
+    RadioButton rb;
+    Button Done_btn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.multiple_faces_selection);
-        mRgAllButtons = findViewById(R.id.radio);
-        getImages();
 
+        getImages();
         RecyclerView rvItem = findViewById(R.id.recycler_view_items);
         LinearLayoutManager layoutManager = new LinearLayoutManager(com.helloworld.goodpoint.ui.select_multiple_faces.Selection.this);
-        ItemListAdapter itemAdapter = new ItemListAdapter(buildItemList(),this);
+        ItemListAdapter itemAdapter = new ItemListAdapter(buildItemList(), this);
         rvItem.setAdapter(itemAdapter);
         rvItem.setLayoutManager(layoutManager);
-
+        Done_btn = (Button) findViewById(R.id.Done_btn);
+        Done_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FancyToast.makeText(Selection.this, "Thank you", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                startActivity(new Intent(Selection.this, HomeActivity.class));
+                finish();
+            }
+        });
 
 
     }
 
+    //Toast.makeText(Selection.this,
+//"size="+faces.get(i).size(),
+//Toast.LENGTH_LONG).show();
     private List<com.helloworld.goodpoint.ui.select_multiple_faces.ItemList> buildItemList() {
         List<com.helloworld.goodpoint.ui.select_multiple_faces.ItemList> itemList = new ArrayList<>();
-        mRgAllButtons= findViewById(R.id.radio);
-        image = BitmapFactory.decodeResource(getResources(), R.drawable.ellipse);
-        for (int i = 0; i < 3; i++) {
-            com.helloworld.goodpoint.ui.select_multiple_faces.ItemList item = new com.helloworld.goodpoint.ui.select_multiple_faces.ItemList(image, buildSubItemList());
+        List<List<Bitmap>> faces = GlobalVar.allFaces;
+        List<Bitmap> mfaces = GlobalVar.ImgThatHaveMoreThanOneFace;
+        for (int i = 0; i < mfaces.size(); i++) {
+            com.helloworld.goodpoint.ui.select_multiple_faces.ItemList item = new com.helloworld.goodpoint.ui.select_multiple_faces.ItemList(mfaces.get(i), buildSubItemList(faces.get(i)));
             itemList.add(item);
         }
         return itemList;
     }
 
-    private List<com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList> buildSubItemList() {
-        image = BitmapFactory.decodeResource(getResources(), R.drawable.ellipse);
+    private List<com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList> buildSubItemList(List<Bitmap> faces) {
         List<com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList> subItemList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList subItem = new com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList(image);
+        for (int i = 0; i < faces.size(); i++) {
+            com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList subItem = new com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList(faces.get(i));
             subItemList.add(subItem);
         }
-       // addRadioButtons(10);
+        // addRadioButtons(10);
+
         return subItemList;
     }
 
