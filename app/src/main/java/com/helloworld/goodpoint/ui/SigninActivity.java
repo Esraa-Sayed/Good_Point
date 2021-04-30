@@ -51,7 +51,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         inti();
 
     }
-
     protected void inti() {
         Email = findViewById(R.id.email);
         Pass =findViewById(R.id.pass);
@@ -69,7 +68,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -77,15 +75,15 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                 if(validAccount() && validatePassword()) {
                     if(RememberMe.isChecked()) {
                         new PrefManager(getApplicationContext()).setLogin("Token");
-                        //loginUser();
+                        loginUser();
                     }
                     else
-                        //loginUser();
-                        startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                        loginUser();
+                        //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
 
                 }else
                     Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                    //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                 break;
 
 
@@ -133,16 +131,13 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         if(validateEmail()) return true;
         else return false;
     }
-
     public void loginUser()
     {
         String emailInput = Email.getText().toString().trim();
         String passwordInput = Pass.getText().toString().trim();
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-
         Call<Token> call = apiInterface.getToken(emailInput,passwordInput);
-
         call.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
@@ -152,19 +147,16 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     if(tokenManager.getToken().getAccess() != null){
                         tokenManager.saveToken(response.body());
                     }
-
                     startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                     finish();
                 }
                 else
                     Toast.makeText(SigninActivity.this, "Invalid account", Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
                 Toast.makeText(SigninActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
     }
 }

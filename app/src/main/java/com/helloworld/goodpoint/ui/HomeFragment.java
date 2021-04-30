@@ -52,7 +52,6 @@ public class HomeFragment extends Fragment {
         }
 
         //Hi_msg = v.findViewById(R.id.hi_message);
-        //String hi = getIntent().get
 
         // Inflate the layout for this fragment
         createGroupList();

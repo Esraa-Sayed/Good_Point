@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.pojo.RegUser;
@@ -120,14 +121,13 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if(!confirmInput(view) ){
-                //registerUser();
-                startActivity(new Intent(SignupActivity.this,check_registration.class));
+                registerUser();
+                //startActivity(new Intent(SignupActivity.this,check_registration.class));
             }
         }
     });
 
     }
-
     protected void inti() {
         UserName = findViewById(R.id.edName);
         Email = findViewById(R.id.edEmail);
@@ -184,7 +184,6 @@ public class SignupActivity extends AppCompatActivity {
                 startActivityForResult(gallery, 11);
                 break;
         }
-
         return super.onContextItemSelected(item);
     }
 
@@ -358,7 +357,6 @@ public class SignupActivity extends AppCompatActivity {
         outState.putParcelable("BitmapImage",Bitmap_Image);
     }
 
-
     public void registerUser()  {
 
     String emailInput = Email.getText().toString().trim();
@@ -369,14 +367,12 @@ public class SignupActivity extends AppCompatActivity {
     String Datee = DateT.getText().toString().trim();
 
     ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+    //RegUser regUser = new RegUser(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
+    Call<Token> call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
 
-
-    RegUser regUser = new RegUser(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
-    Call<RegUser> call = apiInterface.storePost(regUser);
-
-        call.enqueue(new Callback<RegUser>() {
+        call.enqueue(new Callback<Token>() {
         @Override
-        public void onResponse(Call<RegUser> call, Response<RegUser> response) {
+        public void onResponse(Call<Token> call, Response<Token> response) {
             if(response.isSuccessful())
             {
                 Toast.makeText(SignupActivity.this, "Post successfully ...", Toast.LENGTH_SHORT).show();
@@ -387,13 +383,10 @@ public class SignupActivity extends AppCompatActivity {
                 Email.setError("Email may already exist");
                 Phone.setError("Phone may already exist");
         }
-
         @Override
-        public void onFailure(Call<RegUser> call, Throwable t) {
+        public void onFailure(Call<Token> call, Throwable t) {
             Toast.makeText(SignupActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
         }
     });
-
     }
-
-    }
+}
