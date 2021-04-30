@@ -196,7 +196,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             N.execute(bitmap);
         }
 
-        setOnClickListeners();
+
     }
     class checkIfAllImagesContainFacesOrNot extends AsyncTask<List<Bitmap>,Void, List<Bitmap>>
     {
@@ -244,6 +244,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                             linearLayout.addView(view);
 
                         }
+                        setOnClickListeners();
                         ImgNotHaveFaces.clear();
                     }
                 });
@@ -262,6 +263,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     linearLayout.addView(view);
 
                 }
+                setOnClickListeners();
             }
 
         }
