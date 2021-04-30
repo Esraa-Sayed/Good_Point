@@ -1,23 +1,24 @@
 package com.helloworld.goodpoint.ui.select_multiple_faces;
 
 import android.graphics.Bitmap;
-import android.widget.RadioButton;
 
 public class SubItemList {
     private Bitmap subItemImage;
-    private RadioButton btn;
 
-    public RadioButton getBtn() {
-        return btn;
+    public int getPos() {
+        return pos;
     }
 
-    public void setBtn(RadioButton btn) {
-        this.btn = btn;
+    public void setPos(int pos) {
+        this.pos = pos;
     }
 
+    private int pos;
 
-    public SubItemList(Bitmap subItemImage) {
+
+    public SubItemList(Bitmap subItemImage,int pos) {
         this.subItemImage = subItemImage;
+        this.pos=pos;
     }
 
 

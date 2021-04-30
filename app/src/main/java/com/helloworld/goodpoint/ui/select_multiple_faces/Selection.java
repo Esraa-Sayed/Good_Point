@@ -71,7 +71,7 @@ public class Selection extends AppCompatActivity {
     private List<com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList> buildSubItemList(List<Bitmap> faces) {
         List<com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList> subItemList = new ArrayList<>();
         for (int i = 0; i < faces.size(); i++) {
-            com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList subItem = new com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList(faces.get(i));
+            com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList subItem = new com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList(faces.get(i),i);
             subItemList.add(subItem);
         }
         // addRadioButtons(10);
