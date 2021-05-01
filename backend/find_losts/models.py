@@ -7,7 +7,7 @@ from notification.models import Notification
 
 
 class LostObject(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField()
     city = models.CharField(max_length=35)
     user_id = models.ForeignKey(User, related_name='lost', on_delete=models.CASCADE, db_column='user_id')
     is_matched = models.BooleanField(default=False)
