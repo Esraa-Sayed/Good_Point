@@ -29,9 +29,9 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.ui.Alert;
 import com.helloworld.goodpoint.ui.GlobalVar;
 import com.helloworld.goodpoint.ui.prepareList;
-import com.helloworld.goodpoint.ui.select_multiple_faces.Selection;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.ArrayList;
@@ -247,9 +247,10 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         protected void onPostExecute(Void a) {
             super.onPostExecute(a);
             if (GlobalVar.allFaces.size() > 0) {
-                startActivity(new Intent(LostObjectDetailsActivity.this, Selection.class));
+                startActivity(new Intent(LostObjectDetailsActivity.this, Alert.class));
                 finish();
             } else {
+
                 FancyToast.makeText(LostObjectDetailsActivity.this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                 finish();
             }
