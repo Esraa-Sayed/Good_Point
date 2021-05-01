@@ -42,6 +42,7 @@ public class SubItemListAdapter extends RecyclerView.Adapter<SubItemListAdapter.
         subItemViewHolder.tvItemImage.setImageBitmap(subItem.getSubItemImage());
         try {
             subItemViewHolder.bindData(subItem, i);
+            subItem.setPos(i);
         } catch (Exception e) {
             e.printStackTrace();
 

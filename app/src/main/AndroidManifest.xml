@@ -43,6 +43,12 @@
 
         <activity android:name=".ui.select_multiple_faces.Selection"
             android:theme="@style/NoActionBar"/>
+
+        <activity android:name=".ui.test"
+            android:theme="@style/NoActionBar"/>
+
+        <activity android:name=".ui.Alert"
+            android:theme="@style/NoActionBar"/>
         <activity
             android:name=".ui.WelcomeActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
