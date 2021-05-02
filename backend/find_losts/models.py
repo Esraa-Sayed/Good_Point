@@ -49,7 +49,7 @@ class LostItem(models.Model):
 
 
 class FoundObject(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField()
     longitude = models.DecimalField(max_digits=14, decimal_places=10, default=0.0)
     latitude = models.DecimalField(max_digits=14, decimal_places=10, default=0.0)
     city = models.CharField(max_length=35)
@@ -69,12 +69,12 @@ class FoundPerson(models.Model):
 
 
 class FoundPersonImage(models.Model):
-    id = models.OneToOneField(FoundPerson, primary_key=True, on_delete=models.CASCADE, db_column='id')
+    id_image = models.ForeignKey(FoundPerson, on_delete=models.CASCADE, db_column='id_image')
     image = models.ImageField(unique=True)
 
     class Meta:
         db_table = 'found_person_image'
-        unique_together = (('id', 'image'),)
+        unique_together = (('id_image', 'image'),)
 
 
 class FoundItem(models.Model):

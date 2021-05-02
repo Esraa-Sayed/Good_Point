@@ -19,17 +19,19 @@ class LostObjectView(generics.ListCreateAPIView):
     serializer_class = LostObjectSerializer
 
 
+class LostObjectDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = LostObject.objects.all()
+    serializer_class = LostObjectSerializer
+
+
 class LostItemView(generics.ListCreateAPIView):
     queryset = LostItem.objects.all()
     serializer_class = LostItemSerializer
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+class LostItemDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = LostItem.objects.all()
+    serializer_class = LostItemSerializer
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LostPersonView(generics.ListCreateAPIView):
     queryset = LostPerson.objects.all()
@@ -46,3 +48,23 @@ class LostPersonView(generics.ListCreateAPIView):
 class LostPersonImageView(generics.ListCreateAPIView):
     queryset = LostPersonImage.objects.all()
     serializer_class = LostPersonImageSerializer
+
+
+class FoundObjectView(generics.ListCreateAPIView):
+    queryset = FoundObject.objects.all()
+    serializer_class = FoundObjectSerializer
+
+
+class FoundItemView(generics.ListCreateAPIView):
+    queryset = FoundItem.objects.all()
+    serializer_class = FoundItemSerializer
+
+
+class FoundPersonView(generics.ListCreateAPIView):
+    queryset = FoundPerson.objects.all()
+    serializer_class = FoundPersonSerializer
+
+
+class FoundPersonImageView(generics.ListCreateAPIView):
+    queryset = FoundPersonImage.objects.all()
+    serializer_class = FoundPersonImageSerializer
