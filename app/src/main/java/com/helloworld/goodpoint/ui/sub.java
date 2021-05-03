@@ -1,10 +1,10 @@
-package com.helloworld.goodpoint.ui.select_multiple_faces;
+package com.helloworld.goodpoint.ui;
 
 import android.graphics.Bitmap;
 
 import java.io.Serializable;
 
-public class SubItemList implements Serializable {
+public class sub implements Serializable {
     private Bitmap subItemImage;
 
     public int getPos() {
@@ -18,7 +18,7 @@ public class SubItemList implements Serializable {
     private int pos;
 
 
-    public SubItemList(Bitmap subItemImage,int pos) {
+    public sub(Bitmap subItemImage,int pos) {
         this.subItemImage = subItemImage;
         this.pos=pos;
     }

@@ -5,9 +5,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,8 +21,9 @@ public class SubItemListAdapter extends RecyclerView.Adapter<SubItemListAdapter.
     private List<SubItemList> subItemList;
     private int lastSelectedPosition = -1;
     private Context context;
+    private AdapterView.OnItemClickListener onItemClickListener;
 
-    SubItemListAdapter(List<SubItemList> subItemList,Context ctx) {
+    SubItemListAdapter(List<SubItemList> subItemList, Context ctx) {
         this.subItemList = subItemList;
         context = ctx;
     }
@@ -32,17 +33,31 @@ public class SubItemListAdapter extends RecyclerView.Adapter<SubItemListAdapter.
     public SubItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_sub_list_items, viewGroup, false);
 
-        return new SubItemViewHolder(view);
+        return new SubItemViewHolder(view,this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SubItemViewHolder subItemViewHolder, int i) {
         com.helloworld.goodpoint.ui.select_multiple_faces.SubItemList subItem = subItemList.get(i);
         subItemViewHolder.tvItemImage.setImageBitmap(subItem.getSubItemImage());
-        subItemViewHolder.rb.setChecked(lastSelectedPosition == i);
-        subItemViewHolder.rb.setClickable(false);
-            //Toast.makeText(cxt, "size="+item.getSubItemList().size(),Toast.LENGTH_LONG).show();
+        try {
+            subItemViewHolder.bindData(subItem, i);
+            subItem.setPos(i);
+        } catch (Exception e) {
+            e.printStackTrace();
 
+        }
+        //Toast.makeText(cxt, "size="+item.getSubItemList().size(),Toast.LENGTH_LONG).show();
+
+    }
+
+    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public void onItemHolderClick(SubItemViewHolder holder) {
+        if (onItemClickListener != null)
+            onItemClickListener.onItemClick(null, holder.itemView, holder.getAdapterPosition(), holder.getItemId());
     }
 
     @Override
@@ -51,24 +66,28 @@ public class SubItemListAdapter extends RecyclerView.Adapter<SubItemListAdapter.
     }
 
 
-    class SubItemViewHolder extends RecyclerView.ViewHolder {
+    class SubItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private SubItemListAdapter mAdapter;
         private ImageView tvItemImage;
-        private RadioGroup rg;
         private RadioButton rb;
 
-        SubItemViewHolder(View itemView) {
+        public SubItemViewHolder(View itemView, final SubItemListAdapter mAdapter) {
             super(itemView);
+            this.mAdapter=mAdapter;
             tvItemImage = itemView.findViewById(R.id.img_view);
             rb = itemView.findViewById(R.id.radioButton);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    lastSelectedPosition = getAdapterPosition();
-                    notifyDataSetChanged();
+            itemView.setOnClickListener(this);
+            rb.setOnClickListener( this);
+        }
 
+        public void bindData(SubItemList list, int position) {
+            rb.setChecked(position==lastSelectedPosition);
 
-                }
-            });
+        }
+        public void onClick(View v){
+            lastSelectedPosition = getAdapterPosition();
+            notifyItemRangeChanged(0,subItemList.size());
+            mAdapter.onItemHolderClick(SubItemViewHolder.this);
         }
     }
 }

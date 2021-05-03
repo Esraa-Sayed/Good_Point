@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.SparseArray;
@@ -28,12 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
-
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.pojo.LostItem;
-import com.helloworld.goodpoint.retrofit.ApiClient;
-import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.GlobalVar;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.helloworld.goodpoint.ui.select_multiple_faces.Selection;
@@ -42,10 +37,6 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LostObjectDetailsActivity extends AppCompatActivity implements View.OnClickListener, objectDataType {
     private TextView DateT;
@@ -88,8 +79,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             month = cal.get(Calendar.MONTH);
             Day = cal.get(Calendar.DAY_OF_MONTH);
         }
-        String todayDate = year + "-" + (month + 1) + "-" + Day;
-        //String todayDate = year + "/" + (month + 1) + "/" + Day;
+        String todayDate = year + "/" + (month + 1) + "/" + Day;
         DateT.setText(todayDate);
         DateSet = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -97,15 +87,13 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 m++;
                 if (y > year || (m - 1 > month && y >= year) || (d > Day && m - 1 >= month && y >= year)) {
                     FancyToast.makeText(LostObjectDetailsActivity.this, "Invalid date", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
-                    //String todayDate = year + "/" + (month + 1) + "/" + Day;
-                    String todayDate = year + "-" + (month + 1) + "-" + Day;
+                    String todayDate = year + "/" + (month + 1) + "/" + Day;
                     DateT.setText(todayDate);
                 } else {
                     year = y;
                     month = m - 1;
                     Day = d;
-                    //String Date = y + "/" + m + "/" + d;
-                    String Date = y + "-" + m + "-" + d;
+                    String Date = y + "/" + m + "/" + d;
                     DateT.setText(Date);
                 }
             }
@@ -151,7 +139,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 } else if (flagObject && CheckMatchObject()) {
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
-                    LostItems();
                     finish();
                 } else if (flagPerson && CheckMatchPerson()) {
                     faceDetector = new FaceDetector.Builder(this)
@@ -368,70 +355,4 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         outState.putBoolean("flagPerson", flagPerson);
         outState.putBoolean("flagObject", flagObject);
     }
-
-    public void LostItems()  {
-
-        EditText TypeObject;
-        TypeObject =  ObjectF.getView().findViewById(R.id.Other);
-        EditText serialObject =  ObjectF.getView().findViewById(R.id.Serial);
-        EditText brandObject =  ObjectF.getView().findViewById(R.id.brand);
-        AutoCompleteTextView V =  ObjectF.getView().findViewById(R.id.ColorOfObject);
-        EditText textArea_informationObject =  ObjectF.getView().findViewById(R.id.textArea_information);
-
-
-        String cityInput = autoCom.getText().toString();
-        String Datee = DateT.getText().toString().trim();
-        String is_matched = "false";
-        String Type = TypeObject.getText().toString();
-        String Serial = serialObject.getText().toString();
-        String brand = brandObject.getText().toString();
-        String ObjectColor = V.getText().toString();
-        String textArea_information = textArea_informationObject.getText().toString();
-
-
-        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-
-
-        //Call<LostItem> call = apiInterface.storeLost(cityInput,Datee,is_matched);
-        //Call<LostItem> call2 = apiInterface.store2Lost(Type,Serial,brand,ObjectColor,textArea_information);
-
-        Call<LostItem> call = apiInterface.storeLost("2021-04-14 12:02:00+02","Cairo","false");
-        Call<LostItem> call2 = apiInterface.store2Lost("Labtop","45455","dfsa","Red","dsaf");
-
-        call.enqueue(new Callback<LostItem>() {
-            @Override
-            public void onResponse(Call<LostItem> call, Response<LostItem> response) {
-                if(response.isSuccessful())
-                {
-                    Toast.makeText(LostObjectDetailsActivity.this, "Post successfully ...", Toast.LENGTH_SHORT).show();
-                }
-                else
-                    Toast.makeText(LostObjectDetailsActivity.this, "Not Post ...", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<LostItem> call, Throwable t) {
-                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-        call2.enqueue(new Callback<LostItem>() {
-            @Override
-            public void onResponse(Call<LostItem> call, Response<LostItem> response) {
-                if(response.isSuccessful())
-                {
-                    Toast.makeText(LostObjectDetailsActivity.this, "Post successfully ...", Toast.LENGTH_SHORT).show();
-                }
-                else
-                    Toast.makeText(LostObjectDetailsActivity.this, "Not Post ...", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<LostItem> call, Throwable t) {
-                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
-
-
 }

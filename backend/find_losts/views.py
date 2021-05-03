@@ -4,7 +4,7 @@ from rest_framework import serializers
 from django.http import HttpResponse
 from .models import LostObject, LostItem, LostPerson, LostPersonImage
 from rest_framework import status
-from .serializers import LostObjectSerializer, LostItemSerializer
+from .serializers import *
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,10 +19,23 @@ class LostObjectView(generics.ListCreateAPIView):
     serializer_class = LostObjectSerializer
 
 
+class LostObjectDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = LostObject.objects.all()
+    serializer_class = LostObjectSerializer
+
+
 class LostItemView(generics.ListCreateAPIView):
     queryset = LostItem.objects.all()
     serializer_class = LostItemSerializer
 
+class LostItemDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = LostItem.objects.all()
+    serializer_class = LostItemSerializer
+
+
+class LostPersonView(generics.ListCreateAPIView):
+    queryset = LostPerson.objects.all()
+    serializer_class = LostPersonSerializer
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -31,3 +44,27 @@ class LostItemView(generics.ListCreateAPIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class LostPersonImageView(generics.ListCreateAPIView):
+    queryset = LostPersonImage.objects.all()
+    serializer_class = LostPersonImageSerializer
+
+
+class FoundObjectView(generics.ListCreateAPIView):
+    queryset = FoundObject.objects.all()
+    serializer_class = FoundObjectSerializer
+
+
+class FoundItemView(generics.ListCreateAPIView):
+    queryset = FoundItem.objects.all()
+    serializer_class = FoundItemSerializer
+
+
+class FoundPersonView(generics.ListCreateAPIView):
+    queryset = FoundPerson.objects.all()
+    serializer_class = FoundPersonSerializer
+
+
+class FoundPersonImageView(generics.ListCreateAPIView):
+    queryset = FoundPersonImage.objects.all()
+    serializer_class = FoundPersonImageSerializer
