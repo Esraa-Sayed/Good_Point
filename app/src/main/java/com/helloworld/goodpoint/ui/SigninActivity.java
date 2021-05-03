@@ -37,35 +37,37 @@ import retrofit2.Response;
 
 public class SigninActivity extends AppCompatActivity implements View.OnClickListener {
     TokenManager tokenManager;
-    private EditText Email,Pass;
+    private EditText Email, Pass;
     private TextView ForgetPass;
     private CheckBox RememberMe;
-    private Button Sigin ,CreateNewAccount;
+    private Button Sigin, CreateNewAccount;
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^" +
                     "(?=.*[0-9])" +         //at least 1 digit
                     "(?=.*[a-z])" +         //at least 1 lower case letter
                     "(?=.*[A-Z])" +         //at least 1 upper case letter
-                   // "(?=.*[a-zA-Z])" +      //any letter
-                   // "(?=.*[@#$%^&+=])" +    //at least 1 special character
-                   // "(?=\\S+$)" +           //no white spaces
+                    // "(?=.*[a-zA-Z])" +      //any letter
+                    // "(?=.*[@#$%^&+=])" +    //at least 1 special character
+                    // "(?=\\S+$)" +           //no white spaces
                     ".{8,}" +               //at least 8 characters
                     "$");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-       //getActionBar().hide();
+        //getActionBar().hide();
         setContentView(R.layout.activity_signin);
         inti();
         String f;
 
     }
+
     protected void inti() {
         Email = findViewById(R.id.email);
-        Pass =findViewById(R.id.pass);
+        Pass = findViewById(R.id.pass);
         ForgetPass = findViewById(R.id.forgetPass);
-        Sigin =findViewById(R.id.signin);
+        Sigin = findViewById(R.id.signin);
         CreateNewAccount = findViewById(R.id.NewAccount);
         RememberMe = findViewById(R.id.checkbox);
         Sigin.setOnClickListener(this);
@@ -78,30 +80,31 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
+
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.signin:
-                if(validAccount() && validatePassword()) {
-                    if(RememberMe.isChecked()) {
+                if (validAccount() && validatePassword()) {
+                    if (RememberMe.isChecked()) {
                         new PrefManager(getApplicationContext()).setLogin("Token");
                         loginUser();
-                    }
-                    else
+                    } else
                         loginUser();
-                        //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
-
-                }else
-                    Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
                     //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+
+                } else
+                    Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
+                //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                 break;
 
 
             case R.id.NewAccount:
-                    startActivity(new Intent(this, SignupActivity.class));
-                    break;
+                startActivity(new Intent(this, SignupActivity.class));
+                break;
         }
     }
+
     private boolean validatePassword() {
         String passwordInput = Pass.getText().toString().trim();
         if (passwordInput.isEmpty()) {
@@ -123,6 +126,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             return true;
         }
     }
+
     private boolean validateEmail() {
         String emailInput = Email.getText().toString().trim();
         if (emailInput.isEmpty()) {
@@ -136,79 +140,38 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             return true;
         }
     }
+
     private boolean validAccount() {
         //check validation
-        if(validateEmail()) return true;
+        if (validateEmail()) return true;
         else return false;
     }
 
 
-    public void loginUser()
-    {
+    public void loginUser() {
         String emailInput = Email.getText().toString().trim();
         String passwordInput = Pass.getText().toString().trim();
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Token> call = apiInterface.getToken(emailInput,passwordInput);
+        Call<Token> call = apiInterface.getToken(emailInput, passwordInput);
 
         call.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
-                if(response.isSuccessful())
-                {
-                    tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
-                    if(tokenManager.getToken().getAccess() != null){
-                        tokenManager.saveToken(response.body());
-                    }
-                    String token = response.body().getAccess();
-                    //----------------------------------------------------------------------
-                    Call<JsonObject> call2 = apiInterface.getData("Bearer "+token);
-                    call2.enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-                            if(response.isSuccessful()) {
-
-                                try {//Decode.decoded(token)
-
-                                    JSONObject jsonObject = new JSONObject(response.body().toString()).getJSONObject("user");
-                                    String name = jsonObject.getString("username");
-
-                                    Intent intent =new Intent(SigninActivity.this,HomeActivity.class);
-                                    intent.putExtra("name",name);
-
-
-
-                                    //Toast.makeText(SigninActivity.this, name, Toast.LENGTH_SHORT).show();
-                                    //Toast.makeText(SigninActivity.this, "Posted", Toast.LENGTH_SHORT).show();
-                                    startActivity(intent);
-                                    //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
-                                    finish();
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            else
-                                Toast.makeText(SigninActivity.this, "error", Toast.LENGTH_SHORT).show();
-                        }
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            Toast.makeText(SigninActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-                }
-                else
-                    Toast.makeText(SigninActivity.this, "Invalid account", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SigninActivity.this,HomeActivity.class));
             }
+
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                Toast.makeText(SigninActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
             }
         });
-
     }
+
+
+
+
 
 
 }
