@@ -1,12 +1,27 @@
 package com.helloworld.goodpoint.pojo;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class RegUser {
 
+    @SerializedName("username")
+    @Expose
     private String username;
+    @SerializedName("password")
+    @Expose
     private String password;
+    @SerializedName("first_name")
+    @Expose
     private String first_name;
+    @SerializedName("phone")
+    @Expose
     private String phone;
+    @SerializedName("city")
+    @Expose
     private String city;
+    @SerializedName("birthdate")
+    @Expose
     private String birthdate;
 
     public RegUser(String username, String password, String first_name, String phone, String city, String birthdate) {

@@ -367,12 +367,11 @@ public class SignupActivity extends AppCompatActivity {
     String Datee = DateT.getText().toString().trim();
 
     ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-    //RegUser regUser = new RegUser(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
-    Call<Token> call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
+    Call<RegUser> call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
 
-        call.enqueue(new Callback<Token>() {
+        call.enqueue(new Callback<RegUser>() {
         @Override
-        public void onResponse(Call<Token> call, Response<Token> response) {
+        public void onResponse(Call<RegUser> call, Response<RegUser> response) {
             if(response.isSuccessful())
             {
                 Toast.makeText(SignupActivity.this, "Post successfully ...", Toast.LENGTH_SHORT).show();
@@ -384,7 +383,7 @@ public class SignupActivity extends AppCompatActivity {
                 Phone.setError("Phone may already exist");
         }
         @Override
-        public void onFailure(Call<Token> call, Throwable t) {
+        public void onFailure(Call<RegUser> call, Throwable t) {
             Toast.makeText(SignupActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
         }
     });

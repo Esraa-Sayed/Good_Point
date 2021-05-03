@@ -51,7 +51,8 @@ public class HomeFragment extends Fragment {
             Daily_msg.setText("Good Night");
         }
 
-        //Hi_msg = v.findViewById(R.id.hi_message);
+        Hi_msg = v.findViewById(R.id.hi_message);
+        Hi_msg.setText("Hi, "+ getArguments().getString("name"));
 
         // Inflate the layout for this fragment
         createGroupList();

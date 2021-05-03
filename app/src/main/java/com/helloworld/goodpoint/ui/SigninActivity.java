@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
@@ -13,13 +15,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.pojo.RegUser;
 import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
+import com.helloworld.goodpoint.retrofit.Decode;
 import com.helloworld.goodpoint.retrofit.TokenManager;
 import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.regex.Pattern;
 
 import retrofit2.Call;
@@ -49,6 +58,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
        //getActionBar().hide();
         setContentView(R.layout.activity_signin);
         inti();
+        String f;
 
     }
     protected void inti() {
@@ -131,6 +141,8 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         if(validateEmail()) return true;
         else return false;
     }
+
+
     public void loginUser()
     {
         String emailInput = Email.getText().toString().trim();
@@ -138,6 +150,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<Token> call = apiInterface.getToken(emailInput,passwordInput);
+
         call.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
@@ -147,8 +160,44 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     if(tokenManager.getToken().getAccess() != null){
                         tokenManager.saveToken(response.body());
                     }
-                    startActivity(new Intent(SigninActivity.this, HomeActivity.class));
-                    finish();
+                    String token = response.body().getAccess();
+                    //----------------------------------------------------------------------
+                    Call<JsonObject> call2 = apiInterface.getData("Bearer "+token);
+                    call2.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                            if(response.isSuccessful()) {
+
+                                try {//Decode.decoded(token)
+
+                                    JSONObject jsonObject = new JSONObject(response.body().toString()).getJSONObject("user");
+                                    String name = jsonObject.getString("username");
+
+                                    Intent intent =new Intent(SigninActivity.this,HomeActivity.class);
+                                    intent.putExtra("name",name);
+
+
+
+                                    //Toast.makeText(SigninActivity.this, name, Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(SigninActivity.this, "Posted", Toast.LENGTH_SHORT).show();
+                                    startActivity(intent);
+                                    //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                                    finish();
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else
+                                Toast.makeText(SigninActivity.this, "error", Toast.LENGTH_SHORT).show();
+                        }
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            Toast.makeText(SigninActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
                 }
                 else
                     Toast.makeText(SigninActivity.this, "Invalid account", Toast.LENGTH_SHORT).show();
@@ -158,5 +207,8 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(SigninActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+
     }
+
+
 }

@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class LostItem {
 
-    //@SerializedName("user_id")
-    //@Expose
-    //int  user_id;
+    @SerializedName("user_id")
+    @Expose
+    int  user_id;
     @SerializedName("date")
     @Expose
     private String date;
@@ -34,8 +34,8 @@ public class LostItem {
     private String description;
 
 
-    public LostItem(/*int user_id,*/ String date, String city, String is_matched, String type, String serial_number, String brand, String color, String description) {
-        //this.user_id = user_id;
+    public LostItem(int user_id, String date, String city, String is_matched, String type, String serial_number, String brand, String color, String description) {
+        this.user_id = user_id;
         this.date = date;
         this.city = city;
         this.is_matched = is_matched;
@@ -46,7 +46,7 @@ public class LostItem {
         this.description = description;
     }
 
-    /*public int getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
@@ -54,13 +54,12 @@ public class LostItem {
         this.user_id = user_id;
     }
 
-    public String getDate() {
-        return date;
-    }*/
 
     public void setDate(String date) {
         this.date = date;
     }
+
+    public String getDate() { return date; }
 
     public String getCity() {
         return city;
