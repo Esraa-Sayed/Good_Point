@@ -25,5 +25,6 @@ urlpatterns = [
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/', include('user_account.url'), name='authentications'),
     path('losts/',include('find_losts.url'), name='losts'),
+    path('notification/',include('notification.url'), name='notification'),
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

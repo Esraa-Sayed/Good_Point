@@ -7,15 +7,13 @@ from notification.models import Notification
 
 
 class LostObject(models.Model):
-    date = models.DateField()
+    date = models.DateTimeField()
     city = models.CharField(max_length=35)
     user_id = models.ForeignKey(User, related_name='lost', on_delete=models.CASCADE, db_column='user_id')
     is_matched = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'lost_object'
-
-
 
 
 class LostPerson(models.Model):
@@ -27,6 +25,7 @@ class LostPerson(models.Model):
 
 
 class LostPersonImage(models.Model):
+    #id = models.AutoField(primary_key=True)
     id = models.OneToOneField(LostPerson, primary_key=True, on_delete=models.CASCADE, db_column='id')
     image = models.ImageField(unique=True)
 
@@ -42,7 +41,7 @@ class LostItem(models.Model):
     brand = models.CharField(max_length=50)
     description = models.CharField(max_length=700)
     serial_number = models.CharField(max_length=100, blank=True, null=True)
-    image = models.ImageField(blank=True, null=True)
+    image = models.ImageField(unique=True, blank=True, null=True)
 
     class Meta:
         db_table = 'lost_item'
@@ -69,12 +68,12 @@ class FoundPerson(models.Model):
 
 
 class FoundPersonImage(models.Model):
-    id_image = models.ForeignKey(FoundPerson, on_delete=models.CASCADE, db_column='id_image')
+    id = models.OneToOneField(FoundPerson, primary_key=True, on_delete=models.CASCADE, db_column='id')
     image = models.ImageField(unique=True)
 
     class Meta:
         db_table = 'found_person_image'
-        unique_together = (('id_image', 'image'),)
+        unique_together = (('id', 'image'),)
 
 
 class FoundItem(models.Model):

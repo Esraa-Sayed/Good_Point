@@ -44,8 +44,16 @@ class LostPersonView(generics.ListCreateAPIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class LostPersonDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = LostPerson.objects.all()
+    serializer_class = LostPersonSerializer
+
 
 class LostPersonImageView(generics.ListCreateAPIView):
+    queryset = LostPersonImage.objects.all()
+    serializer_class = LostPersonImageSerializer
+
+class LostPersonImageDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = LostPersonImage.objects.all()
     serializer_class = LostPersonImageSerializer
 
@@ -54,8 +62,16 @@ class FoundObjectView(generics.ListCreateAPIView):
     queryset = FoundObject.objects.all()
     serializer_class = FoundObjectSerializer
 
+class FoundObjectDetalisView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = FoundObject.objects.all()
+    serializer_class = FoundObjectSerializer
+
 
 class FoundItemView(generics.ListCreateAPIView):
+    queryset = FoundItem.objects.all()
+    serializer_class = FoundItemSerializer
+
+class FoundItemDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = FoundItem.objects.all()
     serializer_class = FoundItemSerializer
 

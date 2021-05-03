@@ -34,10 +34,11 @@ class LostPersonSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'id': {'id already exists'}})
         return super().validate(attrs)
 
+
 class LostPersonImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = LostPersonImage
-        fields = ['id', 'image']
+        fields = '__all__'
 
 
 
