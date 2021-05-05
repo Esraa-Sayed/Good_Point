@@ -100,8 +100,20 @@
         <activity
             android:name=".ui.MainActivity"
             android:theme="@style/NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.helloworld.ui.MainActivity">
             <intent-filter>
+                <action android:name=".ui.MainActivity"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.ExternalActivity"
+            android:icon="@drawable/androidicon"
+            android:roundIcon="@drawable/androidicon"
+            android:taskAffinity="com.helloworld.ui.ExternalActivity">
+            <intent-filter>
+                <action android:name=".ui.ExternalActivity"/>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
