@@ -19,9 +19,9 @@ class SignupSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if User.objects.filter(username=attrs.get('username', '')).exists():
-            raise serializers.ValidationError({'username': {'Email already exists'}})
+            raise serializers.ValidationError({'error': {'username': 'Email already exists'}})
         if User.objects.filter(phone=attrs.get('phone', '')).exists():
-            raise serializers.ValidationError({'phone': {'Phone number already exists'}})
+            raise serializers.ValidationError({'error': {'phone': 'Phone number already exists'}})
         return super().validate(attrs)
 
     def create(self, validated_data):

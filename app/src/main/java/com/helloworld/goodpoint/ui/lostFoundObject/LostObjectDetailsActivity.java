@@ -30,6 +30,7 @@ import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.GlobalVar;
@@ -148,6 +149,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 if (!flagObject && !flagPerson) {
                     FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 } else if (flagObject && CheckMatchObject()) {
+                    LostItems();
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     finish();
                 } else if (flagPerson && CheckMatchPerson()) {
@@ -378,7 +380,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
 
         String cityInput = autoCom.getText().toString();
         String Datee = DateT.getText().toString().trim();
-        String is_matched = "false";
+        String is_matched = "false";/////////////////////////////////////////////////////////////////////////////
         String Type = TypeObject.getText().toString();
         String Serial = serialObject.getText().toString();
         String brand = brandObject.getText().toString();
@@ -392,15 +394,40 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         //Call<LostItem> call = apiInterface.storeLost(cityInput,Datee,is_matched);
         //Call<LostItem> call2 = apiInterface.store2Lost(Type,Serial,brand,ObjectColor,textArea_information);
 
-        Call<LostItem> call = apiInterface.storeLost("2021-04-14 12:02:00+02","Cairo","false");
-        Call<LostItem> call2 = apiInterface.store2Lost("Labtop","45455","dfsa","Red","dsaf");
+        Call<LostItem> call = apiInterface.storeLost(User.getUser().getId(),"2021-04-14","Cairo","false");
+        Call<LostItem> call2 = apiInterface.store2Lost("Money","4501455","dfsa","red","dsaf");
 
         call.enqueue(new Callback<LostItem>() {
             @Override
             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
                 if(response.isSuccessful())
                 {
-                    Toast.makeText(LostObjectDetailsActivity.this, "Post successfully ...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LostObjectDetailsActivity.this, "object post ...", Toast.LENGTH_SHORT).show();
+
+
+
+
+                    call2.enqueue(new Callback<LostItem>() {
+                        @Override
+                        public void onResponse(Call<LostItem> call, Response<LostItem> response) {
+                            if(response.isSuccessful())
+                            {
+                                Toast.makeText(LostObjectDetailsActivity.this, "item post ...", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                                Toast.makeText(LostObjectDetailsActivity.this, "Not Post item ...", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<LostItem> call, Throwable t) {
+                            Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
+
+
+
                 }
                 else
                     Toast.makeText(LostObjectDetailsActivity.this, "Not Post ...", Toast.LENGTH_SHORT).show();
@@ -411,22 +438,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-        call2.enqueue(new Callback<LostItem>() {
-            @Override
-            public void onResponse(Call<LostItem> call, Response<LostItem> response) {
-                if(response.isSuccessful())
-                {
-                    Toast.makeText(LostObjectDetailsActivity.this, "Post successfully ...", Toast.LENGTH_SHORT).show();
-                }
-                else
-                    Toast.makeText(LostObjectDetailsActivity.this, "Not Post ...", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onFailure(Call<LostItem> call, Throwable t) {
-                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
 
     }
 

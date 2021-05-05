@@ -16,7 +16,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,6 +26,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.pojo.RegUser;
+import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.ui.lostFoundObject.FoundObjectActivity;
 import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
 
@@ -35,6 +39,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     BottomNavigationView bottomNavigationView;
     FloatingActionButton fab;
     Fragment fhome, fmatch, fprofile;
+    TextView namenavigator;
+    TextView mailnavigator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +55,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             //To make first fragment is home when opening the app
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fhome).commit();
         }
-        String username = getIntent().getStringExtra("name");
-        //Toast.makeText(this, username, Toast.LENGTH_SHORT).show();
-        Bundle bundle = new Bundle();
-        bundle.putString("name",username);
-        fhome.setArguments(bundle);
+
     }
 
     private void setBottomNavigator() {
@@ -86,6 +88,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fhome = new HomeFragment();
         fmatch = new MatchFragment();
         fprofile = new ProfileFragment();
+        View view = navigationView.getHeaderView(0);
+        namenavigator = (TextView) view.findViewById(R.id.namenav);
+        mailnavigator = (TextView) view.findViewById(R.id.mailnav);
+        namenavigator.setText(User.getUser().getUsername());
+        mailnavigator.setText(User.getUser().getEmail());
     }
 
     @Override

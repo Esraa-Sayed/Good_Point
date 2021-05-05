@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
 import android.util.Patterns;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -237,6 +241,10 @@ public class SignupActivity extends AppCompatActivity {
         } else if (usernameInput.length() > 15) {
             UserName.setError("Username too long");
             return false;
+        }
+        else if (usernameInput.length() < 2) {
+            UserName.setError("Username too short");
+            return false;
         }else if (isAlpha(usernameInput)) {
             UserName.setError("Using only Letters");
             return false;
@@ -374,18 +382,44 @@ public class SignupActivity extends AppCompatActivity {
         public void onResponse(Call<RegUser> call, Response<RegUser> response) {
             if(response.isSuccessful())
             {
-                Toast.makeText(SignupActivity.this, "Post successfully ...", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(SignupActivity.this,check_registration.class));
                 finish();
             }
-            else
-                Email.setError("Email may already exist");
-                Phone.setError("Phone may already exist");
+            else {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.errorBody().string()).getJSONObject("error");
+                    try {
+                        String name = jsonObject.getString("username");
+                        //Log.e("good", name);
+                        Email.setError(name);
+                    }
+                        catch(Exception e)
+                        {
+                            try {
+                                String phone = jsonObject.getString("phone");
+                                //Log.e("good",phone);
+                                Phone.setError(phone);
+                            }
+                            catch(Exception exception)
+                            {
+                                Toast.makeText(SignupActivity.this, "There is an error!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                } catch (IOException | JSONException e) {
+                    Toast.makeText(SignupActivity.this, "There is an error!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
         }
         @Override
         public void onFailure(Call<RegUser> call, Throwable t) {
             Toast.makeText(SignupActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
         }
     });
+
     }
+
+
+
 }

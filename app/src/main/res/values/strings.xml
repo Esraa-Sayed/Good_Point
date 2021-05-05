@@ -116,7 +116,7 @@
     <string name="Add_point"><b>Put point</b></string>z
     <string name="Lost">Lost objects</string>
     <string name="Found">Found objects</string>
-    <string name="Hi_message"><b>Hi, User</b></string>
+    <string name="Hi_message"><b></b></string>
     <string name="Daily_message">Good Evening</string>
     <string name="Losses"><b>The Losses</b></string>
     <string name="Founds">The Findings</string>

@@ -1,6 +1,6 @@
 package com.helloworld.goodpoint.ui;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.fragment.app.Fragment;
 
@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.adapter.MyExpandableListAdapter;
+import com.helloworld.goodpoint.pojo.User;
 
 
 public class HomeFragment extends Fragment {
@@ -52,7 +53,7 @@ public class HomeFragment extends Fragment {
         }
 
         Hi_msg = v.findViewById(R.id.hi_message);
-        Hi_msg.setText("Hi, "+ getArguments().getString("name"));
+        Hi_msg.setText("Hi, "+ User.getUser().getUsername());
 
         // Inflate the layout for this fragment
         createGroupList();

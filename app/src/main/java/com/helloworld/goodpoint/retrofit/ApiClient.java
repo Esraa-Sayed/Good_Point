@@ -6,7 +6,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class ApiClient {
     //base url
-    private static final String BASE_URL = "https://c0fa50b87c8c.ngrok.io";
+    private static final String BASE_URL = "https://1053038d4919.ngrok.io";
     private static Retrofit retrofit = null;
 
 

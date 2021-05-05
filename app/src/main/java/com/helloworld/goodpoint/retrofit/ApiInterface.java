@@ -47,7 +47,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("losts/lostobject/")
-    Call<LostItem> storeLost(/*@Query("user_id") int userid ,*/ @Field("date") String Datee, @Field("city") String cityInput
+    Call<LostItem> storeLost(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput
                             ,@Field("is_matched") String is_matched);
 
     @FormUrlEncoded

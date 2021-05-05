@@ -24,6 +24,7 @@ public class RegUser {
     @Expose
     private String birthdate;
 
+
     public RegUser(String username, String password, String first_name, String phone, String city, String birthdate) {
         this.username = username;
         this.password = password;

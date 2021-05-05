@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.RegUser;
 import com.helloworld.goodpoint.pojo.Token;
+import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.retrofit.Decode;
@@ -86,16 +87,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.signin:
                 if (validAccount() && validatePassword()) {
-                    if (RememberMe.isChecked()) {
-                        new PrefManager(getApplicationContext()).setLogin("Token");
-                        loginUser();
-                    } else
-                        loginUser();
-                    //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
-
+                        //loginUser(RememberMe.isChecked());
+                        startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                 } else
                     Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
-                //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                    startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                 break;
 
 
@@ -148,7 +144,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    public void loginUser() {
+    public void loginUser(boolean Remember) {
         String emailInput = Email.getText().toString().trim();
         String passwordInput = Pass.getText().toString().trim();
 
@@ -158,12 +154,52 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         call.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
+                String token = response.body().getAccess();
+                if(Remember)
+                {
+                    new PrefManager(getApplicationContext()).setLogin(response.body().getRefresh());
+                }
 
-                startActivity(new Intent(SigninActivity.this,HomeActivity.class));
+                Call<JsonObject> call2 = apiInterface.getData("Bearer " + token);
+                call2.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.body().toString()).getJSONObject("user");
+                            String id = jsonObject.getString("id");
+                            String name = jsonObject.getString("username");
+                            String email = jsonObject.getString("email");
+                            String phone = jsonObject.getString("phone");
+                            String city = jsonObject.getString("city");
+                            String birthdate = jsonObject.getString("birthdate");
+
+                            Intent intent = new Intent(SigninActivity.this, HomeActivity.class);
+                            User.getUser().setId(id);
+                            User.getUser().setUsername(name);
+                            User.getUser().setEmail(email);
+                            User.getUser().setPhone(phone);
+                            User.getUser().setCity(city);
+                            User.getUser().setBirthdate(birthdate);
+
+                            startActivity(intent);
+                            finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Toast.makeText(SigninActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
-            @Override
+
+                @Override
             public void onFailure(Call<Token> call, Throwable t) {
+                    Toast.makeText(SigninActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         });
