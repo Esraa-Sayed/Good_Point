@@ -21,6 +21,7 @@ class LoginView(APIView):
         response = {
             'username': user.first_name,
             'email': user.username,
+            'id' : user.pk,
             'phone': user.phone,
             'city': user.city,
             'birthdate': user.birthdate,
@@ -40,3 +41,5 @@ class LogoutView(GenericAPIView):
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+

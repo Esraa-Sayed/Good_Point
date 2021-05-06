@@ -3,7 +3,6 @@ package com.helloworld.goodpoint.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -13,13 +12,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -32,17 +27,25 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.pojo.Token;
+import com.helloworld.goodpoint.retrofit.ApiClient;
+import com.helloworld.goodpoint.retrofit.ApiInterface;
+import com.helloworld.goodpoint.pojo.RegUser;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
-import java.io.ObjectInputValidation;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
 import android.util.Patterns;
 
-import org.intellij.lang.annotations.RegExp;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignupActivity extends AppCompatActivity {
     private TextView DateT;
@@ -65,6 +68,10 @@ public class SignupActivity extends AppCompatActivity {
                     //"(?=\\S+$)" +           //no white spaces
                     ".{8,}" +               //at least 4 characters
                     "$");
+
+    public SignupActivity() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,15 +105,18 @@ public class SignupActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 m++;
                 if (y > year || (y == year && m - 1 > month)|| (y == year && m - 1 == month && d > Day) ) {
-                    String Date = d + "/" + m + "/" + y;
+                    String Date = y + "-" + m + "-" + d;
+                    //String Date = d + "/" + m + "/" + y;
                     //Toast.makeText(SignupActivity.this, Date, Toast.LENGTH_SHORT).show();
-                    String todayDate = Day + "/" + (month + 1) + "/" + year;
+                    String todayDate = year + "-" + (month + 1) + "-" + Day;
+                    //String todayDate = Day + "/" + (month + 1) + "/" + year;
                     DateT.setText(todayDate);
                     FancyToast.makeText(SignupActivity.this,"Invalid date",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                 }
                 else {
                     //Toast.makeText(SignupActivity.this, "hi", Toast.LENGTH_SHORT).show();
-                    String Date = d + "/" + m + "/" + y;
+                    String Date = y + "-" + m + "-" + d;
+                    //String Date = d + "/" + m + "/" + y;
                     DateT.setText(Date);
                 }
             }
@@ -114,18 +124,14 @@ public class SignupActivity extends AppCompatActivity {
     CreateAccount.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-           // Toast.makeText(SignupActivity.this, "", Toast.LENGTH_SHORT).show();
             if(!confirmInput(view) ){
-                startActivity(new Intent(SignupActivity.this,check_registration.class));
-                finish();
+                registerUser();
+                //startActivity(new Intent(SignupActivity.this,check_registration.class));
             }
         }
     });
 
     }
-
-
-
     protected void inti() {
         UserName = findViewById(R.id.edName);
         Email = findViewById(R.id.edEmail);
@@ -147,13 +153,15 @@ public class SignupActivity extends AppCompatActivity {
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
         Day = cal.get(Calendar.DAY_OF_MONTH);
-        String TodayDate = Day + "/" + (month + 1) + "/" + year;
+        String TodayDate = year + "-" + (month + 1) + "-" + Day;
+        //String TodayDate = Day + "/" + (month + 1) + "/" + year;
         DateT.setText(TodayDate);/**/
         prepareList List = new prepareList();
         list = List.prepareList(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         city.setThreshold(1);
         city.setAdapter(adapter);
+
     }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -180,7 +188,6 @@ public class SignupActivity extends AppCompatActivity {
                 startActivityForResult(gallery, 11);
                 break;
         }
-
         return super.onContextItemSelected(item);
     }
 
@@ -233,6 +240,10 @@ public class SignupActivity extends AppCompatActivity {
             return false;
         } else if (usernameInput.length() > 15) {
             UserName.setError("Username too long");
+            return false;
+        }
+        else if (usernameInput.length() < 2) {
+            UserName.setError("Username too short");
             return false;
         }else if (isAlpha(usernameInput)) {
             UserName.setError("Using only Letters");
@@ -319,7 +330,6 @@ public class SignupActivity extends AppCompatActivity {
         return false;
     }/**/
 
-
     protected void prepareList() {
         list = new ArrayList<>();
         list.add(getString(R.string.Cairo));
@@ -354,6 +364,62 @@ public class SignupActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putParcelable("BitmapImage",Bitmap_Image);
     }
+
+    public void registerUser()  {
+
+    String emailInput = Email.getText().toString().trim();
+    String passwordInput = Password.getText().toString().trim();
+    String usernameInput = UserName.getText().toString().trim();
+    String pInput = Phone.getText().toString().trim();
+    String cityInput = city.getText().toString().trim();
+    String Datee = DateT.getText().toString().trim();
+
+    ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+    Call<RegUser> call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
+
+        call.enqueue(new Callback<RegUser>() {
+        @Override
+        public void onResponse(Call<RegUser> call, Response<RegUser> response) {
+            if(response.isSuccessful())
+            {
+                startActivity(new Intent(SignupActivity.this,check_registration.class));
+                finish();
+            }
+            else {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.errorBody().string()).getJSONObject("error");
+                    try {
+                        String name = jsonObject.getString("username");
+                        //Log.e("good", name);
+                        Email.setError(name);
+                    }
+                        catch(Exception e)
+                        {
+                            try {
+                                String phone = jsonObject.getString("phone");
+                                //Log.e("good",phone);
+                                Phone.setError(phone);
+                            }
+                            catch(Exception exception)
+                            {
+                                Toast.makeText(SignupActivity.this, "There is an error!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                } catch (IOException | JSONException e) {
+                    Toast.makeText(SignupActivity.this, "There is an error!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+        @Override
+        public void onFailure(Call<RegUser> call, Throwable t) {
+            Toast.makeText(SignupActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    });
+
+    }
+
 
 
 }
