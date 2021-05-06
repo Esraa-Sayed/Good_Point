@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -33,6 +34,8 @@ import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.pojo.RegUser;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -365,6 +368,21 @@ public class SignupActivity extends AppCompatActivity {
         outState.putParcelable("BitmapImage",Bitmap_Image);
     }
 
+
+
+    private String imageToString()
+    {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        Bitmap_Image.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        byte[] imgByte = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imgByte,Base64.DEFAULT);
+    }
+
+
+
+
+
+
     public void registerUser()  {
 
     String emailInput = Email.getText().toString().trim();
@@ -373,9 +391,10 @@ public class SignupActivity extends AppCompatActivity {
     String pInput = Phone.getText().toString().trim();
     String cityInput = city.getText().toString().trim();
     String Datee = DateT.getText().toString().trim();
+    String images = imageToString();
 
-    ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-    Call<RegUser> call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
+    ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+    Call<RegUser> call = apiInterface.storePost("http://415c895e1bd1.ngrok.io/media/profile/New%20Bitmap%20Image_wNKzj92.bmp",emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
 
         call.enqueue(new Callback<RegUser>() {
         @Override
@@ -384,6 +403,30 @@ public class SignupActivity extends AppCompatActivity {
             {
                 startActivity(new Intent(SignupActivity.this,check_registration.class));
                 finish();
+
+             /*   Call<RegUser> call2 = apiInterface.storeImage(images);
+                call2.enqueue(new Callback<RegUser>() {
+                    @Override
+                    public void onResponse(Call<RegUser> call, Response<RegUser> response) {
+                        if(response.isSuccessful()) {
+                            startActivity(new Intent(SignupActivity.this, check_registration.class));
+                            finish();
+                        }
+                        else
+                            startActivity(new Intent(SignupActivity.this, check_registration.class));
+                            finish();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<RegUser> call, Throwable t) {
+                        Toast.makeText(SignupActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });*/
+
+
+
+
             }
             else {
                 try {

@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
@@ -17,19 +15,14 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.pojo.RegUser;
 import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
-import com.helloworld.goodpoint.retrofit.Decode;
-import com.helloworld.goodpoint.retrofit.TokenManager;
 import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.regex.Pattern;
 
 import retrofit2.Call;
@@ -37,7 +30,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SigninActivity extends AppCompatActivity implements View.OnClickListener {
-    TokenManager tokenManager;
     private EditText Email, Pass;
     private TextView ForgetPass;
     private CheckBox RememberMe;
@@ -87,11 +79,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.signin:
                 if (validAccount() && validatePassword()) {
-                        //loginUser(RememberMe.isChecked());
-                        startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                        loginUser(RememberMe.isChecked());
+                        //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                 } else
                     Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                    //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                 break;
 
 
@@ -148,7 +140,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         String emailInput = Email.getText().toString().trim();
         String passwordInput = Pass.getText().toString().trim();
 
-        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
         Call<Token> call = apiInterface.getToken(emailInput, passwordInput);
 
         call.enqueue(new Callback<Token>() {

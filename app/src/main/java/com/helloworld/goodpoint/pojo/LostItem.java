@@ -14,9 +14,6 @@ public class LostItem {
     @SerializedName("city")
     @Expose
     private String city;
-    @SerializedName("is_matched")
-    @Expose
-    private String is_matched;
     @SerializedName("type")
     @Expose
     private String type;
@@ -34,11 +31,10 @@ public class LostItem {
     private String description;
 
 
-    public LostItem(int user_id, String date, String city, String is_matched, String type, String serial_number, String brand, String color, String description) {
+    public LostItem(int user_id, String date, String city, String type, String serial_number, String brand, String color, String description) {
         this.user_id = user_id;
         this.date = date;
         this.city = city;
-        this.is_matched = is_matched;
         this.type = type;
         this.serial_number = serial_number;
         this.brand = brand;
@@ -67,14 +63,6 @@ public class LostItem {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public String getIs_matched() {
-        return is_matched;
-    }
-
-    public void setIs_matched(String is_matched) {
-        this.is_matched = is_matched;
     }
 
     public String getType() {

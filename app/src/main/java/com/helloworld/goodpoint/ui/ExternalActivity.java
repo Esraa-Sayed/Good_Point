@@ -23,7 +23,7 @@ public class ExternalActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 PrefManager p = new PrefManager(ExternalActivity.this);
-                p.setNGROKLink(et.getText().toString());
+                p.setNGROKLink("https://"+et.getText().toString()+".ngrok.io");
             }
         });
     }

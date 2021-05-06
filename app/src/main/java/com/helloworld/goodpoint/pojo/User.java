@@ -23,6 +23,10 @@ public class User {
     @SerializedName("birthdate")
     @Expose
     private String birthdate;
+    @SerializedName("profile_pic")
+    @Expose
+    private String profile_pic;
+
 
 
     private static User user;
@@ -84,9 +88,11 @@ public class User {
         return birthdate;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
-    }
+    public void setBirthdate(String birthdate) { this.birthdate = birthdate; }
+
+    public String getProfile_pic() { return profile_pic; }
+
+    public void setProfile_pic(String profile_pic) { this.profile_pic = profile_pic; }
 
 
 }

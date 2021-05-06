@@ -23,15 +23,19 @@ public class RegUser {
     @SerializedName("birthdate")
     @Expose
     private String birthdate;
+    @SerializedName("profile_pic")
+    @Expose
+    private String profile_pic;
 
 
-    public RegUser(String username, String password, String first_name, String phone, String city, String birthdate) {
+    public RegUser(String username, String password, String first_name, String phone, String city, String birthdate, String profile_pic) {
         this.username = username;
         this.password = password;
         this.first_name = first_name;
         this.phone = phone;
         this.city = city;
         this.birthdate = birthdate;
+        this.profile_pic = profile_pic;
     }
 
     public String getUsername() {
@@ -81,4 +85,8 @@ public class RegUser {
     public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
+
+    public String getProfile_pic() { return profile_pic; }
+
+    public void setProfile_pic(String profile_pic) { this.profile_pic = profile_pic; }
 }

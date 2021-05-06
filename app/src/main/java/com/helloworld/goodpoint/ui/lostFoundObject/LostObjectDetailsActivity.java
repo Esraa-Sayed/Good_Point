@@ -34,6 +34,7 @@ import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.GlobalVar;
+import com.helloworld.goodpoint.ui.PrefManager;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.helloworld.goodpoint.ui.select_multiple_faces.Selection;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -380,7 +381,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
 
         String cityInput = autoCom.getText().toString();
         String Datee = DateT.getText().toString().trim();
-        String is_matched = "false";/////////////////////////////////////////////////////////////////////////////
         String Type = TypeObject.getText().toString();
         String Serial = serialObject.getText().toString();
         String brand = brandObject.getText().toString();
@@ -388,13 +388,13 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         String textArea_information = textArea_informationObject.getText().toString();
 
 
-        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
 
 
         //Call<LostItem> call = apiInterface.storeLost(cityInput,Datee,is_matched);
         //Call<LostItem> call2 = apiInterface.store2Lost(Type,Serial,brand,ObjectColor,textArea_information);
 
-        Call<LostItem> call = apiInterface.storeLost(User.getUser().getId(),"2021-04-14","Cairo","false");
+        Call<LostItem> call = apiInterface.storeLost(User.getUser().getId(),"2021-04-14","Cairo");
         Call<LostItem> call2 = apiInterface.store2Lost("Money","4501455","dfsa","red","dsaf");
 
         call.enqueue(new Callback<LostItem>() {

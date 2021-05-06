@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     Thread.sleep(3000);
-                    ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+                    ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
                     Call<Token> call = apiInterface.refresh(new PrefManager(getApplicationContext()).isLoginned());
                     call.enqueue(new Callback<Token>() {
                         @Override

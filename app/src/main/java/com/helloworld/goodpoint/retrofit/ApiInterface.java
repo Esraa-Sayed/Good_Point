@@ -22,9 +22,15 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("auth/signup/")
-    Call<RegUser> storePost(@Field("username") String emailInput, @Field("password") String passwordInput
-                         ,@Field("first_name") String usernameInput, @Field("phone") String pInput
-                         ,@Field("city") String cityInput, @Field("birthdate") String Datee);
+    Call<RegUser> storePost(@Field("profile_pic") String images, @Field("username") String emailInput
+                            , @Field("password") String passwordInput,@Field("first_name") String usernameInput
+                            , @Field("phone") String pInput,@Field("city") String cityInput
+                            , @Field("birthdate") String Datee);
+
+  /*  @FormUrlEncoded
+    @POST("media/profile/")
+    Call<RegUser> storeImage(@Field("profile_pic") String images);*/
+
 
 
     @FormUrlEncoded
@@ -47,8 +53,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("losts/lostobject/")
-    Call<LostItem> storeLost(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput
-                            ,@Field("is_matched") String is_matched);
+    Call<LostItem> storeLost(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput);
 
     @FormUrlEncoded
     @POST("losts/lostitem/")
