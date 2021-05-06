@@ -18,14 +18,17 @@ class LoginView(APIView):
 
     def post(self, request):
         user = request.user
+        user_pic = ""
+        if user.profile_pic is not null:
+            user_pic = user.profile_pic.url
         response = {
+            'id' : user.pk,
             'username': user.first_name,
             'email': user.username,
-            'id' : user.pk,
             'phone': user.phone,
             'city': user.city,
             'birthdate': user.birthdate,
-            'profile_pic': user.profile_pic.url
+            'profile_pic': user_pic
         }
         return Response({'user': response}, status=status.HTTP_200_OK)
 
