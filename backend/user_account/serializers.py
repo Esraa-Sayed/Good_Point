@@ -18,10 +18,20 @@ class SignupSerializer(serializers.ModelSerializer):
         fields = ['username', 'password', 'first_name', 'phone', 'city', 'birthdate', 'profile_pic']
 
     def validate(self, attrs):
-        if User.objects.filter(username=attrs.get('username', '')).exists():
-            raise serializers.ValidationError({'error': {'username': 'Email already exists'}})
-        if User.objects.filter(phone=attrs.get('phone', '')).exists():
-            raise serializers.ValidationError({'error': {'phone': 'Phone number already exists'}})
+        exist_email = User.objects.filter(username=attrs.get('username', '')).exists()
+        exist_phone = User.objects.filter(phone=attrs.get('phone', '')).exists()
+        if exist_email and exist_phone:
+            raise serializers.ValidationError(
+                {
+                    'error': {
+                        'username': 'Email already exists',
+                        'phone': 'Phone number already exists'
+                    }
+                })
+        if exist_email:
+            raise serializers.ValidationError({'error': {'username': 'Email already exists', 'phone': ''}})
+        if exist_phone:
+            raise serializers.ValidationError({'error': {'username': '', 'phone': 'Phone number already exists'}})
         return super().validate(attrs)
 
     def create(self, validated_data):
@@ -46,3 +56,12 @@ class LogoutSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         pass
+
+
+class WhoFoundItemSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='first_name')
+    email = serializers.CharField(source='username')
+
+    class Meta:
+        model = User
+        fields = ['name', 'email', 'phone']
