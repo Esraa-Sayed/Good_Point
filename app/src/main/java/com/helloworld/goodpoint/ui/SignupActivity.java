@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -36,7 +37,9 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -46,9 +49,14 @@ import android.util.Patterns;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Multipart;
 
 public class SignupActivity extends AppCompatActivity {
     private TextView DateT;
@@ -370,7 +378,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
-    private String imageToString()
+  /* private String imageToString()
     {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Bitmap_Image.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
@@ -378,23 +386,28 @@ public class SignupActivity extends AppCompatActivity {
         return Base64.encodeToString(imgByte,Base64.DEFAULT);
     }
 
-
+*/
 
 
 
 
     public void registerUser()  {
-
     String emailInput = Email.getText().toString().trim();
     String passwordInput = Password.getText().toString().trim();
     String usernameInput = UserName.getText().toString().trim();
     String pInput = Phone.getText().toString().trim();
     String cityInput = city.getText().toString().trim();
     String Datee = DateT.getText().toString().trim();
-    String images = imageToString();
+    //String images = imageToString();
+
+        //File file = new File(String.valueOf(image));
+        //RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
+        //MultipartBody.Part body = MultipartBody.Part.createFormData("profile_pic", file.getName(), requestBody);
+
+
 
     ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
-    Call<RegUser> call = apiInterface.storePost("http://415c895e1bd1.ngrok.io/media/profile/New%20Bitmap%20Image_wNKzj92.bmp",emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
+    Call<RegUser> call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
 
         call.enqueue(new Callback<RegUser>() {
         @Override
@@ -431,23 +444,17 @@ public class SignupActivity extends AppCompatActivity {
             else {
                 try {
                     JSONObject jsonObject = new JSONObject(response.errorBody().string()).getJSONObject("error");
-                    try {
-                        String name = jsonObject.getString("username");
+                        String mail = jsonObject.getString("username");
+                        String phone = jsonObject.getString("phone");
                         //Log.e("good", name);
-                        Email.setError(name);
+                    if(!mail.isEmpty() && !phone.isEmpty()) {
+                        Email.setError(mail);
+                        Phone.setError(phone);
                     }
-                        catch(Exception e)
-                        {
-                            try {
-                                String phone = jsonObject.getString("phone");
-                                //Log.e("good",phone);
-                                Phone.setError(phone);
-                            }
-                            catch(Exception exception)
-                            {
-                                Toast.makeText(SignupActivity.this, "There is an error!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                    else if(!mail.isEmpty())
+                        Email.setError(mail);
+                    else
+                        Phone.setError(phone);
 
                 } catch (IOException | JSONException e) {
                     Toast.makeText(SignupActivity.this, "There is an error!", Toast.LENGTH_SHORT).show();

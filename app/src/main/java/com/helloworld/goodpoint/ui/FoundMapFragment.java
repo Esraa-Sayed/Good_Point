@@ -44,12 +44,21 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
+import com.helloworld.goodpoint.pojo.RegUser;
+import com.helloworld.goodpoint.pojo.User;
+import com.helloworld.goodpoint.pojo.UserMap;
+import com.helloworld.goodpoint.retrofit.ApiClient;
+import com.helloworld.goodpoint.retrofit.ApiInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, View.OnClickListener {
 
@@ -77,7 +86,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
             googleMap.setMyLocationEnabled(true);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLatLng, 15));
 
-            list = getLocations();
+            //list = getLocations();
 
             for(ObjectLocation object: list) {
                 Marker marker = googleMap.addMarker(new MarkerOptions().position(object.getLatLng()));
@@ -89,6 +98,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
         }
     };
 
+    /*
     private List<ObjectLocation> getLocations() {
         List<ObjectLocation>ret = new ArrayList<>();
         Random random = new Random();
@@ -96,19 +106,20 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
             ret.add(new ObjectLocation(25+random.nextDouble()*10,22+random.nextDouble()*10,i));
         return ret;
     }
-
+    */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_map, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        getPoints();
         runGoogleMap();
     }
 
@@ -222,19 +233,6 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
     public boolean onMarkerClick(Marker marker) {
         int id = marker_id.get(marker);
         Log.e("MYTAG",id+"");
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View v = inflater.inflate(R.layout.custom_map_dialog,null);
-        name = v.findViewById(R.id.name_of_founder);
-        email = v.findViewById(R.id.mail_of_founder);
-        emailAddress = email.getText().toString();
-        phone = v.findViewById(R.id.phone_of_founder);
-        call = v.findViewById(R.id.call_button);
-        call.setOnClickListener(this);
-        mail = v.findViewById(R.id.mail_button);
-        mail.setOnClickListener(this);
-        dialog.setView(v);
-        dialog.setCancelable(true);
-        dialog.create().show();
         return false;
     }
 
@@ -278,5 +276,57 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
                 runGoogleMap();
                 break;
         }
+    }
+
+    public void getPoints()
+    {
+        
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getContext()).getNGROKLink()).create(ApiInterface.class);
+        Call<List<ObjectLocation>> call = apiInterface.getPoint();
+        call.enqueue(new Callback<List<ObjectLocation>>() {
+            @Override
+            public void onResponse(Call<List<ObjectLocation>> call, Response<List<ObjectLocation>> response) {
+                list = response.body();
+                Toast.makeText(getContext(), ""+response.body().get(0).getLatitude(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<List<ObjectLocation>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public  void getUserMap(int id)
+    {
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getContext()).getNGROKLink()).create(ApiInterface.class);
+        Call<UserMap> call2 = apiInterface.getUserMap(id);
+        call2.enqueue(new Callback<UserMap>() {
+            @Override
+            public void onResponse(Call<UserMap> call2, Response<UserMap> response) {
+
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                View v = inflater.inflate(R.layout.custom_map_dialog,null);
+                name = v.findViewById(R.id.name_of_founder);
+                email = v.findViewById(R.id.mail_of_founder);
+                emailAddress = email.getText().toString();
+                phone = v.findViewById(R.id.phone_of_founder);
+                call = v.findViewById(R.id.call_button);
+                call.setOnClickListener(FoundMapFragment.this);
+                mail = v.findViewById(R.id.mail_button);
+                mail.setOnClickListener(FoundMapFragment.this);
+                dialog.setView(v);
+                dialog.setCancelable(true);
+                dialog.create().show();
+
+
+                Toast.makeText(getContext(), response.body().getName(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<UserMap> call, Throwable t) {
+
+            }
+        });
     }
 }

@@ -23,7 +23,7 @@ class LoginView(APIView):
         user_pic = ""
         losts = list(LostObject.objects.filter(user_id=user.pk).values('id'))
         founds = list(FoundObject.objects.filter(user_id=user.pk).values('id'))
-        if user.profile_pic is not null:
+        if user.profile_pic is not None:
             user_pic = user.profile_pic.url
         response = {
             'id': user.pk,

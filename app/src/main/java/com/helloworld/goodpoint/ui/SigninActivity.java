@@ -79,11 +79,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.signin:
                 if (validAccount() && validatePassword()) {
-                        loginUser(RememberMe.isChecked());
-                        //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                        //loginUser(RememberMe.isChecked());
+                        startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                 } else
                     Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
-                    //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                    startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                 break;
 
 

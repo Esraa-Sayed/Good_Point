@@ -84,3 +84,9 @@ class FoundPersonView(generics.ListCreateAPIView):
 class FoundPersonImageView(generics.ListCreateAPIView):
     queryset = FoundPersonImage.objects.all()
     serializer_class = FoundPersonImageSerializer
+
+
+class MapView(generics.ListAPIView):
+    items = FoundItem.objects.values_list('id')
+    queryset = FoundObject.objects.filter(id__in=items)
+    serializer_class = MapSerializer

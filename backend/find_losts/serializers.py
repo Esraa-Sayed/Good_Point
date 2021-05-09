@@ -74,3 +74,8 @@ class FoundPersonImageSerializer(serializers.ModelSerializer):
         model = FoundPersonImage
         fields = ['id_image', 'image']
 
+class MapSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoundObject
+        fields = ['longitude', 'latitude', 'user_id']
+

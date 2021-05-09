@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from user_account import views as user_view
+
 
 
 urlpatterns = [
@@ -18,4 +20,6 @@ urlpatterns = [
     path('founditem/<int:pk>/', views.FoundItemDetailsView.as_view(), name='lost_item'),
     #path('lostperson_image/<int:pk>/', views.LostPersonImageDetailsView.as_view(), name='lost_item'),
     #path('lostcomb/', views.CombineListView.as_view(), name='lost_object'),
+    path('founder/<int:id>/', user_view.WhoFoundItemView.as_view(), name='who found item'),
+    path('map/',views.MapView.as_view(), name='map'),
 ]
