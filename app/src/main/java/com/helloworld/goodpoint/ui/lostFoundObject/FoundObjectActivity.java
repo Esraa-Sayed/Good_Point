@@ -365,10 +365,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             return false;
         } else if (Type.equals("Others")) {
             TypeObject = ObjectF.getView().findViewById(R.id.Other);
-            Type = TypeObject.getText().toString();
-            if (Type.isEmpty()) {
+            if (TypeObject.getText().toString().isEmpty()) {
                 TypeObject.setError("Field can't be empty");
                 return false;
+            }
+            else {
+                Type = TypeObject.getText().toString();
             }
         } else if (brand.isEmpty()) {
             brandObject.setError("Field can't be empty");
