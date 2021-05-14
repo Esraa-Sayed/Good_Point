@@ -38,6 +38,7 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
@@ -290,6 +291,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 finish();
             }
             dialog.dismiss();
+            LostPerson();
 
         }
 
@@ -425,7 +427,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                         JSONObject jsonObject = new JSONObject(response.body().toString());
                         String id = jsonObject.getString("id");
                         //LostItem.getLostItem().setId(id);
-                        Toast.makeText(LostObjectDetailsActivity.this, "Object posted.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LostObjectDetailsActivity.this, "Object is posted.", Toast.LENGTH_SHORT).show();
 
 
                         //File file = new File(getRealPathFromURI(imageUri));
@@ -437,7 +439,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
                                 if(response.isSuccessful())
                                 {
-                                    Toast.makeText(LostObjectDetailsActivity.this, "Item Posted.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LostObjectDetailsActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
                                 }
                                 else
                                     Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
@@ -445,6 +447,73 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
 
                             @Override
                             public void onFailure(Call<LostItem> call, Throwable t) {
+                                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                else
+                    Toast.makeText(LostObjectDetailsActivity.this, "The object is not posted.", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
+
+
+    public void LostPerson()  {
+
+        String Datee = DateT.getText().toString().trim();
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+
+        Call<JsonObject> call = apiInterface.storeLostObj(User.getUser().getId(),Datee,City);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.isSuccessful()) {
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().toString());
+                        String id = jsonObject.getString("id");
+                        //LostPerson.getLostPerson().setId(id);
+                        Toast.makeText(LostObjectDetailsActivity.this, "Object posted.", Toast.LENGTH_SHORT).show();
+
+
+                        //File file = new File(getRealPathFromURI(imageUri));
+                        //RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
+                        //MultipartBody.Part image = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+                        Call<LostPerson> call2 = apiInterface.storeLostPerson(id);
+                        call2.enqueue(new Callback<LostPerson>() {
+                            @Override
+                            public void onResponse(Call<LostPerson> call, Response<LostPerson> response) {
+                                if(response.isSuccessful())
+                                {
+                                    Toast.makeText(LostObjectDetailsActivity.this, "Person is posted.", Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                    Toast.makeText(LostObjectDetailsActivity.this, "The person is not posted.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<LostPerson> call, Throwable t) {
                                 Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });

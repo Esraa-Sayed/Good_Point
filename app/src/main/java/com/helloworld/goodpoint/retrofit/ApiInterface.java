@@ -2,6 +2,7 @@ package com.helloworld.goodpoint.retrofit;
 
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
 import com.helloworld.goodpoint.pojo.RegUser;
 import com.helloworld.goodpoint.pojo.Token;
@@ -78,7 +79,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("losts/lostperson_image/")
-    Call<LostItem> storeLost(@Part("id") String id, @Part MultipartBody.Part image);
+    Call<LostPerson> storeLostPerson(@Part("id") String id/*, @Part MultipartBody.Part image*/);
 
 
 
