@@ -7,11 +7,14 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,15 +22,19 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.CursorLoader;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
+import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.LostItem;
 import com.helloworld.goodpoint.pojo.User;
@@ -39,10 +46,19 @@ import com.helloworld.goodpoint.ui.prepareList;
 import com.helloworld.goodpoint.ui.select_multiple_faces.Selection;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,9 +75,11 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private String City, ObjectColor, Serial, brand, textArea_information, Type;
     private String PName;
     private Bitmap Bitmap_Image;
+    Uri imageUri;
     private FaceDetector faceDetector;
     private List<Bitmap> Person_Images;
     private boolean flagPerson, flagObject, CheckImageObeject;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +170,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 } else if (flagObject && CheckMatchObject()) {
                     LostItems();
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     finish();
                 } else if (flagPerson && CheckMatchPerson()) {
                     faceDetector = new FaceDetector.Builder(this)
@@ -369,68 +388,75 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         outState.putBoolean("flagObject", flagObject);
     }
 
+    public Uri getImageUri(Context inContext, Bitmap Bitmap_Image) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        Bitmap_Image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), Bitmap_Image, "Title", null);
+        return Uri.parse(path);
+    }
+
+    private String getRealPathFromURI(Uri imageUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(this, imageUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+    }
+
+
     public void LostItems()  {
 
-        EditText TypeObject;
-        TypeObject =  ObjectF.getView().findViewById(R.id.Other);
-        EditText serialObject =  ObjectF.getView().findViewById(R.id.Serial);
-        EditText brandObject =  ObjectF.getView().findViewById(R.id.brand);
-        AutoCompleteTextView V =  ObjectF.getView().findViewById(R.id.ColorOfObject);
-        EditText textArea_informationObject =  ObjectF.getView().findViewById(R.id.textArea_information);
-
-
-        String cityInput = autoCom.getText().toString();
         String Datee = DateT.getText().toString().trim();
-        String Type = TypeObject.getText().toString();
-        String Serial = serialObject.getText().toString();
-        String brand = brandObject.getText().toString();
-        String ObjectColor = V.getText().toString();
-        String textArea_information = textArea_informationObject.getText().toString();
-
-
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
 
-
-        //Call<LostItem> call = apiInterface.storeLost(cityInput,Datee,is_matched);
-        //Call<LostItem> call2 = apiInterface.store2Lost(Type,Serial,brand,ObjectColor,textArea_information);
-
-        Call<LostItem> call = apiInterface.storeLost(User.getUser().getId(),"2021-04-14","Cairo");
-        Call<LostItem> call2 = apiInterface.store2Lost("Money","4501455","dfsa","red","dsaf");
-
+        Call<LostItem> call = apiInterface.storeLostObj(User.getUser().getId(),Datee,City);
         call.enqueue(new Callback<LostItem>() {
             @Override
             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
-                if(response.isSuccessful())
-                {
-                    Toast.makeText(LostObjectDetailsActivity.this, "object post ...", Toast.LENGTH_SHORT).show();
+                if(response.isSuccessful()) {
+                    //Toast.makeText(LostObjectDetailsActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
 
 
+                    String id;
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().toString());
+                        id = jsonObject.getString("id");
+                        LostItem.getLostItem().setId(Integer.parseInt(id));
 
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                    call2.enqueue(new Callback<LostItem>() {
-                        @Override
-                        public void onResponse(Call<LostItem> call, Response<LostItem> response) {
-                            if(response.isSuccessful())
-                            {
-                                Toast.makeText(LostObjectDetailsActivity.this, "item post ...", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                                Toast.makeText(LostObjectDetailsActivity.this, "Not Post item ...", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(Call<LostItem> call, Throwable t) {
-                            Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-
-
+                    Toast.makeText(LostObjectDetailsActivity.this, "LostItem.getLostItem().getId()", Toast.LENGTH_SHORT).show();
 
 
                 }
-                else
-                    Toast.makeText(LostObjectDetailsActivity.this, "Not Post ...", Toast.LENGTH_SHORT).show();
+
+                File file = new File(getRealPathFromURI(imageUri));
+                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
+                MultipartBody.Part image = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+                Call<JsonObject> call2 = apiInterface.storeLostItem(4,Type,Serial,brand,ObjectColor,textArea_information,image);
+                call2.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        if(response.isSuccessful())
+                        {
+                            Toast.makeText(LostObjectDetailsActivity.this, "item post ...", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                            Toast.makeText(LostObjectDetailsActivity.this, "Not Post item ...", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
             }
 
             @Override
@@ -438,6 +464,12 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+
+
+
+
+
+
 
 
     }

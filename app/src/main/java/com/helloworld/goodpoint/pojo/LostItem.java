@@ -7,7 +7,10 @@ public class LostItem {
 
     @SerializedName("user_id")
     @Expose
-    int  user_id;
+    String  user_id;
+    @SerializedName("id")
+    @Expose
+    int  id;
     @SerializedName("date")
     @Expose
     private String date;
@@ -31,7 +34,8 @@ public class LostItem {
     private String description;
 
 
-    public LostItem(int user_id, String date, String city, String type, String serial_number, String brand, String color, String description) {
+   /* public LostItem(int user_id, int id, String date, String city, String type, String serial_number, String brand, String color, String description) {
+        this.id = id;
         this.user_id = user_id;
         this.date = date;
         this.city = city;
@@ -40,16 +44,34 @@ public class LostItem {
         this.brand = brand;
         this.color = color;
         this.description = description;
+    }*/
+
+
+    private static LostItem lostItem;
+    public static LostItem getLostItem()
+    {
+        if (lostItem == null) {
+            lostItem = new LostItem();
+
+        }
+        return lostItem;
+    }
+    private LostItem()
+    {
+
     }
 
-    public int getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public void setDate(String date) {
         this.date = date;

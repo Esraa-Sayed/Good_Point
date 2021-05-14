@@ -1,7 +1,6 @@
 package com.helloworld.goodpoint.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -12,7 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.Token;
@@ -20,17 +19,15 @@ import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
-
 import org.json.JSONObject;
-
 import java.util.regex.Pattern;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SigninActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText Email, Pass;
+    private TextInputLayout tilUserName, tilEmail, tilPassword, tilCity, tilPhone;
     private TextView ForgetPass;
     private CheckBox RememberMe;
     private Button Sigin, CreateNewAccount;
@@ -59,6 +56,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     protected void inti() {
         Email = findViewById(R.id.email);
         Pass = findViewById(R.id.pass);
+        tilPassword = findViewById(R.id.tilPass);
         ForgetPass = findViewById(R.id.forgetPass);
         Sigin = findViewById(R.id.signin);
         CreateNewAccount = findViewById(R.id.NewAccount);
@@ -79,11 +77,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.signin:
                 if (validAccount() && validatePassword()) {
-                        //loginUser(RememberMe.isChecked());
-                        startActivity(new Intent(SigninActivity.this, HomeActivity.class));
-                } else
+                        loginUser(RememberMe.isChecked());
+                        //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                } /*else
                     Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+                    //startActivity(new Intent(SigninActivity.this, HomeActivity.class));*/
                 break;
 
 
@@ -96,10 +94,10 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     private boolean validatePassword() {
         String passwordInput = Pass.getText().toString().trim();
         if (passwordInput.isEmpty()) {
-            Pass.setError("Field can't be empty");
+            tilPassword.setError("Field can't be empty");
             return false;
         } else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
-            Pass.setError("password to weak!");
+            tilPassword.setError("Must contains digits, lower&upper case letters and length > 8");
             /*if(!passwordInput.matches("[0-9]+"))
                 Pass.setError("must contain at least 1 digit");
             else if(!passwordInput.matches("[a-z]+"))
@@ -110,7 +108,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                 Pass.setError("must contain at least 8 characters");*/
             return false;
         } else {
-            Pass.setError(null);
+            tilPassword.setError(null);
             return true;
         }
     }
@@ -146,11 +144,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         call.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
-                String token = response.body().getAccess();
-                if(Remember)
-                {
-                    new PrefManager(getApplicationContext()).setLogin(response.body().getRefresh());
-                }
+                if (response.isSuccessful()) {
+                    String token = response.body().getAccess();
+                    if (Remember) {
+                        new PrefManager(getApplicationContext()).setLogin(response.body().getRefresh());
+                    }
 
                 Call<JsonObject> call2 = apiInterface.getData("Bearer " + token);
                 call2.enqueue(new Callback<JsonObject>() {
@@ -186,6 +184,9 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                         Toast.makeText(SigninActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
+            }
+                else
+                    Toast.makeText(SigninActivity.this, "Invalid account.", Toast.LENGTH_SHORT).show();
             }
 
 

@@ -3,18 +3,17 @@ package com.helloworld.goodpoint.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.CursorLoader;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.FileUtils;
 import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,37 +25,29 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.textfield.TextInputLayout;
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.pojo.RegUser;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
 import android.util.Patterns;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Multipart;
 
 public class SignupActivity extends AppCompatActivity {
     private TextView DateT;
@@ -118,14 +109,12 @@ public class SignupActivity extends AppCompatActivity {
                 if (y > year || (y == year && m - 1 > month)|| (y == year && m - 1 == month && d > Day) ) {
                     String Date = y + "-" + m + "-" + d;
                     //String Date = d + "/" + m + "/" + y;
-                    //Toast.makeText(SignupActivity.this, Date, Toast.LENGTH_SHORT).show();
                     String todayDate = year + "-" + (month + 1) + "-" + Day;
                     //String todayDate = Day + "/" + (month + 1) + "/" + year;
                     DateT.setText(todayDate);
                     FancyToast.makeText(SignupActivity.this,"Invalid date",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                 }
                 else {
-                    //Toast.makeText(SignupActivity.this, "hi", Toast.LENGTH_SHORT).show();
                     String Date = y + "-" + m + "-" + d;
                     //String Date = d + "/" + m + "/" + y;
                     DateT.setText(Date);
@@ -187,7 +176,6 @@ public class SignupActivity extends AppCompatActivity {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_capture:
-                //Toast.makeText(this,"Hello!!",Toast.LENGTH_SHORT).show();
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (cameraIntent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(cameraIntent, 10);
@@ -376,8 +364,6 @@ public class SignupActivity extends AppCompatActivity {
         outState.putParcelable("BitmapImage",Bitmap_Image);
     }
 
-
-
   /* private String imageToString()
     {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -385,11 +371,17 @@ public class SignupActivity extends AppCompatActivity {
         byte[] imgByte = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(imgByte,Base64.DEFAULT);
     }
-
 */
-
-
-
+    private String getRealPathFromURI(Uri imageUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(this, imageUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+    }
 
     public void registerUser()  {
     String emailInput = Email.getText().toString().trim();
@@ -398,16 +390,14 @@ public class SignupActivity extends AppCompatActivity {
     String pInput = Phone.getText().toString().trim();
     String cityInput = city.getText().toString().trim();
     String Datee = DateT.getText().toString().trim();
-    //String images = imageToString();
 
-        //File file = new File(String.valueOf(image));
-        //RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
-        //MultipartBody.Part body = MultipartBody.Part.createFormData("profile_pic", file.getName(), requestBody);
-
+    File file = new File(getRealPathFromURI(imageUri));
+    RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
+    MultipartBody.Part image = MultipartBody.Part.createFormData("profile_pic", file.getName(), requestBody);
 
 
     ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
-    Call<RegUser> call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
+    Call<RegUser> call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee,image);
 
         call.enqueue(new Callback<RegUser>() {
         @Override
@@ -416,30 +406,6 @@ public class SignupActivity extends AppCompatActivity {
             {
                 startActivity(new Intent(SignupActivity.this,check_registration.class));
                 finish();
-
-             /*   Call<RegUser> call2 = apiInterface.storeImage(images);
-                call2.enqueue(new Callback<RegUser>() {
-                    @Override
-                    public void onResponse(Call<RegUser> call, Response<RegUser> response) {
-                        if(response.isSuccessful()) {
-                            startActivity(new Intent(SignupActivity.this, check_registration.class));
-                            finish();
-                        }
-                        else
-                            startActivity(new Intent(SignupActivity.this, check_registration.class));
-                            finish();
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<RegUser> call, Throwable t) {
-                        Toast.makeText(SignupActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });*/
-
-
-
-
             }
             else {
                 try {
