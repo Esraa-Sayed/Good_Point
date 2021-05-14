@@ -80,7 +80,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private prepareList List;
     private List<String> listColor;
     private Fragment PersonF, ObjectF;
-    private String location;
+    private String location,City;
     private String ObjectColor, Serial, brand, textArea_information, Type;
     private String PName;
     private ProgressBar progressbar;
@@ -233,6 +233,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 } else if (flagObject && CheckMatchObject()) {
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+
                     finish();
                 } else if (flagPerson && CheckMatchPerson()) {
                     faceDetector = new FaceDetector.Builder(this)
@@ -484,7 +485,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             try {
                 List<Address> addresses = geocoder.getFromLocation(Latitude, Longitude, 1);
                 String Country = addresses.get(0).getCountryName();
-                String City = addresses.get(0).getAdminArea();
+                City = addresses.get(0).getAdminArea();
                 String area = addresses.get(0).getLocality();
                 Locate = area + "," + City + "," + Country + ".";
             } catch (IOException e) {
