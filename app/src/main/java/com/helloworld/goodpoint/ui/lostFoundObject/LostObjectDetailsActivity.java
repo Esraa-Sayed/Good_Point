@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -391,7 +392,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         outState.putBoolean("flagObject", flagObject);
     }
 
-    public Uri getImageUri(Context inContext, Bitmap Bitmap_Image) {
+    /*public Uri getImageUri(Context inContext, Bitmap Bitmap_Image) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         Bitmap_Image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), Bitmap_Image, "Title", null);
@@ -407,7 +408,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         String result = cursor.getString(column_index);
         cursor.close();
         return result;
-    }
+    }*/
 
 
     public void LostItems()  {
@@ -415,36 +416,39 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         String Datee = DateT.getText().toString().trim();
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
 
-        Call<LostItem> call = apiInterface.storeLostObj(User.getUser().getId(),Datee,City);
-        call.enqueue(new Callback<LostItem>() {
+        Call<JsonObject> call = apiInterface.storeLostObj(User.getUser().getId(),Datee,City);
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<LostItem> call, Response<LostItem> response) {
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if(response.isSuccessful()) {
                     //Toast.makeText(LostObjectDetailsActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
 
 
-                    String id;
+
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().toString());
-                        id = jsonObject.getString("id");
+                        String id = jsonObject.getString("id");
+                        Log.e("good", id);
                         LostItem.getLostItem().setId(Integer.parseInt(id));
+                        //Toast.makeText(LostObjectDetailsActivity.this, id, Toast.LENGTH_SHORT).show();
+
+
+                    Toast.makeText(LostObjectDetailsActivity.this, "id", Toast.LENGTH_SHORT).show();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-                    Toast.makeText(LostObjectDetailsActivity.this, "LostItem.getLostItem().getId()", Toast.LENGTH_SHORT).show();
-
 
                 }
 
-                File file = new File(getRealPathFromURI(imageUri));
-                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
-                MultipartBody.Part image = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
-                Call<JsonObject> call2 = apiInterface.storeLostItem(4,Type,Serial,brand,ObjectColor,textArea_information,image);
-                call2.enqueue(new Callback<JsonObject>() {
+                //File file = new File(getRealPathFromURI(imageUri));
+                //RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
+                //MultipartBody.Part image = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+                Call<JSONObject> call2 = apiInterface.storeLostItem(4,Type,Serial,brand,ObjectColor,textArea_information);
+                call2.enqueue(new Callback<JSONObject>() {
                     @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                         if(response.isSuccessful())
                         {
                             Toast.makeText(LostObjectDetailsActivity.this, "item post ...", Toast.LENGTH_SHORT).show();
@@ -454,7 +458,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     }
 
                     @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                    public void onFailure(Call<JSONObject> call, Throwable t) {
                         Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
@@ -463,7 +467,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             }
 
             @Override
-            public void onFailure(Call<LostItem> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

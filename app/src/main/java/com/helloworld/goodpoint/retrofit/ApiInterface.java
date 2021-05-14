@@ -67,13 +67,13 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("losts/lostobject/")
-    Call<LostItem> storeLostObj(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput);
+    Call<JsonObject> storeLostObj(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput);
 
     @Multipart
     @POST("losts/lostitem/")
-    Call<JsonObject> storeLostItem(@Part("id") int obj_id, @Part("type") String Type, @Part("serial_number") String Serial
+    Call<JSONObject> storeLostItem(@Part("id") int obj_id, @Part("type") String Type, @Part("serial_number") String Serial
                              , @Part("brand") String brand, @Part("color") String ObjectColor
-                             , @Part("description") String textArea_information, @Part MultipartBody.Part image);
+                             , @Part("description") String textArea_information/*, @Part MultipartBody.Part image*/);
 
 
     @FormUrlEncoded
