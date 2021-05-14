@@ -71,7 +71,7 @@ public interface ApiInterface {
 
     @Multipart
     @POST("losts/lostitem/")
-    Call<JSONObject> storeLostItem(@Part("id") int obj_id, @Part("type") String Type, @Part("serial_number") String Serial
+    Call<LostItem> storeLostItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
                              , @Part("brand") String brand, @Part("color") String ObjectColor
                              , @Part("description") String textArea_information/*, @Part MultipartBody.Part image*/);
 

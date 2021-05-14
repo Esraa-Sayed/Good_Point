@@ -410,7 +410,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         return result;
     }*/
 
-
     public void LostItems()  {
 
         String Datee = DateT.getText().toString().trim();
@@ -421,48 +420,43 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if(response.isSuccessful()) {
-                    //Toast.makeText(LostObjectDetailsActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
-
-
 
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().toString());
                         String id = jsonObject.getString("id");
-                        Log.e("good", id);
-                        LostItem.getLostItem().setId(Integer.parseInt(id));
-                        //Toast.makeText(LostObjectDetailsActivity.this, id, Toast.LENGTH_SHORT).show();
+                        //LostItem.getLostItem().setId(id);
+                        Toast.makeText(LostObjectDetailsActivity.this, "Object posted.", Toast.LENGTH_SHORT).show();
 
 
-                    Toast.makeText(LostObjectDetailsActivity.this, "id", Toast.LENGTH_SHORT).show();
+                        //File file = new File(getRealPathFromURI(imageUri));
+                        //RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
+                        //MultipartBody.Part image = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+                        Call<LostItem> call2 = apiInterface.storeLostItem(id,Type,Serial,brand,ObjectColor,textArea_information);
+                        call2.enqueue(new Callback<LostItem>() {
+                            @Override
+                            public void onResponse(Call<LostItem> call, Response<LostItem> response) {
+                                if(response.isSuccessful())
+                                {
+                                    Toast.makeText(LostObjectDetailsActivity.this, "Item Posted.", Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                    Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<LostItem> call, Throwable t) {
+                                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-
                 }
-
-                //File file = new File(getRealPathFromURI(imageUri));
-                //RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
-                //MultipartBody.Part image = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
-                Call<JSONObject> call2 = apiInterface.storeLostItem(4,Type,Serial,brand,ObjectColor,textArea_information);
-                call2.enqueue(new Callback<JSONObject>() {
-                    @Override
-                    public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
-                        if(response.isSuccessful())
-                        {
-                            Toast.makeText(LostObjectDetailsActivity.this, "item post ...", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                            Toast.makeText(LostObjectDetailsActivity.this, "Not Post item ...", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<JSONObject> call, Throwable t) {
-                        Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-
+                else
+                    Toast.makeText(LostObjectDetailsActivity.this, "The object is not posted.", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -472,16 +466,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             }
         });
 
-
-
-
-
-
-
-
     }
-
-
-
 
 }

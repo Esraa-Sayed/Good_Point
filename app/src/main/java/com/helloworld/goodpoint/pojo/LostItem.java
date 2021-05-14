@@ -10,7 +10,7 @@ public class LostItem {
     String  user_id;
     @SerializedName("id")
     @Expose
-    int  id;
+    String  id;
     @SerializedName("date")
     @Expose
     private String date;
@@ -69,9 +69,9 @@ public class LostItem {
         this.user_id = user_id;
     }
 
-    public int getId() { return id; }
+    public String getId() { return id; }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(String id) { this.id = id; }
 
     public void setDate(String date) {
         this.date = date;
