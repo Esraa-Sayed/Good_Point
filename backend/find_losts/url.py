@@ -18,8 +18,15 @@ urlpatterns = [
     path('lostperson/<int:pk>/', views.LostPersonDetailsView.as_view(), name='lost_item'),
     path('foundobject/<int:pk>/', views.FoundObjectDetalisView.as_view(), name='lost_item'),
     path('founditem/<int:pk>/', views.FoundItemDetailsView.as_view(), name='lost_item'),
+
+    path('lostobject/city=<CharField:city>/', views.LostObject_cityView.as_view(), name='notification'),
+    #path('user_id=<int:user_id>/', views.UserNotificationView.as_view(), name='notification'),
+    #path('user_id=<int:user_id>/', views.UserNotificationView.as_view(), name='notification'),
+    #path('user_id=<int:user_id>/', views.UserNotificationView.as_view(), name='notification'),
+    #path('user_id=<int:user_id>/', views.UserNotificationView.as_view(), name='notification'),
+    #path('user_id=<int:user_id>/', views.UserNotificationView.as_view(), name='notification'),
     #path('lostperson_image/<int:pk>/', views.LostPersonImageDetailsView.as_view(), name='lost_item'),
     #path('lostcomb/', views.CombineListView.as_view(), name='lost_object'),
     path('founder/<int:id>/', user_view.WhoFoundItemView.as_view(), name='who found item'),
-    path('map/',views.MapView.as_view(), name='map'),
+    path('map/', views.MapView.as_view(), name='map'),
 ]
