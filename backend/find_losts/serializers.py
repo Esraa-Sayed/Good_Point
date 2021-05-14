@@ -75,7 +75,10 @@ class FoundPersonImageSerializer(serializers.ModelSerializer):
         fields = ['id_image', 'image']
 
 class MapSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FoundObject
-        fields = ['longitude', 'latitude', 'user_id']
+    longitude = serializers.DecimalField(max_digits=14, decimal_places=10, source='id.longitude')
+    latitude = serializers.DecimalField(max_digits=14, decimal_places=10, source='id.latitude')
+    user_id = serializers.IntegerField(source='id.user_id.id')
 
+    class Meta:
+        model = FoundItem
+        fields = ['longitude', 'latitude', 'user_id']

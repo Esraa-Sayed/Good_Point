@@ -86,7 +86,14 @@ class FoundPersonImageView(generics.ListCreateAPIView):
     serializer_class = FoundPersonImageSerializer
 
 
+class LostObject_cityView(generics.ListAPIView):
+    serializer_class = LostObjectSerializer
+
+    def get_queryset(self):
+        obj = self.kwargs['city']
+        return LostObject.objects.filter(city=obj)
+
+
 class MapView(generics.ListAPIView):
-    items = FoundItem.objects.values_list('id')
-    queryset = FoundObject.objects.filter(id__in=items)
+    queryset = FoundItem.objects.select_related('id')
     serializer_class = MapSerializer
