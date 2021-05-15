@@ -32,6 +32,7 @@ import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.pojo.RegUser;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -195,6 +196,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10 && resultCode == RESULT_OK) {
             Bitmap_Image = (Bitmap) data.getExtras().get("data");
+            imageUri = getImageUri(Bitmap_Image);
             image.setImageBitmap(Bitmap_Image);
         }
         if (requestCode == 11 && resultCode == RESULT_OK) {
@@ -364,14 +366,14 @@ public class SignupActivity extends AppCompatActivity {
         outState.putParcelable("BitmapImage",Bitmap_Image);
     }
 
-  /* private String imageToString()
-    {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        Bitmap_Image.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-        byte[] imgByte = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(imgByte,Base64.DEFAULT);
+    public Uri getImageUri(Bitmap bitmap_Image) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap_Image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap_Image, "Profile", null);
+        return Uri.parse(path);
     }
-*/
+
+
     private String getRealPathFromURI(Uri imageUri) {
         String[] proj = {MediaStore.Images.Media.DATA};
         CursorLoader loader = new CursorLoader(this, imageUri, proj, null, null, null);
@@ -391,14 +393,17 @@ public class SignupActivity extends AppCompatActivity {
     String cityInput = city.getText().toString().trim();
     String Datee = DateT.getText().toString().trim();
 
-    File file = new File(getRealPathFromURI(imageUri));
-    RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
-    MultipartBody.Part image = MultipartBody.Part.createFormData("profile_pic", file.getName(), requestBody);
-
-
     ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
-    Call<RegUser> call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee,image);
+    Call<RegUser> call;
+    if(imageUri != null) {
+        File file = new File(getRealPathFromURI(imageUri));
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
+        MultipartBody.Part image = MultipartBody.Part.createFormData("profile_pic", file.getName(), requestBody);
+        call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee,image);
+    }
 
+    else
+        call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee);
         call.enqueue(new Callback<RegUser>() {
         @Override
         public void onResponse(Call<RegUser> call, Response<RegUser> response) {
@@ -435,7 +440,6 @@ public class SignupActivity extends AppCompatActivity {
     });
 
     }
-
 
 
 }

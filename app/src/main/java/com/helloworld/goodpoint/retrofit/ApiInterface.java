@@ -1,6 +1,8 @@
 package com.helloworld.goodpoint.retrofit;
 
 import com.google.gson.JsonObject;
+import com.helloworld.goodpoint.pojo.FoundItem;
+import com.helloworld.goodpoint.pojo.FoundPerson;
 import com.helloworld.goodpoint.pojo.LostItem;
 import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
@@ -30,16 +32,14 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    /*
-    @Multipart
+
     @FormUrlEncoded
     @POST("auth/signup/")
     Call<RegUser> storePost(@Field("username") String emailInput
                             , @Field("password") String passwordInput, @Field("first_name") String usernameInput
                             , @Field("phone") String pInput, @Field("city") String cityInput
-                            , @Field("birthdate") String Datee);/*@Part MultipartBody.Part profile_pic/*
+                            , @Field("birthdate") String Datee);
 
-     */
 
 
     @Multipart
@@ -73,8 +73,14 @@ public interface ApiInterface {
     @Multipart
     @POST("losts/lostitem/")
     Call<LostItem> storeLostItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
+            , @Part("brand") String brand, @Part("color") String ObjectColor
+            , @Part("description") String textArea_information);
+
+    @Multipart
+    @POST("losts/lostitem/")
+    Call<LostItem> storeLostItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
                              , @Part("brand") String brand, @Part("color") String ObjectColor
-                             , @Part("description") String textArea_information/*, @Part MultipartBody.Part image*/);
+                             , @Part("description") String textArea_information, @Part MultipartBody.Part image);
 
     @Multipart
     @POST("losts/lostperson/")
@@ -93,13 +99,17 @@ public interface ApiInterface {
 
     @Multipart
     @POST("losts/founditem/")
-    Call<LostItem> storeFoundItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
+    Call<FoundItem> storeFoundItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
             , @Part("brand") String brand, @Part("color") String ObjectColor
             , @Part("description") String textArea_information);
 
+    @Multipart
+    @POST("losts/foundperson/")
+    Call<JsonObject> storeFoundPerson(@Part("id") String obj_id, @Part("name") String name);
 
-
-
+    @Multipart
+    @POST("losts/foundperson_image/")
+    Call<FoundPerson> storeFoundPersonImage(@Part("id") String person_id/*, @Part MultipartBody.Part image*/);
 
     //----------------------------------------------------------------------------------------------
 

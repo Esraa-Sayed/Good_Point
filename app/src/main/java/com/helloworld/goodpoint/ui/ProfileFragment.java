@@ -12,8 +12,11 @@ import android.widget.TextView;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.User;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProfileFragment extends Fragment {
     TextView name_above,email_above,name,email,phone,city,date;
+    CircleImageView pic;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -27,6 +30,7 @@ public class ProfileFragment extends Fragment {
         phone = v.findViewById(R.id.phone_p);
         city = v.findViewById(R.id.city_p);
         date = v.findViewById(R.id.birth_date);
+        pic = v.findViewById(R.id.profile_pic);
 
 
         //name_above.setText(getArguments().getString("name"));

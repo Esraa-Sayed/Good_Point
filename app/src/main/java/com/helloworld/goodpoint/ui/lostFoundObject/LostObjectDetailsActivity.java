@@ -9,11 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -78,7 +80,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private String City, ObjectColor, Serial, brand, textArea_information, Type;
     private String PName;
     private Bitmap Bitmap_Image;
-    Uri imageUri;
+    Uri imageURI;
     private FaceDetector faceDetector;
     private List<Bitmap> Person_Images;
     private boolean flagPerson, flagObject, CheckImageObeject;
@@ -395,11 +397,10 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         outState.putBoolean("flagObject", flagObject);
     }
 
-    /*
-    public Uri getImageUri(Context inContext, Bitmap Bitmap_Image) {
+    public Uri getImageUri(Bitmap bitmap_Image) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        Bitmap_Image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), Bitmap_Image, "Title", null);
+        bitmap_Image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap_Image, "LostItem", null);
         return Uri.parse(path);
     }
 
@@ -413,17 +414,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         cursor.close();
         return result;
     }
-
-    private String imageToString()
-    {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        Bitmap_Image.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-        byte[] imgByte = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(imgByte,Base64.DEFAULT);
-    }
-     */
-
-
 
     public void LostItems()  {
 
@@ -439,54 +429,50 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().toString());
                         String id = jsonObject.getString("id");
-                        //LostItem.getLostItem().setId(id);
                         Toast.makeText(LostObjectDetailsActivity.this, "Object is posted.", Toast.LENGTH_SHORT).show();
+                        Call<LostItem> call2;
+                        if(Bitmap_Image != null) {
+                            imageURI = getImageUri(Bitmap_Image);
+                            File file = new File(getRealPathFromURI(imageURI));
+                            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
 
-
-
-                        Call<LostItem> call2 = apiInterface.storeLostItem(id,Type,Serial,brand,ObjectColor,textArea_information);
-                        call2.enqueue(new Callback<LostItem>() {
-                            @Override
-                            public void onResponse(Call<LostItem> call, Response<LostItem> response) {
-                                if(response.isSuccessful())
-                                {
-                                    Toast.makeText(LostObjectDetailsActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
+                            MultipartBody.Part image = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+                            call2 = apiInterface.storeLostItem(id, Type, Serial, brand, ObjectColor, textArea_information, image);
+                        }
+                        else
+                            call2 = apiInterface.storeLostItem(id, Type, Serial, brand, ObjectColor, textArea_information);
+                            call2.enqueue(new Callback<LostItem>() {
+                                @Override
+                                public void onResponse(Call<LostItem> call, Response<LostItem> response) {
+                                    if(response.isSuccessful())
+                                    {
+                                        Toast.makeText(LostObjectDetailsActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else
+                                        Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
                                 }
-                                else
-                                    Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
-                            }
 
-                            @Override
-                            public void onFailure(Call<LostItem> call, Throwable t) {
-                                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<LostItem> call, Throwable t) {
+                                    Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
 
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-
+                    else
+                        Toast.makeText(LostObjectDetailsActivity.this, "The object is not posted.", Toast.LENGTH_SHORT).show();
                 }
-                else
-                    Toast.makeText(LostObjectDetailsActivity.this, "The object is not posted.", Toast.LENGTH_SHORT).show();
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
 
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
-
-
-
-
-
-
-
+        }
 
 
 
@@ -504,7 +490,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().toString());
                         String id = jsonObject.getString("id");
-                        //LostPerson.getLostPerson().setId(id);
                         Toast.makeText(LostObjectDetailsActivity.this, "Object posted.", Toast.LENGTH_SHORT).show();
 
 
@@ -515,13 +500,9 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                                 if(response.isSuccessful())
                                 {
                                     Toast.makeText(LostObjectDetailsActivity.this, "Person is posted.", Toast.LENGTH_SHORT).show();
-                                    //Call<LostPerson> call3 = apiInterface.storeLostPersonImage(id);
-
                                     try {
                                         JSONObject jsonObject = new JSONObject(response.body().toString());
                                         String id = jsonObject.getString("id");
-                                        //LostPerson.getLostPerson().setId(id);
-
 
                                         Call<LostPerson> call3 = apiInterface.storeLostPersonImage(id);
                                         call3.enqueue(new Callback<LostPerson>() {
@@ -530,7 +511,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                                                 if(response.isSuccessful())
                                                 {
                                                     Toast.makeText(LostObjectDetailsActivity.this, "PersonImage is posted.", Toast.LENGTH_SHORT).show();
-                                                    //Call<LostPerson> call3 = apiInterface.storeLostPersonImage(id);
                                                 }
                                                 else
                                                     Toast.makeText(LostObjectDetailsActivity.this, "The personImage is not posted.", Toast.LENGTH_SHORT).show();
@@ -545,7 +525,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
 
                                 }
                                 else

@@ -163,6 +163,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             String phone = jsonObject.getString("phone");
                             String city = jsonObject.getString("city");
                             String birthdate = jsonObject.getString("birthdate");
+                            String Userimage = jsonObject.getString("profile_pic");
 
                             Intent intent = new Intent(SigninActivity.this, HomeActivity.class);
                             User.getUser().setId(id);
@@ -171,6 +172,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             User.getUser().setPhone(phone);
                             User.getUser().setCity(city);
                             User.getUser().setBirthdate(birthdate);
+                            User.getUser().setProfile_pic(Userimage);
 
                             startActivity(intent);
                             finish();
@@ -189,7 +191,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(SigninActivity.this, "Invalid account.", Toast.LENGTH_SHORT).show();
             }
 
-
                 @Override
             public void onFailure(Call<Token> call, Throwable t) {
                     Toast.makeText(SigninActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
@@ -197,10 +198,5 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
-
-
-
-
-
 
 }
