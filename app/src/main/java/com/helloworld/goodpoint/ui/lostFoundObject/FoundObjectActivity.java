@@ -232,9 +232,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 if (!flagObject && !flagPerson) {
                     FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 } else if (flagObject && CheckMatchObject()) {
-                    //FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
-                    FancyToast.makeText(this, "City :- "+City, FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
-
+                    FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     finish();
                 } else if (flagPerson && CheckMatchPerson()) {
                     faceDetector = new FaceDetector.Builder(this)
