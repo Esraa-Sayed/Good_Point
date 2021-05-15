@@ -7,10 +7,10 @@ public class LostItem {
 
     @SerializedName("user_id")
     @Expose
-    String  user_id;
+    private String user_id;
     @SerializedName("id")
     @Expose
-    String  id;
+    private String id;
     @SerializedName("date")
     @Expose
     private String date;

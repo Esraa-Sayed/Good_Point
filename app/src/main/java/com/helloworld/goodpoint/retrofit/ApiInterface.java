@@ -76,10 +76,26 @@ public interface ApiInterface {
                              , @Part("brand") String brand, @Part("color") String ObjectColor
                              , @Part("description") String textArea_information/*, @Part MultipartBody.Part image*/);
 
+    @Multipart
+    @POST("losts/lostperson/")
+    Call<JsonObject> storeLostPerson(@Part("id") String obj_id, @Part("name") String name);
+
+
+    @Multipart
+    @POST("losts/lostperson_image/")
+    Call<LostPerson> storeLostPersonImage(@Part("id") String person_id/*, @Part MultipartBody.Part image*/);
+    //----------------------------------------------------------------------------------------------
 
     @FormUrlEncoded
-    @POST("losts/lostperson_image/")
-    Call<LostPerson> storeLostPerson(@Part("id") String id/*, @Part MultipartBody.Part image*/);
+    @POST("losts/foundobject/")
+    Call<JsonObject> storeFoundObj(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput
+                                 , @Field("longitude") double longitude, @Field("latitude") double latitude);
+
+    @Multipart
+    @POST("losts/founditem/")
+    Call<LostItem> storeFoundItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
+            , @Part("brand") String brand, @Part("color") String ObjectColor
+            , @Part("description") String textArea_information);
 
 
 

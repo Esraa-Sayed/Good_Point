@@ -6,7 +6,10 @@ import com.google.gson.annotations.SerializedName;
 public class LostPerson {
     @SerializedName("id")
     @Expose
-    String  id;
+    private String id;
+    @SerializedName("name")
+    @Expose
+    private String name;
 
 
     private static LostPerson lostPerson;
@@ -30,4 +33,8 @@ public class LostPerson {
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
 }
