@@ -232,7 +232,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 if (!flagObject && !flagPerson) {
                     FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 } else if (flagObject && CheckMatchObject()) {
-                    FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                    //FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                    FancyToast.makeText(this, "City :- "+City, FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
 
                     finish();
                 } else if (flagPerson && CheckMatchPerson()) {
@@ -485,9 +486,10 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             try {
                 List<Address> addresses = geocoder.getFromLocation(Latitude, Longitude, 1);
                 String Country = addresses.get(0).getCountryName();
-                City = addresses.get(0).getAdminArea();
+                String CityG = addresses.get(0).getAdminArea();
+                City = CityG.substring(0,CityG.lastIndexOf(' '));
                 String area = addresses.get(0).getLocality();
-                Locate = area + "," + City + "," + Country + ".";
+                Locate = area + "," + CityG + "," + Country + ".";
             } catch (IOException e) {
                 e.printStackTrace();
             }
