@@ -56,17 +56,31 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
+import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.pojo.FoundItem;
+import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.User;
+import com.helloworld.goodpoint.retrofit.ApiClient;
+import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.Alert;
 import com.helloworld.goodpoint.ui.GlobalVar;
+import com.helloworld.goodpoint.ui.PrefManager;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class FoundObjectActivity extends AppCompatActivity implements View.OnClickListener, objectDataType {
@@ -80,7 +94,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private prepareList List;
     private List<String> listColor;
     private Fragment PersonF, ObjectF;
-    private String location;
+    private String location, City;
     private String ObjectColor, Serial, brand, textArea_information, Type;
     private String PName;
     private ProgressBar progressbar;
@@ -117,7 +131,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             month = cal.get(Calendar.MONTH);
             Day = cal.get(Calendar.DAY_OF_MONTH);
         }
-        String todayDate = year + "/" + (month + 1) + "/" + Day;
+        //String todayDate = year + "/" + (month + 1) + "/" + Day;
+        String todayDate = year + "-" + (month + 1) + "-" + Day;
         DateFound.setText(todayDate);
 
         DateSet = new DatePickerDialog.OnDateSetListener() {
@@ -126,13 +141,15 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 m++;
                 if (y > year || (m - 1 > month && y >= year) || (d > Day && m - 1 >= month && y >= year)) {
                     FancyToast.makeText(FoundObjectActivity.this, "Invalid date", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
-                    String todayDate = year + "/" + (month + 1) + "/" + Day;
+                    //String todayDate = year + "/" + (month + 1) + "/" + Day;
+                    String todayDate = year + "-" + (month + 1) + "-" + Day;
                     DateFound.setText(todayDate);
                 } else {
                     year = y;
                     month = m - 1;
                     Day = d;
-                    String Date = y + "/" + m + "/" + d;
+                    //String Date = y + "/" + m + "/" + d;
+                    String Date = y + "-" + m + "-" + d;
                     DateFound.setText(Date);
                 }
             }
@@ -232,6 +249,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 if (!flagObject && !flagPerson) {
                     FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 } else if (flagObject && CheckMatchObject()) {
+                    FoundItems();
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     finish();
                 } else if (flagPerson && CheckMatchPerson()) {
@@ -368,8 +386,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             if (TypeObject.getText().toString().isEmpty()) {
                 TypeObject.setError("Field can't be empty");
                 return false;
-            }
-            else {
+            } else {
                 Type = TypeObject.getText().toString();
             }
         } else if (brand.isEmpty()) {
@@ -484,9 +501,10 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             try {
                 List<Address> addresses = geocoder.getFromLocation(Latitude, Longitude, 1);
                 String Country = addresses.get(0).getCountryName();
-                String City = addresses.get(0).getAdminArea();
+                String CityG = addresses.get(0).getAdminArea();
+                City = CityG.substring(0, CityG.lastIndexOf(' '));
                 String area = addresses.get(0).getLocality();
-                Locate = area + "," + City + "," + Country + ".";
+                Locate = area + "," + CityG + "," + Country + ".";
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -581,5 +599,67 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         outState.putBoolean("flagPerson", flagPerson);
         outState.putBoolean("flagObject", flagObject);
     }
+
+
+    public void FoundItems() {
+
+        String Datee = DateFound.getText().toString().trim();
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+
+        Call<JsonObject> call = apiInterface.storeFoundObj(User.getUser().getId(), Datee, City, Longitude , Latitude);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().toString());
+                        String id = jsonObject.getString("id");
+                        Toast.makeText(FoundObjectActivity.this, id, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FoundObjectActivity.this, "Object is posted.", Toast.LENGTH_SHORT).show();
+
+
+                        Call<FoundItem> call2 = apiInterface.storeFoundItem(id, Type, Serial, brand, ObjectColor, textArea_information);
+                        call2.enqueue(new Callback<FoundItem>() {
+                            @Override
+                            public void onResponse(Call<FoundItem> call, Response<FoundItem> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(FoundObjectActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
+                                } else
+                                    Toast.makeText(FoundObjectActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<FoundItem> call, Throwable t) {
+                                Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else
+                        Toast.makeText(FoundObjectActivity.this, "Objec is not posted.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    public void FoundPerson()
+    {
+
+    }
+
+
+
+
+
 
 }

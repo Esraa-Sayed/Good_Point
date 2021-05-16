@@ -1,16 +1,22 @@
 package com.helloworld.goodpoint.retrofit;
 
 import com.google.gson.JsonObject;
+import com.helloworld.goodpoint.pojo.FoundItem;
+import com.helloworld.goodpoint.pojo.FoundPerson;
 import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
 import com.helloworld.goodpoint.pojo.RegUser;
 import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.pojo.UserMap;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -26,17 +32,22 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    @Multipart
+
     @FormUrlEncoded
     @POST("auth/signup/")
     Call<RegUser> storePost(@Field("username") String emailInput
                             , @Field("password") String passwordInput, @Field("first_name") String usernameInput
                             , @Field("phone") String pInput, @Field("city") String cityInput
-                            , @Field("birthdate") String Datee/*@Part MultipartBody.Part profile_pic/* @Field("profile_pic") String images,*/);
+                            , @Field("birthdate") String Datee);
 
-  /*  @FormUrlEncoded
-    @POST("media/profile/")
-    Call<RegUser> storeImage(@Field("profile_pic") String images);*/
+
+
+    @Multipart
+    @POST("auth/signup/")
+    Call<RegUser> storePost(@Part("username") String emailInput
+                            , @Part("password") String passwordInput, @Part("first_name") String usernameInput
+                            , @Part("phone") String pInput, @Part("city") String cityInput
+                            , @Part("birthdate") String Datee, @Part MultipartBody.Part profile_pic);
 
 
 
@@ -55,19 +66,50 @@ public interface ApiInterface {
 
     //----------------------------------------------------------------------------------------------
 
-    //@GET("losts/lostobject/")
-    //Call<List<LostItem>> getuser(@Query("user_id") int idd);
-
-
     @FormUrlEncoded
     @POST("losts/lostobject/")
-    Call<LostItem> storeLost(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput);
+    Call<JsonObject> storeLostObj(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput);
+
+    @Multipart
+    @POST("losts/lostitem/")
+    Call<LostItem> storeLostItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
+            , @Part("brand") String brand, @Part("color") String ObjectColor
+            , @Part("description") String textArea_information);
+
+    @Multipart
+    @POST("losts/lostitem/")
+    Call<LostItem> storeLostItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
+                             , @Part("brand") String brand, @Part("color") String ObjectColor
+                             , @Part("description") String textArea_information, @Part MultipartBody.Part image);
+
+    @Multipart
+    @POST("losts/lostperson/")
+    Call<JsonObject> storeLostPerson(@Part("id") String obj_id, @Part("name") String name);
+
+
+    @Multipart
+    @POST("losts/lostperson_image/")
+    Call<LostPerson> storeLostPersonImage(@Part("id") String person_id/*, @Part MultipartBody.Part image*/);
+    //----------------------------------------------------------------------------------------------
 
     @FormUrlEncoded
-    @POST("losts/lostitem/")
-    Call<LostItem> store2Lost(@Field("type") String Type, @Field("serial_number") String Serial
-                             ,@Field("brand") String brand, @Field("color") String ObjectColor
-                             ,@Field("description") String textArea_information);
+    @POST("losts/foundobject/")
+    Call<JsonObject> storeFoundObj(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput
+                                 , @Field("longitude") double longitude, @Field("latitude") double latitude);
+
+    @Multipart
+    @POST("losts/founditem/")
+    Call<FoundItem> storeFoundItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
+            , @Part("brand") String brand, @Part("color") String ObjectColor
+            , @Part("description") String textArea_information);
+
+    @Multipart
+    @POST("losts/foundperson/")
+    Call<JsonObject> storeFoundPerson(@Part("id") String obj_id, @Part("name") String name);
+
+    @Multipart
+    @POST("losts/foundperson_image/")
+    Call<FoundPerson> storeFoundPersonImage(@Part("id") String person_id/*, @Part MultipartBody.Part image*/);
 
     //----------------------------------------------------------------------------------------------
 

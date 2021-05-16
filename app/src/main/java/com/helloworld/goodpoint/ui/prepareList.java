@@ -16,6 +16,7 @@ public class prepareList {
         list.add(con.getString(R.string.Cairo));
         list.add(con.getString(R.string.Alexandria));
         list.add(con.getString(R.string.ShubraElKheima));
+        list.add(con.getString(R.string.ElBeheira));
         list.add(con.getString(R.string.Giza));
         list.add(con.getString(R.string.PortSaid));
         list.add(con.getString(R.string.Suez));

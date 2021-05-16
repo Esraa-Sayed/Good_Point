@@ -50,7 +50,7 @@ class FoundObjectSerializer(serializers.ModelSerializer):
 class FoundItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoundItem
-        fields = ['id', 'type', 'color', 'brand', 'description', 'serial_number', 'image']
+        fields = ['id', 'type', 'color', 'brand', 'description', 'serial_number']#image_removed
 
     def validate(self, attrs):
         if FoundPerson.objects.filter(id=attrs.get('id', '')).exists():

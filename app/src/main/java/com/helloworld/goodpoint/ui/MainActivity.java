@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                                         String phone = jsonObject.getString("phone");
                                         String city = jsonObject.getString("city");
                                         String birthdate = jsonObject.getString("birthdate");
+                                        String Userimage = jsonObject.getString("profile_pic");
 
                                         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                                         User.getUser().setId(id);
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                                         User.getUser().setPhone(phone);
                                         User.getUser().setCity(city);
                                         User.getUser().setBirthdate(birthdate);
+                                        User.getUser().setProfile_pic(Userimage);
 
                                         startActivity(intent);
                                         finish();

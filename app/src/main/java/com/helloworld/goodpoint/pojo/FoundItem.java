@@ -3,7 +3,7 @@ package com.helloworld.goodpoint.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class LostItem {
+public class FoundItem {
 
     @SerializedName("user_id")
     @Expose
@@ -34,7 +34,7 @@ public class LostItem {
     private String description;
 
 
-   /* public LostItem(int user_id, int id, String date, String city, String type, String serial_number, String brand, String color, String description) {
+   /* public FoundItem(int user_id, int id, String date, String city, String type, String serial_number, String brand, String color, String description) {
         this.id = id;
         this.user_id = user_id;
         this.date = date;
@@ -47,16 +47,16 @@ public class LostItem {
     }*/
 
 
-    private static LostItem lostItem;
-    public static LostItem getLostItem()
+    private static FoundItem FoundItem;
+    public static FoundItem getFoundItem()
     {
-        if (lostItem == null) {
-            lostItem = new LostItem();
+        if (FoundItem == null) {
+            FoundItem = new FoundItem();
 
         }
-        return lostItem;
+        return FoundItem;
     }
-    private LostItem()
+    private FoundItem()
     {
 
     }

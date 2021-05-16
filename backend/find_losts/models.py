@@ -82,7 +82,7 @@ class FoundItem(models.Model):
     brand = models.CharField(max_length=50)
     description = models.CharField(max_length=700)
     serial_number = models.CharField(max_length=100, blank=True, null=True)
-    image = models.ImageField(unique=True)
+    #image = models.ImageField(unique=True)
 
     class Meta:
         db_table = 'found_item'
