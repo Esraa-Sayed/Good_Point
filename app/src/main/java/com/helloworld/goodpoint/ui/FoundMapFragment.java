@@ -120,7 +120,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getPoints();
-        runGoogleMap();
+
     }
 
     public boolean locationEnable() {
@@ -287,6 +287,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
             @Override
             public void onResponse(Call<List<ObjectLocation>> call, Response<List<ObjectLocation>> response) {
                 list = response.body();
+                runGoogleMap();
                 Toast.makeText(getContext(), ""+response.body().get(0).getLatitude(), Toast.LENGTH_SHORT).show();
             }
 
