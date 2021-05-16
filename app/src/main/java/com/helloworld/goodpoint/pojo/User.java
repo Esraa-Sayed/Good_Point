@@ -1,5 +1,7 @@
 package com.helloworld.goodpoint.pojo;
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -27,6 +29,7 @@ public class User {
     @Expose
     private String profile_pic;
 
+    private Bitmap profile_bitmap;
 
 
     private static User user;
@@ -94,5 +97,12 @@ public class User {
 
     public void setProfile_pic(String profile_pic) { this.profile_pic = profile_pic; }
 
+    public Bitmap getProfile_bitmap() {
+        return profile_bitmap;
+    }
+
+    public void setProfile_bitmap(Bitmap profile_bitmap) {
+        this.profile_bitmap = profile_bitmap;
+    }
 
 }

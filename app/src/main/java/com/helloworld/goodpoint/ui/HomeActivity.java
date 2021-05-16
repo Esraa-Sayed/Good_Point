@@ -9,9 +9,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +35,14 @@ import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.ui.lostFoundObject.FoundObjectActivity;
 import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -41,6 +53,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     Fragment fhome, fmatch, fprofile;
     TextView namenavigator;
     TextView mailnavigator;
+    CircleImageView imgnavigator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +104,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         View view = navigationView.getHeaderView(0);
         namenavigator = (TextView) view.findViewById(R.id.namenav);
         mailnavigator = (TextView) view.findViewById(R.id.mailnav);
+        imgnavigator = view.findViewById(R.id.circuler_profile_img);
         namenavigator.setText(User.getUser().getUsername());
         mailnavigator.setText(User.getUser().getEmail());
+        if(!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
+            DownloadProfilePic download = new DownloadProfilePic();
+            download.execute(User.getUser().getProfile_pic());
+        }
     }
 
     @Override
@@ -229,5 +247,41 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
             };
 
+    class DownloadProfilePic extends AsyncTask<String,Void, Bitmap> {
 
+        private Bitmap download(String urlLink) throws IOException {
+            Bitmap bitmap = null;
+            URL url = null;
+            HttpURLConnection httpConn;
+            InputStream is = null;
+            try {
+                url = new URL(urlLink);
+                httpConn = (HttpURLConnection) url.openConnection();
+                httpConn.connect();
+                is = httpConn.getInputStream();
+                bitmap = BitmapFactory.decodeStream(is);
+            }catch (MalformedURLException e){
+                Log.e("DownloadProfilePic", "download: "+e.getMessage());
+            }
+            return  bitmap;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                return download(urls[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            if(bitmap==null)return;
+            User.getUser().setProfile_bitmap(bitmap);
+            imgnavigator.setImageBitmap(bitmap);
+        }
+    }
 }
