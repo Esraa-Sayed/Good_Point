@@ -288,7 +288,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
             public void onResponse(Call<List<ObjectLocation>> call, Response<List<ObjectLocation>> response) {
                 list = response.body();
                 runGoogleMap();
-                Toast.makeText(getContext(), ""+response.body().get(0).getLatitude(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), ""+response.body().get(0).getLatitude(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
