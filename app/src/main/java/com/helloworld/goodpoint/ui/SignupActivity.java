@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -31,7 +30,6 @@ import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.pojo.RegUser;
 import com.shashank.sony.fancytoastlib.FancyToast;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +40,6 @@ import java.util.regex.Pattern;
 import android.util.Patterns;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

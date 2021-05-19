@@ -32,6 +32,8 @@ class LostPersonImage(models.Model):
         db_table = 'lost_person_image'
         unique_together = (('id', 'image'),)
 
+def lost_item_image(instance,filename):
+    return f"lost_item/{instance.pk}.jpg/"
 
 class LostItem(models.Model):
     id = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id')
@@ -40,10 +42,11 @@ class LostItem(models.Model):
     brand = models.CharField(max_length=50)
     description = models.CharField(max_length=700)
     serial_number = models.CharField(max_length=100, blank=True, null=True)
-    image = models.ImageField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True, upload_to=lost_item_image)
 
     class Meta:
         db_table = 'lost_item'
+
 
 
 class FoundObject(models.Model):

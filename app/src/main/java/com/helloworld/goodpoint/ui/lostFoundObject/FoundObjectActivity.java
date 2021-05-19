@@ -10,6 +10,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,10 +20,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseArray;
@@ -41,6 +44,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
+import androidx.loader.content.CursorLoader;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -59,7 +63,9 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.FoundItem;
+import com.helloworld.goodpoint.pojo.FoundPerson;
 import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
@@ -72,6 +78,7 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -314,6 +321,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 finish();
             }
             dialog.dismiss();
+            FoundPerson();
 
         }
 
@@ -600,6 +608,25 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         outState.putBoolean("flagObject", flagObject);
     }
 
+/*
+    public Uri getImageUri(Bitmap bitmap_Image) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap_Image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap_Image, "LostItem", null);
+        return Uri.parse(path);
+    }
+
+    private String getRealPathFromURI(Uri imageUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(this, imageUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+    }
+*/
 
     public void FoundItems() {
 
@@ -615,7 +642,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().toString());
                         String id = jsonObject.getString("id");
-                        Toast.makeText(FoundObjectActivity.this, id, Toast.LENGTH_SHORT).show();
                         Toast.makeText(FoundObjectActivity.this, "Object is posted.", Toast.LENGTH_SHORT).show();
 
 
@@ -655,8 +681,89 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     public void FoundPerson()
     {
 
-    }
+        String Datee = DateFound.getText().toString().trim();
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
 
+        Call<JsonObject> call = apiInterface.storeFoundObj(User.getUser().getId(), Datee, City, Longitude , Latitude);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.isSuccessful()) {
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().toString());
+                        String id = jsonObject.getString("id");
+                        Toast.makeText(FoundObjectActivity.this, "Object posted.", Toast.LENGTH_SHORT).show();
+
+
+                        Call<JsonObject> call2 = apiInterface.storeFoundPerson(id,PName);
+                        call2.enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                if(response.isSuccessful())
+                                {
+                                    Toast.makeText(FoundObjectActivity.this, "Person is posted.", Toast.LENGTH_SHORT).show();
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response.body().toString());
+                                        String id = jsonObject.getString("id");
+
+
+
+
+
+
+
+                                        Call<FoundPerson> call3 = apiInterface.storeFoundPersonImage(id);
+                                        call3.enqueue(new Callback<FoundPerson>() {
+                                            @Override
+                                            public void onResponse(Call<FoundPerson> call, Response<FoundPerson> response) {
+                                                if(response.isSuccessful())
+                                                {
+                                                    Toast.makeText(FoundObjectActivity.this, "PersonImage is posted.", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else
+                                                    Toast.makeText(FoundObjectActivity.this, "The personImage is not posted.", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<FoundPerson> call, Throwable t) {
+                                                Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                                else
+                                    Toast.makeText(FoundObjectActivity.this, "The person is not posted.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                else
+                    Toast.makeText(FoundObjectActivity.this, "The object is not posted.", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+    }
 
 
 

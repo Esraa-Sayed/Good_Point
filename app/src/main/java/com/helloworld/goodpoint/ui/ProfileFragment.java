@@ -8,11 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
+import com.helloworld.goodpoint.retrofit.ApiClient;
+import com.helloworld.goodpoint.retrofit.ApiInterface;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
     TextView name_above,email_above,name,email,phone,city,date;
@@ -41,6 +49,7 @@ public class ProfileFragment extends Fragment {
         phone.setText(User.getUser().getPhone());
         city.setText(User.getUser().getCity());
         date.setText(User.getUser().getBirthdate());
+
 
 
         return v;

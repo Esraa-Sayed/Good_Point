@@ -9,16 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -26,15 +22,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
-
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
@@ -50,17 +42,13 @@ import com.helloworld.goodpoint.ui.PrefManager;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.helloworld.goodpoint.ui.select_multiple_faces.Selection;
 import com.shashank.sony.fancytoastlib.FancyToast;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -435,7 +423,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                             imageURI = getImageUri(Bitmap_Image);
                             File file = new File(getRealPathFromURI(imageURI));
                             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
-
                             MultipartBody.Part image = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
                             call2 = apiInterface.storeLostItem(id, Type, Serial, brand, ObjectColor, textArea_information, image);
                         }
@@ -504,6 +491,12 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                                         JSONObject jsonObject = new JSONObject(response.body().toString());
                                         String id = jsonObject.getString("id");
 
+
+
+
+
+
+
                                         Call<LostPerson> call3 = apiInterface.storeLostPersonImage(id);
                                         call3.enqueue(new Callback<LostPerson>() {
                                             @Override
@@ -554,11 +547,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         });
 
     }
-
-
-
-
-
 
 
 

@@ -32,7 +32,6 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-
     @FormUrlEncoded
     @POST("auth/signup/")
     Call<RegUser> storePost(@Field("username") String emailInput
@@ -41,15 +40,12 @@ public interface ApiInterface {
                             , @Field("birthdate") String Datee);
 
 
-
     @Multipart
     @POST("auth/signup/")
     Call<RegUser> storePost(@Part("username") String emailInput
                             , @Part("password") String passwordInput, @Part("first_name") String usernameInput
                             , @Part("phone") String pInput, @Part("city") String cityInput
                             , @Part("birthdate") String Datee, @Part MultipartBody.Part profile_pic);
-
-
 
 
     @FormUrlEncoded
@@ -70,11 +66,11 @@ public interface ApiInterface {
     @POST("losts/lostobject/")
     Call<JsonObject> storeLostObj(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput);
 
-    @Multipart
+    @FormUrlEncoded
     @POST("losts/lostitem/")
-    Call<LostItem> storeLostItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
-            , @Part("brand") String brand, @Part("color") String ObjectColor
-            , @Part("description") String textArea_information);
+    Call<LostItem> storeLostItem(@Field("id") String obj_id, @Field("type") String Type, @Field("serial_number") String Serial
+            , @Field("brand") String brand, @Field("color") String ObjectColor
+            , @Field("description") String textArea_information);
 
     @Multipart
     @POST("losts/lostitem/")
@@ -82,9 +78,9 @@ public interface ApiInterface {
                              , @Part("brand") String brand, @Part("color") String ObjectColor
                              , @Part("description") String textArea_information, @Part MultipartBody.Part image);
 
-    @Multipart
+    @FormUrlEncoded
     @POST("losts/lostperson/")
-    Call<JsonObject> storeLostPerson(@Part("id") String obj_id, @Part("name") String name);
+    Call<JsonObject> storeLostPerson(@Field("id") String obj_id, @Field("name") String name);
 
 
     @Multipart
@@ -97,15 +93,15 @@ public interface ApiInterface {
     Call<JsonObject> storeFoundObj(@Field("user_id") String id, @Field("date") String Datee, @Field("city") String cityInput
                                  , @Field("longitude") double longitude, @Field("latitude") double latitude);
 
-    @Multipart
+    @FormUrlEncoded
     @POST("losts/founditem/")
-    Call<FoundItem> storeFoundItem(@Part("id") String obj_id, @Part("type") String Type, @Part("serial_number") String Serial
-            , @Part("brand") String brand, @Part("color") String ObjectColor
-            , @Part("description") String textArea_information);
+    Call<FoundItem> storeFoundItem(@Field("id") String obj_id, @Field("type") String Type, @Field("serial_number") String Serial
+            , @Field("brand") String brand, @Field("color") String ObjectColor
+            , @Field("description") String textArea_information);
 
-    @Multipart
+    @FormUrlEncoded
     @POST("losts/foundperson/")
-    Call<JsonObject> storeFoundPerson(@Part("id") String obj_id, @Part("name") String name);
+    Call<JsonObject> storeFoundPerson(@Field("id") String obj_id, @Field("name") String name);
 
     @Multipart
     @POST("losts/foundperson_image/")
@@ -118,6 +114,7 @@ public interface ApiInterface {
 
     @GET("losts/founder/")
     Call<UserMap> getUserMap(@Query("id") int id);
+
 
 
 }
