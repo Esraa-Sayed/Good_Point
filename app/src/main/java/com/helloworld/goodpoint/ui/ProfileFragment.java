@@ -49,7 +49,8 @@ public class ProfileFragment extends Fragment {
         phone.setText(User.getUser().getPhone());
         city.setText(User.getUser().getCity());
         date.setText(User.getUser().getBirthdate());
-
+        if(User.getUser().getProfile_bitmap() != null)
+            pic.setImageBitmap(User.getUser().getProfile_bitmap());
 
 
         return v;

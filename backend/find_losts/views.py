@@ -97,3 +97,6 @@ class LostObject_cityView(generics.ListAPIView):
 class MapView(generics.ListAPIView):
     queryset = FoundItem.objects.select_related('id')
     serializer_class = MapSerializer
+    
+#@api_view()
+#def comp_lost_itemView(request,pk):

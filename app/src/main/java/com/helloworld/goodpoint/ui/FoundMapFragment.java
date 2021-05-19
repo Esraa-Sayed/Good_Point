@@ -89,7 +89,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
             //list = getLocations();
 
             for(ObjectLocation object: list) {
-                Marker marker = googleMap.addMarker(new MarkerOptions().position(object.getLatLng()));
+                Marker marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(object.getLatitude(), object.getLongitude())));
                 marker_id.put(marker,object.getUserId());
             }
 
@@ -120,7 +120,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getPoints();
-        runGoogleMap();
+
     }
 
     public boolean locationEnable() {
@@ -232,6 +232,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
     @Override
     public boolean onMarkerClick(Marker marker) {
         int id = marker_id.get(marker);
+        getUserMap(id);
         Log.e("MYTAG",id+"");
         return false;
     }
@@ -280,14 +281,15 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
 
     public void getPoints()
     {
-        
+
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getContext()).getNGROKLink()).create(ApiInterface.class);
         Call<List<ObjectLocation>> call = apiInterface.getPoint();
         call.enqueue(new Callback<List<ObjectLocation>>() {
             @Override
             public void onResponse(Call<List<ObjectLocation>> call, Response<List<ObjectLocation>> response) {
                 list = response.body();
-                Toast.makeText(getContext(), ""+response.body().get(0).getLatitude(), Toast.LENGTH_SHORT).show();
+                runGoogleMap();
+//                Toast.makeText(getContext(), ""+response.body().get(0).getLatitude(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -320,7 +322,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
                 dialog.create().show();
 
 
-                Toast.makeText(getContext(), response.body().getName(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), response.body().getName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
