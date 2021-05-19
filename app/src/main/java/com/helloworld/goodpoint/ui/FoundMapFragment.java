@@ -35,6 +35,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -59,6 +60,8 @@ import java.util.Random;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.graphics.Color.BLUE;
 
 public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, View.OnClickListener {
 
@@ -90,6 +93,7 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
 
             for(ObjectLocation object: list) {
                 Marker marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(object.getLatitude(), object.getLongitude())));
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(30));
                 marker_id.put(marker,object.getUserId());
             }
 
@@ -310,9 +314,12 @@ public class FoundMapFragment extends Fragment implements GoogleMap.OnMarkerClic
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 View v = inflater.inflate(R.layout.custom_map_dialog,null);
                 name = v.findViewById(R.id.name_of_founder);
+                name.setText(response.body().getName());
                 email = v.findViewById(R.id.mail_of_founder);
+                email.setText(response.body().getEmail());
                 emailAddress = email.getText().toString();
                 phone = v.findViewById(R.id.phone_of_founder);
+                phone.setText(response.body().getPhone());
                 call = v.findViewById(R.id.call_button);
                 call.setOnClickListener(FoundMapFragment.this);
                 mail = v.findViewById(R.id.mail_button);

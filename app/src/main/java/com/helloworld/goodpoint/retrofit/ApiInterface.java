@@ -28,6 +28,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -112,8 +113,8 @@ public interface ApiInterface {
     @GET("losts/map/")
     Call<List<ObjectLocation>> getPoint();
 
-    @GET("losts/founder/")
-    Call<UserMap> getUserMap(@Query("id") int id);
+    @GET("losts/founder/{id}")
+    Call<UserMap> getUserMap(@Path("id") int id);
 
 
 
