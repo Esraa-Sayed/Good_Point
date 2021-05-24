@@ -408,7 +408,7 @@ public class SignupActivity extends AppCompatActivity {
     Call<RegUser> call;
     if(imageUri != null) {
         File file = new File(getRealPathFromURI(imageUri));
-        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part image = MultipartBody.Part.createFormData("profile_pic", file.getName(), requestBody);
         call = apiInterface.storePost(emailInput,passwordInput,usernameInput,pInput,cityInput,Datee,image);
     }
