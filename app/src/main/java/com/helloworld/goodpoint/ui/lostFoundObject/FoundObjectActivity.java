@@ -10,7 +10,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -20,12 +19,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseArray;
@@ -44,7 +41,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
-import androidx.loader.content.CursorLoader;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -64,8 +60,6 @@ import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.FoundItem;
 import com.helloworld.goodpoint.pojo.FoundPerson;
-import com.helloworld.goodpoint.pojo.LostItem;
-import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
@@ -78,7 +72,6 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -113,6 +106,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private FaceDetector faceDetector;
     FusedLocationProviderClient fusedLocationProviderClient;
     private boolean flagPerson, flagObject;
+    List<FoundItem> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,6 +264,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     checkFaces N = new checkFaces(this);
                     N.execute();
                 }
+                FoundItem item = new FoundItem(Type, Serial, brand, ObjectColor);
+                getItems(item, this);
                 break;
         }
     }
@@ -633,7 +629,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         String Datee = DateFound.getText().toString().trim();
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
 
-        Call<JsonObject> call = apiInterface.storeFoundObj(User.getUser().getId(), Datee, City, Longitude , Latitude);
+        Call<JsonObject> call = apiInterface.storeFoundObj(User.getUser().getId(), Datee, City, Longitude, Latitude);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -667,7 +663,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     }
 
                 } else
-                        Toast.makeText(FoundObjectActivity.this, "Objec is not posted.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FoundObjectActivity.this, "Objec is not posted.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -678,17 +674,16 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public void FoundPerson()
-    {
+    public void FoundPerson() {
 
         String Datee = DateFound.getText().toString().trim();
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
 
-        Call<JsonObject> call = apiInterface.storeFoundObj(User.getUser().getId(), Datee, City, Longitude , Latitude);
+        Call<JsonObject> call = apiInterface.storeFoundObj(User.getUser().getId(), Datee, City, Longitude, Latitude);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
 
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().toString());
@@ -696,32 +691,24 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                         Toast.makeText(FoundObjectActivity.this, "Object posted.", Toast.LENGTH_SHORT).show();
 
 
-                        Call<JsonObject> call2 = apiInterface.storeFoundPerson(id,PName);
+                        Call<JsonObject> call2 = apiInterface.storeFoundPerson(id, PName);
                         call2.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                if(response.isSuccessful())
-                                {
+                                if (response.isSuccessful()) {
                                     Toast.makeText(FoundObjectActivity.this, "Person is posted.", Toast.LENGTH_SHORT).show();
                                     try {
                                         JSONObject jsonObject = new JSONObject(response.body().toString());
                                         String id = jsonObject.getString("id");
 
 
-
-
-
-
-
                                         Call<FoundPerson> call3 = apiInterface.storeFoundPersonImage(id);
                                         call3.enqueue(new Callback<FoundPerson>() {
                                             @Override
                                             public void onResponse(Call<FoundPerson> call, Response<FoundPerson> response) {
-                                                if(response.isSuccessful())
-                                                {
+                                                if (response.isSuccessful()) {
                                                     Toast.makeText(FoundObjectActivity.this, "PersonImage is posted.", Toast.LENGTH_SHORT).show();
-                                                }
-                                                else
+                                                } else
                                                     Toast.makeText(FoundObjectActivity.this, "The personImage is not posted.", Toast.LENGTH_SHORT).show();
                                             }
 
@@ -735,8 +722,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                         e.printStackTrace();
                                     }
 
-                                }
-                                else
+                                } else
                                     Toast.makeText(FoundObjectActivity.this, "The person is not posted.", Toast.LENGTH_SHORT).show();
                             }
 
@@ -750,8 +736,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                         e.printStackTrace();
                     }
 
-                }
-                else
+                } else
                     Toast.makeText(FoundObjectActivity.this, "The object is not posted.", Toast.LENGTH_SHORT).show();
 
             }
@@ -765,8 +750,47 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    public void getItems(FoundItem item, Context cotext) {
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+        Call<List<FoundItem>> call = apiInterface.getFItem(Type);
+        call.enqueue(new Callback<List<FoundItem>>() {
+            @Override
+            public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
+                list = response.body();
+                if (!list.isEmpty()) {
+                    int percent[] = new int[list.size()];
+                    for (int i = 0; i < (list.size()); i++) {
+                        percent[i] = MatchItems(item, list.get(i));
+                        Log.d("e", "itemList=" + list.get(i).getColor() + " , " + list.get(i).getBrand() + " , " + list.get(i).getType());
+                        Log.d("e", "myItem=" + item.getColor() + " , " + item.getBrand() + " , " + item.getType());
+                        Log.d("e", "Percent [" + (i + 1) + "] =" + percent[i] + "%");
+                        Log.d("e", "==============================================");
+                    }
+                } else
+                    Toast.makeText(getApplicationContext(), "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<List<FoundItem>> call, Throwable t) {
+                Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
 
 
+    public int MatchItems(FoundItem item1, FoundItem item2) {
+        int percentage = 20;
+        if (item1.getBrand().equals(item2.getBrand()))
+            percentage += 20;
+        if (item1.getColor().equals(item2.getColor()))
+            percentage += 20;
+        if (item1.getSerial_number().equals(item2.getSerial_number()))
+            percentage += 20;
+        return percentage;
+    }
 
 
 }
