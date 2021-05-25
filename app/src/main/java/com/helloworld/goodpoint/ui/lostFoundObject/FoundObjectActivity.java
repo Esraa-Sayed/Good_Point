@@ -514,7 +514,11 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 List<Address> addresses = geocoder.getFromLocation(Latitude, Longitude, 1);
                 String Country = addresses.get(0).getCountryName();
                 String CityG = addresses.get(0).getAdminArea();
-                City = CityG.substring(0, CityG.lastIndexOf(' '));
+                int index = CityG.lastIndexOf(' ');
+                if(index == -1)
+                    City = CityG;
+                else
+                    City = CityG.substring(0, index);
                 String area = addresses.get(0).getLocality();
                 Locate = area + "," + CityG + "," + Country + ".";
             } catch (IOException e) {

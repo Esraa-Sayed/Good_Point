@@ -12,6 +12,7 @@ from find_losts.models import LostObject, FoundObject
 
 
 class SignupView(generics.CreateAPIView):
+    queryset = User.objects.all()
     serializer_class = SignupSerializer
 
 
@@ -23,7 +24,7 @@ class LoginView(APIView):
         user_pic = ""
         losts = list(LostObject.objects.filter(user_id=user.pk).values('id'))
         founds = list(FoundObject.objects.filter(user_id=user.pk).values('id'))
-        if user.profile_pic is not None:
+        if user.profile_pic:
             user_pic = user.profile_pic.url
         response = {
             'id': user.pk,

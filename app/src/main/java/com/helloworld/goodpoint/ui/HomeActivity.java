@@ -107,9 +107,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         imgnavigator = view.findViewById(R.id.circuler_profile_img);
         namenavigator.setText(User.getUser().getUsername());
         mailnavigator.setText(User.getUser().getEmail());
-        if(!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
+        if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
+            Log.e("Profile Pic", User.getUser().getProfile_pic());
+            String dnsLink = new PrefManager(this).getNGROKLink();
             DownloadProfilePic download = new DownloadProfilePic();
-            download.execute(User.getUser().getProfile_pic());
+            download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
         }
     }
 
@@ -254,6 +256,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             URL url = null;
             HttpURLConnection httpConn;
             InputStream is = null;
+            Log.e("ProfilePic", urlLink);
             try {
                 url = new URL(urlLink);
                 httpConn = (HttpURLConnection) url.openConnection();
