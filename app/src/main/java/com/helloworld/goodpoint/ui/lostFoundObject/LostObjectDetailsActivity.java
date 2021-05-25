@@ -25,9 +25,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
+
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
@@ -43,14 +45,17 @@ import com.helloworld.goodpoint.ui.PrefManager;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.helloworld.goodpoint.ui.select_multiple_faces.Selection;
 import com.shashank.sony.fancytoastlib.FancyToast;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -74,7 +79,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private FaceDetector faceDetector;
     private List<Bitmap> Person_Images;
     private boolean flagPerson, flagObject, CheckImageObeject;
-
+    List<LostItem> Llist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +183,9 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     checkFaces N = new checkFaces(this);
                     N.execute();
                 }
+                LostItem item = new LostItem(Type, Serial, brand, ObjectColor);
+                Toast.makeText(this, "Type= " + Type, Toast.LENGTH_SHORT).show();
+                getItems(item, this);
                 break;
         }
     }
@@ -496,5 +504,49 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         });
 
     }
+
+    public void getItems(LostItem item, Context context) {
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
+        Call<List<LostItem>> call = apiInterface.getLItem();
+        call.enqueue(new Callback<List<LostItem>>() {
+            @Override
+            public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
+                Llist = response.body();
+                int percent[] = new int[Llist.size()];
+                if (!Llist.isEmpty()) {
+                    for (int i = 0; i < Llist.size(); i++) {
+                        percent[i] = MatchItems(item, Llist.get(i));
+
+//                        Log.d("e", "itemlist="+Llist.get(i).getColor()+" , "+Llist.get(i).getBrand()+" , "+Llist.get(i).getType());
+//                        Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
+//                        Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
+                    }
+                } else
+                    Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<LostItem>> call, Throwable t) {
+                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+
+
+    public int MatchItems(LostItem item1, LostItem item2) {
+        int percentage = 0;
+        if (item1.getBrand().equals(item2.getBrand()))
+            percentage += 20;
+        if (item1.getColor().equals(item2.getColor()))
+            percentage += 20;
+        if (item1.getSerial_number().equals(item2.getSerial_number()))
+            percentage += 20;
+        return percentage;
+    }
+
 
 }
