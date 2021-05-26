@@ -26,8 +26,8 @@ public class Selection extends AppCompatActivity implements AdapterView.OnItemCl
 
     private static final String TAG = "Selection";
     //vars
-    private ArrayList<String> mNames = new ArrayList<>();
-    private ArrayList<String> mImageUrls = new ArrayList<>();
+    //private ArrayList<String> mNames = new ArrayList<>();
+    //private ArrayList<String> mImageUrls = new ArrayList<>();
     RadioButton rb;
     Button Done_btn;
     ImageView imageView;

@@ -5,6 +5,9 @@ import android.graphics.Bitmap;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 
     @SerializedName("id")
@@ -28,7 +31,12 @@ public class User {
     @SerializedName("profile_pic")
     @Expose
     private String profile_pic;
-
+    @SerializedName("losts")
+    @Expose
+    List<Integer>losts;
+    @SerializedName("founds")
+    @Expose
+    List<Integer>founds;
     private Bitmap profile_bitmap;
 
 
@@ -37,15 +45,19 @@ public class User {
     {
         if (user == null) {
             user = new User();
-
+            user.losts = new ArrayList<>();
+            user.founds = new ArrayList<>();
         }
         return user;
     }
-    private User()
-    {
 
+    public List<Integer> getLosts() {
+        return losts;
     }
 
+    public List<Integer> getFounds() {
+        return founds;
+    }
 
     public String getId() {
         return id;

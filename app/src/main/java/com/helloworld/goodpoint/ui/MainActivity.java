@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.RegUser;
@@ -16,6 +17,7 @@ import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -94,6 +96,13 @@ public class MainActivity extends AppCompatActivity {
                                         String city = jsonObject.getString("city");
                                         String birthdate = jsonObject.getString("birthdate");
                                         String Userimage = jsonObject.getString("profile_pic");
+                                        JSONArray jsonArray = jsonObject.getJSONArray("losts");
+                                        Log.e("blabla", jsonArray.length() + "");
+                                        for(int i=0;i<jsonArray.length();i++)
+                                            User.getUser().getLosts().add(jsonArray.getJSONObject(i).getInt("id"));
+                                        jsonArray = jsonObject.getJSONArray("founds");
+                                        for(int i=0;i<jsonArray.length();i++)
+                                            User.getUser().getFounds().add(jsonArray.getJSONObject(i).getInt("id"));
 
                                         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                                         User.getUser().setId(id);

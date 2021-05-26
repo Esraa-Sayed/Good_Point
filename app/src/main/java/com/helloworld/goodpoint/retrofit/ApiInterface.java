@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.pojo.FoundItem;
 import com.helloworld.goodpoint.pojo.FoundPerson;
 import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.LostObject;
 import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
 import com.helloworld.goodpoint.pojo.RegUser;
@@ -28,6 +29,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -78,14 +80,12 @@ public interface ApiInterface {
                              , @Part("brand") String brand, @Part("color") String ObjectColor
                              , @Part("description") String textArea_information, @Part MultipartBody.Part image);
 
-    @FormUrlEncoded
-    @POST("losts/lostperson/")
-    Call<JsonObject> storeLostPerson(@Field("id") String obj_id, @Field("name") String name);
-
-
     @Multipart
-    @POST("losts/lostperson_image/")
-    Call<LostPerson> storeLostPersonImage(@Part("id") String person_id/*, @Part MultipartBody.Part image*/);
+    @POST("losts/lostperson/")
+    Call<JsonObject> storeLostPerson(@Part("date") String Date, @Part("city") String city, @Part("user_id") String user_id
+                                   , @Part("name") String name, @Part MultipartBody.Part[] images);
+
+
     //----------------------------------------------------------------------------------------------
 
     @FormUrlEncoded
@@ -103,9 +103,11 @@ public interface ApiInterface {
     @POST("losts/foundperson/")
     Call<JsonObject> storeFoundPerson(@Field("id") String obj_id, @Field("name") String name);
 
+    /*
     @Multipart
     @POST("losts/foundperson_image/")
-    Call<FoundPerson> storeFoundPersonImage(@Part("id") String person_id/*, @Part MultipartBody.Part image*/);
+    Call<FoundPerson> storeFoundPersonImage(@Part("id") String person_id/*, @Part MultipartBody.Part image);
+    */
 
     //----------------------------------------------------------------------------------------------
 
