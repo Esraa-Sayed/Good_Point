@@ -36,7 +36,6 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.LostItem;
-import com.helloworld.goodpoint.pojo.LostObject;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
@@ -523,65 +522,16 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     }
                 } else
                     Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
-
-
             }
 
+
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(Call<java.util.List<LostItem>> call, Throwable t) {
                 Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
     }
-*/
-
-
-
-
-    public void LostPerson()  {
-
-        String Datee = DateT.getText().toString().trim();
-        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
-
-        MultipartBody.Part[] Pimages =  new MultipartBody.Part[Person_Images.size()];
-        for (int i = 0 ; i< Person_Images.size() ; i++)
-        {
-            imageURI = getImageUri(Person_Images.get(i));
-            File file = new File(getRealPathFromURI(imageURI));
-            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
-            Pimages[i] = MultipartBody.Part.createFormData("images", file.getName(), requestBody);
-            //MultipartBody.Part image = MultipartBody.Part.createFormData("images", file.getName(), requestBody);
-            //Pimages.add(image);
-        }
-
-        Call<JsonObject> call = apiInterface.storeLostPerson(Datee,City,User.getUser().getId(),PName,Pimages);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if(response.isSuccessful())
-                    Toast.makeText(LostObjectDetailsActivity.this, "The object is  posted.", Toast.LENGTH_SHORT).show();
-
-                else {
-                    try {
-                        Toast.makeText(LostObjectDetailsActivity.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
-                        Log.e("onResponse: ", response.errorBody().string());
-                    } catch (IOException e) {
-                        Log.e("onResponse: ", e.getMessage());
-                    }
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<LostItem>> call, Throwable t) {
-                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-    }
-
 
     public int MatchItems(LostItem item1, LostItem item2) {
         int percentage = 0;

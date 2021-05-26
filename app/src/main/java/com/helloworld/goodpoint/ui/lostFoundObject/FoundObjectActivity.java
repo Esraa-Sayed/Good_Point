@@ -734,12 +734,5 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
 
     }
-
-
-     */
-
-
-
-
-
+    
 }
