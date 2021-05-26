@@ -4,15 +4,9 @@ from .models import *
 from user_account.models import User
 
 
-class LostObjectSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = LostObject
-        fields = ['id', 'date', 'city', 'is_matched', 'user_id']
 
 
 class LostItemSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = LostItem
         fields = ['id', 'type', 'serial_number', 'brand', 'color', 'description', 'image']
@@ -21,6 +15,12 @@ class LostItemSerializer(serializers.ModelSerializer):
         if LostPerson.objects.filter(id=attrs.get('id', '')).exists():
             raise serializers.ValidationError({'id': {'id already exists'}})
         return super().validate(attrs)
+
+class LostObjectSerializer(serializers.ModelSerializer):
+    #lost_item = LostItemSerializer(many=True, read_only=True)
+    class Meta:
+        model = LostObject
+        fields = ['id', 'date', 'city', 'is_matched', 'user_id']
 
 
 class LostPersonSerializer(serializers.ModelSerializer):
