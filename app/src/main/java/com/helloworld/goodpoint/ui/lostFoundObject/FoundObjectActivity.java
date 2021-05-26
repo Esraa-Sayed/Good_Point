@@ -325,7 +325,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 finish();
             }
             dialog.dismiss();
-            //FoundPerson();
+            FoundPerson();
 
         }
 
@@ -734,5 +734,5 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
 
     }
-    
+
 }
