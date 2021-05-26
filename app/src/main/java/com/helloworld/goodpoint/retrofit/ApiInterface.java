@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.pojo.FoundItem;
 import com.helloworld.goodpoint.pojo.FoundPerson;
 import com.helloworld.goodpoint.pojo.LostItem;
-import com.helloworld.goodpoint.pojo.LostObject;
 import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
 import com.helloworld.goodpoint.pojo.RegUser;
@@ -73,12 +72,14 @@ public interface ApiInterface {
                              , @Part("brand") String brand, @Part("color") String ObjectColor
                              , @Part("description") String textArea_information, @Part MultipartBody.Part image);
 
-    @Multipart
+    @FormUrlEncoded
     @POST("losts/lostperson/")
-    Call<JsonObject> storeLostPerson(@Part("date") String Date, @Part("city") String city, @Part("user_id") String user_id
-                                   , @Part("name") String name, @Part MultipartBody.Part images);
+    Call<JsonObject> storeLostPerson(@Field("id") String obj_id, @Field("name") String name);
 
 
+    @Multipart
+    @POST("losts/lostperson_image/")
+    Call<LostPerson> storeLostPersonImage(@Part("id") String person_id/*, @Part MultipartBody.Part image*/);
     //----------------------------------------------------------------------------------------------
 
     @FormUrlEncoded
@@ -92,17 +93,13 @@ public interface ApiInterface {
             , @Field("brand") String brand, @Field("color") String ObjectColor
             , @Field("description") String textArea_information);
 
-    @Multipart
+    @FormUrlEncoded
     @POST("losts/foundperson/")
-    Call<JsonObject> storeFoundPerson(@Part("user_id") String id, @Part("date") String Datee, @Part("city") String cityInput
-            , @Part("longitude") Double longitude, @Part("latitude") Double latitude, @Part("name") String name
-            , @Part MultipartBody.Part image);
+    Call<JsonObject> storeFoundPerson(@Field("id") String obj_id, @Field("name") String name);
 
-    /*
     @Multipart
     @POST("losts/foundperson_image/")
-    Call<FoundPerson> storeFoundPersonImage(@Part("id") String person_id/*, @Part MultipartBody.Part image);
-    */
+    Call<FoundPerson> storeFoundPersonImage(@Part("id") String person_id/*, @Part MultipartBody.Part image*/);
 
     //----------------------------------------------------------------------------------------------
 
@@ -115,8 +112,15 @@ public interface ApiInterface {
     @GET("losts/founditem")
     Call<List<FoundItem>> getFItem(@Query("type") String type);
 
-    @GET("losts/lostitem/")
-    Call<List<LostItem>> getLItem();
+
+    @GET("losts/lostobject/")
+    Call<List<LostItem>> getHomeLosts_obj(@Query("user_id") String id);
+
+    @GET("losts/lostobject/{user_id}")
+    Call<List<LostItem>> getHomeLosts_i(@Path("user_id") String id);
+
+    @GET("losts/foundobject/{user_id}")
+    Call<List<FoundItem>> getHomeFounds_i(@Path("user_id") String id);
 
 
 }

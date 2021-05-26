@@ -8,9 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.adapter.MyExpandableListAdapter;
+import com.helloworld.goodpoint.pojo.FoundItem;
+import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.User;
+import com.helloworld.goodpoint.retrofit.ApiClient;
+import com.helloworld.goodpoint.retrofit.ApiInterface;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,9 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.adapter.MyExpandableListAdapter;
-import com.helloworld.goodpoint.pojo.User;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HomeFragment extends Fragment {
@@ -32,6 +40,10 @@ public class HomeFragment extends Fragment {
     ExpandableListAdapter expandableListAdapter;
     TextView Daily_msg;
     TextView Hi_msg;
+    List<FoundItem> list;
+    List<LostItem> list1;
+    String LossesObjects;
+    String FindingsItems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,22 +54,24 @@ public class HomeFragment extends Fragment {
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
 
-        if(timeOfDay >= 0 && timeOfDay < 12){
+        if (timeOfDay >= 0 && timeOfDay < 12) {
             Daily_msg.setText("Good Morning");
-        }else if(timeOfDay >= 12 && timeOfDay < 16){
+        } else if (timeOfDay >= 12 && timeOfDay < 16) {
             Daily_msg.setText("Good Afternoon");
-        }else if(timeOfDay >= 16 && timeOfDay < 21){
+        } else if (timeOfDay >= 16 && timeOfDay < 21) {
             Daily_msg.setText("Good Evening");
-        }else if(timeOfDay >= 21 && timeOfDay < 24){
+        } else if (timeOfDay >= 21 && timeOfDay < 24) {
             Daily_msg.setText("Good Night");
         }
 
         Hi_msg = v.findViewById(R.id.hi_message);
-        Hi_msg.setText("Hi, "+ User.getUser().getUsername());
+        Hi_msg.setText("Hi, " + User.getUser().getUsername());
 
         // Inflate the layout for this fragment
+        FindingsItems=getHomeFounds();
+        LossesObjects=getHomeLosts();
         createGroupList();
-        createObjects();
+        createObjects(FindingsItems,LossesObjects);
 
         expandableListView = v.findViewById(R.id.expanded_menu);
         expandableListAdapter = new MyExpandableListAdapter(getActivity(), groupList, objects); //getActivity
@@ -65,34 +79,32 @@ public class HomeFragment extends Fragment {
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int i, int i1, long l) {
-                String selected = expandableListAdapter.getChild(i,i1).toString();
+                String selected = expandableListAdapter.getChild(i, i1).toString();
                 return true;
             }
         });
 
-        return  v;
+        return v;
     }
 
 
-    private void createObjects() {
-        String[] LossesObjects = {"Mobile HUAWEI", "Black wallet", "Child", "ID card"};
-        String[] FindingsObjects = {"Money 250 L.E", "White Cat", "Laptop Dell", "Gray Wristwatch"};
+    private void createObjects(String itemsF,String itemsL) {
+
+        //String[] LossesObjects = {"Mobile HUAWEI", "Black wallet", "Child", "ID card"};
 
         objects = new HashMap<String, List<String>>();
-        for (String group : groupList){
-            if (group.equals(getString(R.string.Losses))){
-                loadChild(LossesObjects);
-            }
-            else if (group.equals(getString(R.string.Founds)))
-                loadChild(FindingsObjects);
+        for (String group : groupList) {
+            if (group.equals(getString(R.string.Losses))) {
+                loadChild(itemsL);
+            } else if (group.equals(getString(R.string.Founds)))
+                loadChild(itemsF);
             objects.put(group, childList);
         }
     }
 
-    private void loadChild(String[] AllObjects) {
+    private void loadChild(String AllObjects) {
         childList = new ArrayList<>();
-        for (String obj : AllObjects)
-            childList.add(obj);
+         childList.add(AllObjects);
     }
 
 
@@ -102,4 +114,54 @@ public class HomeFragment extends Fragment {
         groupList.add(getString(R.string.Founds));
     }
 
+    public String getHomeFounds() {
+
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getContext()).getNGROKLink()).create(ApiInterface.class);
+        Call<List<FoundItem>> call = apiInterface.getHomeFounds_i(User.getUser().getId());
+        call.enqueue(new Callback<List<FoundItem>>() {
+            @Override
+            public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
+                list = response.body();
+                if (!list.isEmpty()) {
+                    for (int i = 0; i < list.size(); i++) {
+                        FindingsItems += list.get(i).getType() + " " + list.get(i).getColor();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "There is no items !", Toast.LENGTH_SHORT).show();
+                     FindingsItems="";
+                }
+            }
+            @Override
+            public void onFailure(Call<List<FoundItem>> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+        return FindingsItems;
+    }
+    public String getHomeLosts() {
+
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getContext()).getNGROKLink()).create(ApiInterface.class);
+        Call<List<LostItem>> call = apiInterface.getHomeLosts_i(User.getUser().getId());
+        call.enqueue(new Callback<List<LostItem>>() {
+            @Override
+            public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
+                list1 = response.body();
+                if (!list.isEmpty()) {
+                    for (int i = 0; i < list1.size(); i++) {
+                        LossesObjects += list1.get(i).getType() + " " + list1.get(i).getColor();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "There is no items !", Toast.LENGTH_SHORT).show();
+                    LossesObjects="";
+                }
+            }
+            @Override
+            public void onFailure(Call<List<LostItem>> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+        return LossesObjects;
+    }
 }
