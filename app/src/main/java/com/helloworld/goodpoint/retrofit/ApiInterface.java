@@ -95,7 +95,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("losts/foundperson/")
-    Call<JsonObject> storeFoundPerson(@Field("id") String obj_id, @Field("name") String name);
+    Call<JsonObject> storeFoundPerson(String id, String datee, @Field("id") String obj_id, double longitude, double latitude, @Field("name") String name, MultipartBody.Part pimage);
 
     @Multipart
     @POST("losts/foundperson_image/")
@@ -112,6 +112,8 @@ public interface ApiInterface {
     @GET("losts/founditem")
     Call<List<FoundItem>> getFItem(@Query("type") String type);
 
+    @GET("losts/lostitem/")
+    Call<List<LostItem>> getLItem();
 
     @GET("losts/lostobject/")
     Call<List<LostItem>> getHomeLosts_obj(@Query("user_id") String id);
