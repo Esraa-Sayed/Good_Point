@@ -1,11 +1,5 @@
 package com.helloworld.goodpoint.ui;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.loader.content.CursorLoader;
-
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -17,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Patterns;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,12 +23,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.loader.content.CursorLoader;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.pojo.RegUser;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
-import com.helloworld.goodpoint.pojo.RegUser;
 import com.shashank.sony.fancytoastlib.FancyToast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,9 +47,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
-import android.util.Patterns;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -422,13 +424,15 @@ public class SignupActivity extends AppCompatActivity {
             {
                 startActivity(new Intent(SignupActivity.this,check_registration.class));
                 finish();
+
             }
             else {
+
                 try {
-                    JSONObject jsonObject = new JSONObject(response.errorBody().string()).getJSONObject("error");
+                     JSONObject jsonObject = new JSONObject(response.errorBody().string()).getJSONObject("error");
                         String mail = jsonObject.getString("username");
                         String phone = jsonObject.getString("phone");
-                        //Log.e("good", name);
+
                     if(!mail.isEmpty() && !phone.isEmpty()) {
                         Email.setError(mail);
                         Phone.setError(phone);
