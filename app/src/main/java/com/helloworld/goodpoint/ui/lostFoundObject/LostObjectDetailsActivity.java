@@ -25,9 +25,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
+
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
@@ -43,14 +45,17 @@ import com.helloworld.goodpoint.ui.PrefManager;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.helloworld.goodpoint.ui.select_multiple_faces.Selection;
 import com.shashank.sony.fancytoastlib.FancyToast;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -74,7 +79,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private FaceDetector faceDetector;
     private List<Bitmap> Person_Images;
     private boolean flagPerson, flagObject, CheckImageObeject;
-
+    List<LostItem> Llist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +183,9 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     checkFaces N = new checkFaces(this);
                     N.execute();
                 }
+                LostItem item = new LostItem(Type, Serial, brand, ObjectColor);
+                Toast.makeText(this, "Type= " + Type, Toast.LENGTH_SHORT).show();
+                getItems(item, this);
                 break;
         }
     }
@@ -226,13 +234,12 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         } else if (Type.equals("Others")) {
             TypeObject = ObjectF.getView().findViewById(R.id.Other);
 
-             if (TypeObject.getText().toString().isEmpty()) {
+            if (TypeObject.getText().toString().isEmpty()) {
                 TypeObject.setError("Field can't be empty");
                 return false;
+            } else {
+                Type = TypeObject.getText().toString();
             }
-            else {
-                  Type = TypeObject.getText().toString();
-             }
         } else if (brand.isEmpty()) {
             brandObject.setError("Field can't be empty");
             return false;
@@ -405,129 +412,41 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         return result;
     }
 
-    public void LostItems()  {
+    public void LostItems() {
 
         String Datee = DateT.getText().toString().trim();
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
 
-        Call<JsonObject> call = apiInterface.storeLostObj(User.getUser().getId(),Datee,City);
+        Call<JsonObject> call = apiInterface.storeLostObj(User.getUser().getId(), Datee, City);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
 
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().toString());
                         String id = jsonObject.getString("id");
                         Toast.makeText(LostObjectDetailsActivity.this, "Object is posted.", Toast.LENGTH_SHORT).show();
                         Call<LostItem> call2;
-                        if(Bitmap_Image != null) {
+                        if (Bitmap_Image != null) {
                             imageURI = getImageUri(Bitmap_Image);
                             File file = new File(getRealPathFromURI(imageURI));
                             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file);
                             MultipartBody.Part image = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
                             call2 = apiInterface.storeLostItem(id, Type, Serial, brand, ObjectColor, textArea_information, image);
-                        }
-                        else
+                        } else
                             call2 = apiInterface.storeLostItem(id, Type, Serial, brand, ObjectColor, textArea_information);
-                            call2.enqueue(new Callback<LostItem>() {
-                                @Override
-                                public void onResponse(Call<LostItem> call, Response<LostItem> response) {
-                                    if(response.isSuccessful())
-                                    {
-                                        Toast.makeText(LostObjectDetailsActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else
-                                        Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onFailure(Call<LostItem> call, Throwable t) {
-                                    Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                    else
-                        Toast.makeText(LostObjectDetailsActivity.this, "The object is not posted.", Toast.LENGTH_SHORT).show();
-                }
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
-
-        }
-
-
-/*
-    public void LostPerson()  {
-
-        String Datee = DateT.getText().toString().trim();
-        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
-
-        Call<JsonObject> call = apiInterface.storeLostObj(User.getUser().getId(),Datee,City);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if(response.isSuccessful()) {
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.body().toString());
-                        String id = jsonObject.getString("id");
-                        Toast.makeText(LostObjectDetailsActivity.this, "Object posted.", Toast.LENGTH_SHORT).show();
-
-
-                        Call<JsonObject> call2 = apiInterface.storeLostPerson(id,PName);
-                        call2.enqueue(new Callback<JsonObject>() {
+                        call2.enqueue(new Callback<LostItem>() {
                             @Override
-                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                if(response.isSuccessful())
-                                {
-                                    Toast.makeText(LostObjectDetailsActivity.this, "Person is posted.", Toast.LENGTH_SHORT).show();
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(response.body().toString());
-                                        String id = jsonObject.getString("id");
-
-
-
-
-
-
-
-                                        Call<LostPerson> call3 = apiInterface.storeLostPersonImage(id);
-                                        call3.enqueue(new Callback<LostPerson>() {
-                                            @Override
-                                            public void onResponse(Call<LostPerson> call, Response<LostPerson> response) {
-                                                if(response.isSuccessful())
-                                                {
-                                                    Toast.makeText(LostObjectDetailsActivity.this, "PersonImage is posted.", Toast.LENGTH_SHORT).show();
-                                                }
-                                                else
-                                                    Toast.makeText(LostObjectDetailsActivity.this, "The personImage is not posted.", Toast.LENGTH_SHORT).show();
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<LostPerson> call, Throwable t) {
-                                                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                }
-                                else
-                                    Toast.makeText(LostObjectDetailsActivity.this, "The person is not posted.", Toast.LENGTH_SHORT).show();
+                            public void onResponse(Call<LostItem> call, Response<LostItem> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(LostObjectDetailsActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
+                                } else
+                                    Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
-                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                            public void onFailure(Call<LostItem> call, Throwable t) {
                                 Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
@@ -536,9 +455,75 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                         e.printStackTrace();
                     }
 
-                }
-                else
+                } else
                     Toast.makeText(LostObjectDetailsActivity.this, "The object is not posted.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    public void LostPerson()  {
+
+        String Datee = DateT.getText().toString().trim();
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+
+        imageURI = getImageUri(Person_Images.get(0));
+        File file = new File(getRealPathFromURI(imageURI));
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part Pimage = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+        //MultipartBody.Part image = MultipartBody.Part.createFormData("images", file.getName(), requestBody);
+        //Pimages.add(image);
+
+        Call<JsonObject> call = apiInterface.storeLostPerson(Datee,City,User.getUser().getId(),PName,Pimage);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.isSuccessful())
+                    Toast.makeText(LostObjectDetailsActivity.this, "The object is  posted.", Toast.LENGTH_SHORT).show();
+
+                else {
+                    try {
+                        Log.e("onResponse: ", response.errorBody().string());
+                    } catch (IOException e) {
+                        Log.e("onResponse: ", e.getMessage());
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("onFailure: ", t.getMessage());
+            }
+        });
+
+    }
+
+    public void getItems(LostItem item, Context context) {
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
+        Call<List<LostItem>> call = apiInterface.getLItem();
+        call.enqueue(new Callback<List<LostItem>>() {
+            @Override
+            public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
+                Llist = response.body();
+                int percent[] = new int[Llist.size()];
+                if (!Llist.isEmpty()) {
+                    for (int i = 0; i < Llist.size(); i++) {
+                        percent[i] = MatchItems(item, Llist.get(i));
+
+//                        Log.d("e", "itemlist="+Llist.get(i).getColor()+" , "+Llist.get(i).getBrand()+" , "+Llist.get(i).getType());
+//                        Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
+//                        Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
+                    }
+                } else
+                    Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
+
 
             }
 
@@ -589,13 +574,25 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(Call<List<LostItem>> call, Throwable t) {
                 Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
             }
         });
 
     }
 
+
+    public int MatchItems(LostItem item1, LostItem item2) {
+        int percentage = 0;
+        if (item1.getBrand().equals(item2.getBrand()))
+            percentage += 20;
+        if (item1.getColor().equals(item2.getColor()))
+            percentage += 20;
+        if (item1.getSerial_number().equals(item2.getSerial_number()))
+            percentage += 20;
+        return percentage;
+    }
 
 
 }

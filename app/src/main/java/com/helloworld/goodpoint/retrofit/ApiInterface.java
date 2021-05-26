@@ -9,27 +9,20 @@ import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
 import com.helloworld.goodpoint.pojo.RegUser;
 import com.helloworld.goodpoint.pojo.Token;
-import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.pojo.UserMap;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -83,7 +76,7 @@ public interface ApiInterface {
     @Multipart
     @POST("losts/lostperson/")
     Call<JsonObject> storeLostPerson(@Part("date") String Date, @Part("city") String city, @Part("user_id") String user_id
-                                   , @Part("name") String name, @Part MultipartBody.Part[] images);
+                                   , @Part("name") String name, @Part MultipartBody.Part images);
 
 
     //----------------------------------------------------------------------------------------------
@@ -99,9 +92,11 @@ public interface ApiInterface {
             , @Field("brand") String brand, @Field("color") String ObjectColor
             , @Field("description") String textArea_information);
 
-    @FormUrlEncoded
+    @Multipart
     @POST("losts/foundperson/")
-    Call<JsonObject> storeFoundPerson(@Field("id") String obj_id, @Field("name") String name);
+    Call<JsonObject> storeFoundPerson(@Part("user_id") String id, @Part("date") String Datee, @Part("city") String cityInput
+            , @Part("longitude") Double longitude, @Part("latitude") Double latitude, @Part("name") String name
+            , @Part MultipartBody.Part image);
 
     /*
     @Multipart
@@ -114,9 +109,14 @@ public interface ApiInterface {
     @GET("losts/map/")
     Call<List<ObjectLocation>> getPoint();
 
-    @GET("losts/founder/")
-    Call<UserMap> getUserMap(@Query("id") int id);
+    @GET("losts/founder/{id}")
+    Call<UserMap> getUserMap(@Path("id") int id);
 
+    @GET("losts/founditem")
+    Call<List<FoundItem>> getFItem(@Query("type") String type);
+
+    @GET("losts/lostitem/")
+    Call<List<LostItem>> getLItem();
 
 
 }

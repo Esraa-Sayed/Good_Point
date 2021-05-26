@@ -15,25 +15,28 @@ class LostObject(models.Model):
         db_table = 'lost_object'
 
 
+def lost_person_images(instance,filename):
+    return f"lostperson/{instance.pk}.jpg"
+
+
+class LostPersonImage(models.Model):
+    id_lp = models.IntegerField
+    image_number = models.IntegerField
+    image = models.ImageField(blank=True, null=True, upload_to=lost_person_images)
+
+    class Meta:
+        db_table = 'lost_person_image'
+
+
 class LostPerson(models.Model):
-    id = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id')
+    id = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id', blank=True)
     name = models.CharField(max_length=150)
+    #person_image = models.ManyToManyField(LostPersonImage, db_column='images', related_name='images')
+    image = models.ImageField(blank=True, null=True, upload_to=lost_person_images)
 
     class Meta:
         db_table = 'lost_person'
 
-
-class LostPersonImage(models.Model):
-    #id = models.AutoField(primary_key=True)
-    id = models.OneToOneField(LostPerson, primary_key=True, on_delete=models.CASCADE, db_column='id')
-    image = models.ImageField(unique=True)
-
-    class Meta:
-        db_table = 'lost_person_image'
-        unique_together = (('id', 'image'),)
-
-def lost_item_image(instance,filename):
-    return f"lost_item/{instance.pk}.jpg/"
 
 class LostItem(models.Model):
     id = models.OneToOneField(LostObject, primary_key=True, on_delete=models.CASCADE, db_column='id')
@@ -42,11 +45,10 @@ class LostItem(models.Model):
     brand = models.CharField(max_length=50)
     description = models.CharField(max_length=700)
     serial_number = models.CharField(max_length=100, blank=True, null=True)
-    image = models.ImageField(blank=True, null=True, upload_to=lost_item_image)
+    image = models.ImageField(blank=True, null=True)
 
     class Meta:
         db_table = 'lost_item'
-
 
 
 class FoundObject(models.Model):
@@ -61,9 +63,14 @@ class FoundObject(models.Model):
         db_table = 'found_object'
 
 
+def found_person_images(instance,filename):
+    return f"foundperson/{instance.pk}.jpg"
+
+
 class FoundPerson(models.Model):
     id = models.OneToOneField(FoundObject, primary_key=True, on_delete=models.CASCADE, db_column='id')
     name = models.CharField(max_length=150, blank=True, null=True)
+    image = models.ImageField(blank=True, null=True, upload_to=found_person_images)
 
     class Meta:
         db_table = 'found_person'
@@ -85,7 +92,7 @@ class FoundItem(models.Model):
     brand = models.CharField(max_length=50)
     description = models.CharField(max_length=700)
     serial_number = models.CharField(max_length=100, blank=True, null=True)
-    #image = models.ImageField(unique=True)
+    image = models.ImageField(null=True, blank=True)
 
     class Meta:
         db_table = 'found_item'

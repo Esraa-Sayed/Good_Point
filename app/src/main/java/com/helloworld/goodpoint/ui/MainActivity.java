@@ -80,12 +80,13 @@ public class MainActivity extends AppCompatActivity {
                     call.enqueue(new Callback<Token>() {
                         @Override
                         public void onResponse(Call<Token> call, Response<Token> response) {
-                            String token = response.body().getAccess();
+                            if(response.isSuccessful()) {
+                                String token = response.body().getAccess();
 
-                            Call<JsonObject> call2 = apiInterface.getData("Bearer " + token);
-                            call2.enqueue(new Callback<JsonObject>() {
-                                @Override
-                                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                Call<JsonObject> call2 = apiInterface.getData("Bearer " + token);
+                                call2.enqueue(new Callback<JsonObject>() {
+                                    @Override
+                                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                                     try {
                                         JSONObject jsonObject = new JSONObject(response.body().toString()).getJSONObject("user");
@@ -104,38 +105,45 @@ public class MainActivity extends AppCompatActivity {
                                         for(int i=0;i<jsonArray.length();i++)
                                             User.getUser().getFounds().add(jsonArray.getJSONObject(i).getInt("id"));
 
-                                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                                        User.getUser().setId(id);
-                                        User.getUser().setUsername(name);
-                                        User.getUser().setEmail(email);
-                                        User.getUser().setPhone(phone);
-                                        User.getUser().setCity(city);
-                                        User.getUser().setBirthdate(birthdate);
-                                        User.getUser().setProfile_pic(Userimage);
+                                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                            User.getUser().setId(id);
+                                            User.getUser().setUsername(name);
+                                            User.getUser().setEmail(email);
+                                            User.getUser().setPhone(phone);
+                                            User.getUser().setCity(city);
+                                            User.getUser().setBirthdate(birthdate);
+                                            User.getUser().setProfile_pic(Userimage);
 
-                                        startActivity(intent);
-                                        finish();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                                            startActivity(intent);
+                                            finish();
+                                        } catch (Exception e) {
+                                            Log.e("Error: ", e.getMessage());
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onFailure(Call<JsonObject> call, Throwable t) {
-                                    Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-
+                                    @Override
+                                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(MainActivity.this, SigninActivity.class));
+                                        finish();
+                                    }
+                                });
+                            }else{
+                                startActivity(new Intent(MainActivity.this, SigninActivity.class));
+                                finish();
+                            }
                         }
 
                         @Override
                         public void onFailure(Call<Token> call, Throwable t) {
-
+                            Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(MainActivity.this, SigninActivity.class));
+                            finish();
                         }
                     });
 
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.e("InterruptedException: ", e.getMessage());
                 }
             }
         });

@@ -12,6 +12,7 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.parsers import MultiPartParser, FormParser
 
 # Create your views here.
 class LostObjectView(generics.ListCreateAPIView):
@@ -24,9 +25,20 @@ class LostObjectDetailsView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = LostObjectSerializer
 
 
-class LostItemView(generics.ListCreateAPIView):
+class LostItemView(generics.GenericAPIView):
     queryset = LostItem.objects.all()
     serializer_class = LostItemSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+    def create(self, request):
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LostItemDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = LostItem.objects.all()
@@ -34,15 +46,10 @@ class LostItemDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class LostPersonView(generics.ListCreateAPIView):
+    http_method_names = ['post']
     queryset = LostPerson.objects.all()
     serializer_class = LostPersonSerializer
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LostPersonDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = LostPerson.objects.all()
@@ -77,6 +84,7 @@ class FoundItemDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class FoundPersonView(generics.ListCreateAPIView):
+    http_method_names = ['post']
     queryset = FoundPerson.objects.all()
     serializer_class = FoundPersonSerializer
 
@@ -86,17 +94,6 @@ class FoundPersonImageView(generics.ListCreateAPIView):
     serializer_class = FoundPersonImageSerializer
 
 
-class LostObject_cityView(generics.ListAPIView):
-    serializer_class = LostObjectSerializer
-
-    def get_queryset(self):
-        obj = self.kwargs['city']
-        return LostObject.objects.filter(city=obj)
-
-
 class MapView(generics.ListAPIView):
     queryset = FoundItem.objects.select_related('id')
     serializer_class = MapSerializer
-    
-#@api_view()
-#def comp_lost_itemView(request,pk):
