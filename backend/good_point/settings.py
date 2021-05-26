@@ -44,12 +44,14 @@ INSTALLED_APPS = [
     'notification',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'django_filters',
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+    #'DEFAULT_AUTHENTICATION_CLASSES': [
+     #   'rest_framework_simplejwt.authentication.JWTAuthentication',
+    #],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 SIMPLE_JWT = {
@@ -96,7 +98,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Good_Point',
         'USER': 'postgres',
-        'PASSWORD': '[,]f,dkj2020',#20111998
+        'PASSWORD': '20111998',#20111998 #[,]f,dkj2020
         'HOST': 'localhost',
         'PORT': '5432'
     }

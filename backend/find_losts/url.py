@@ -19,11 +19,11 @@ urlpatterns = [
     path('foundobject/<int:pk>/', views.FoundObjectDetalisView.as_view(), name='lost_item'),
     path('founditem/<int:pk>/', views.FoundItemDetailsView.as_view(), name='lost_item'),
 
-    #path('lostobject/city=<CharField:city>/', views.LostObject_cityView.as_view(), name='notification'),
-    #path('user_id=<int:user_id>/', views.UserNotificationView.as_view(), name='notification'),
-    #path('user_id=<int:user_id>/', views.UserNotificationView.as_view(), name='notification'),
-    #path('user_id=<int:user_id>/', views.UserNotificationView.as_view(), name='notification'),
-    #path('user_id=<int:user_id>/', views.UserNotificationView.as_view(), name='notification'),
+    #path('comp_lostView/(?P<city>[\w.@+-]+)/$', views.comp_lostView),
+    #path('Comp_ViewSet/<int:pk>/', views.Comp_ViewSet(), name='lost_item'),
+
+    path('LostItem/', views.LostItemFilter.as_view(), name='LostObjectFilter'),
+    path('LostItemFilter/', views.LostItemFilter.as_view(), name='LostItemFilter'),
     #path('user_id=<int:user_id>/', views.UserNotificationView.as_view(), name='notification'),
     #path('lostperson_image/<int:pk>/', views.LostPersonImageDetailsView.as_view(), name='lost_item'),
     #path('lostcomb/', views.CombineListView.as_view(), name='lost_object'),

@@ -2,8 +2,10 @@ from django.shortcuts import render
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from rest_framework import serializers
 from django.http import HttpResponse
+from rest_framework.response import Response
 from .models import LostObject, LostItem, LostPerson, LostPersonImage
 from rest_framework import status
+from rest_framework import status, filters
 from .serializers import *
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -12,12 +14,36 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.decorators import api_view
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.viewsets import ModelViewSet
+from django_filters import FilterSet, AllValuesFilter, DateTimeFilter, NumberFilter
+from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 
 # Create your views here.
 class LostObjectView(generics.ListCreateAPIView):
     queryset = LostObject.objects.all()
     serializer_class = LostObjectSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        date = serializer.validated_data['date']
+        city = serializer.validated_data['city']
+        user_id = serializer.validated_data['user_id']
+        is_matched = serializer.validated_data['is_matched']
+        #obj = Point(lat, long)
+        #serializer.validated_data['geometry'] = geom
+        serializer.save()
+        return Response(serializer.data)
+
+class LostObjectFilter(ListAPIView):
+    queryset = LostObject.objects.all()
+    serializer_class = LostObjectSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['date', 'city', 'is_matched', 'user_id']
 
 
 class LostObjectDetailsView(generics.RetrieveUpdateDestroyAPIView):
@@ -38,6 +64,21 @@ class LostItemView(generics.GenericAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class LostItemFilter(ListAPIView):
+    queryset = LostItem.objects.all()
+    serializer_class = LostItemSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['type', 'serial_number', 'brand', 'color']
+
+
+class LostItemFilter(ListAPIView):
+    queryset = LostItem.objects.all()
+    serializer_class = LostItemSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['id', 'type', 'serial_number', 'brand', 'color']
 
 
 class LostItemDetailsView(generics.RetrieveUpdateDestroyAPIView):
@@ -97,3 +138,26 @@ class FoundPersonImageView(generics.ListCreateAPIView):
 class MapView(generics.ListAPIView):
     queryset = FoundItem.objects.select_related('id')
     serializer_class = MapSerializer
+@api_view(['GET'])
+def comp_lostView(request, city):
+    lost_obj = LostObject.objects.filter(city=city)
+    serializer = LostObjectSerializer(lost_obj, many=True)
+    return Response(serializer.data)
+
+#class IntroductionViewSet(ModelViewSet):
+    #queryset = LostObject.objects.all()
+    #serializer_class = LostObjectSerializer
+    #filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    #filterset_fields = ['id', 'date', 'city', 'is_matched', 'user_id']
+    #search_fields = ['city']
+    #ordering_fields = ['date', 'id']
+    #ordering = ['id']
+class Comp_ViewSet(viewsets.ViewSet):
+
+    def retrieve(self, request, pk):
+        try:
+            lost_obj = LostObject.objects.get(pk=pk)
+        except LostObject.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = LostObjectSerializer(lost_obj)
+        return Response(serializer.data)
