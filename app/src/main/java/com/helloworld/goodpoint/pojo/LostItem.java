@@ -4,7 +4,12 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class LostItem {
-
+    public LostItem(String type, String serial_number, String brand, String color) {
+        this.type = type;
+        this.serial_number = serial_number;
+        this.brand = brand;
+        this.color = color;
+    }
     @SerializedName("user_id")
     @Expose
     private String user_id;

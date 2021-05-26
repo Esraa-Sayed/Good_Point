@@ -3,6 +3,7 @@ package com.helloworld.goodpoint.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +20,8 @@ import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.regex.Pattern;
 import retrofit2.Call;
@@ -164,6 +167,13 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             String city = jsonObject.getString("city");
                             String birthdate = jsonObject.getString("birthdate");
                             String Userimage = jsonObject.getString("profile_pic");
+                            JSONArray jsonArray = jsonObject.getJSONArray("losts");
+                            Log.e("blabla", jsonArray.length() + "");
+                            for(int i=0;i<jsonArray.length();i++)
+                                User.getUser().getLosts().add(jsonArray.getJSONObject(i).getInt("id"));
+                            jsonArray = jsonObject.getJSONArray("founds");
+                            for(int i=0;i<jsonArray.length();i++)
+                                User.getUser().getFounds().add(jsonArray.getJSONObject(i).getInt("id"));
 
                             Intent intent = new Intent(SigninActivity.this, HomeActivity.class);
                             User.getUser().setId(id);

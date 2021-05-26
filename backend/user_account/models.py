@@ -6,11 +6,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 # Create your models here.
 
 def profile_pic_dir(instance, filename):
-    return 'profile/{0}/'.format(filename)
+    return f"profile/{filename}"
 
 
 def idcard_pic_dir(instance, filename):
-    return 'idcard/{0}/'.format(filename)
+    return f"idcard/{filename}"
 
 
 class User(AbstractUser):
