@@ -534,7 +534,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     }
 
     public int MatchItems(LostItem item1, LostItem item2) {
-        int percentage = 0;
+        int percentage = 20;
         if (item1.getBrand().equals(item2.getBrand()))
             percentage += 20;
         if (item1.getColor().equals(item2.getColor()))
