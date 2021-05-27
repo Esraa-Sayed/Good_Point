@@ -8,9 +8,10 @@ import numpy as np
 
 
 class LostObjectSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = LostObject
-        fields = ['date', 'city', 'user_id']
+        fields = ['date', 'city','user_id']
 
 
 class LostItemSerializer(serializers.ModelSerializer):
@@ -23,9 +24,8 @@ class LostItemSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'id': {'id already exists'}})
         return super().validate(attrs)
 
-
 class LostObjectSerializer(serializers.ModelSerializer):
-    # lost_item = LostItemSerializer(many=True, read_only=True)
+    #lost_item = LostItemSerializer(many=True, read_only=True)
     class Meta:
         model = LostObject
         fields = ['id', 'date', 'city', 'is_matched', 'user_id']
@@ -50,7 +50,7 @@ def match_with_found_person(pk):
         encodings.append(face_recognition.face_encodings(face)[0])
         ids.append(id_f[0])
 
-    dist = face_recognition.face_distance(encodings, source_encoding)
+    dist = face_recognition.face_distance(encodings,source_encoding)
     if dist.size > 0:
         min_val = min(dist)
 
@@ -58,7 +58,6 @@ def match_with_found_person(pk):
         return min_val, ids[dist.argmin()]
     else:
         return -1, -1
-
 
 """
     mini = 1.0
@@ -90,14 +89,12 @@ class LostPersonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LostPerson
-        fields = ['date', 'city', 'user_id', 'name', 'image', 'id', 'is_matched']
-        # read_only_fields = ['id', 'is_matched']
-
+        fields = ['date', 'city', 'user_id', 'name', 'image']
+    
     def create(self, validated_data):
         data = validated_data.copy()
-        print(validated_data)
-        # images_data = data.pop('images')
-        # self.context.get('request').data.pop('images')
+        #images_data = data.pop('images')
+        #self.context.get('request').data.pop('images')
         user = User.objects.get(id=data.pop('user_id'))
         person_id = LostObject.objects.create(date=data.pop('date'), city=data.pop('city'), user_id=user)
         person = None
@@ -127,26 +124,22 @@ class LostPersonSerializer(serializers.ModelSerializer):
         res_match = match_with_found_person(person.pk)
         print(res_match)
         matched = False
+        """
         if res_match != -1:
             matched = True
-            matched_person = FoundObject.objects.filter(id=res_match[1])
-            matched_person.is_matched = True
-            matched_person.save()
-            person_id.is_matched = True
-            person_id.save()
-            notify_l = Notification.objects.create(title="", description=f"", type=1, user_id=user)
-            notify_f = Notification.objects.create(title="", description=f"", type=2, user_id=matched_person.user_id)
-            matching = MatchedPerson.objects.create(id_fp=matched_person, id_lp=person_id, percent=1 - res_match[0],
-                                                    notify_id_fp=notify_f, notify_id_lp=notify_l)
+            matched_person = FoundPerson.objects.filter(id=res_match[0])
+            #Notification.objects.create()
+            #Notification.objects.create()
+            #MatchedPerson.objects.create()
+            pass
+        """
 
         return validated_data
-
 
 class FoundObjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoundObject
         fields = ['date', 'longitude', 'latitude', 'city', 'user_id', 'is_matched']
-
 
 class FoundItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -196,12 +189,11 @@ class FoundPersonSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         data = validated_data.copy()
-        print(validated_data)
-        # images_data = data.pop('images')
-        # self.context.get('request').data.pop('images')
+        #images_data = data.pop('images')
+        #self.context.get('request').data.pop('images')
         user = User.objects.get(id=data.pop('user_id'))
         person_id = FoundObject.objects.create(date=data.pop('date'), longitude=data.pop('longitude'),
-                                               latitude=data.pop('latitude'), city=data.pop('city'), user_id=user)
+                                              latitude=data.pop('latitude'), city=data.pop('city'), user_id=user)
         person = None
 
         try:
@@ -229,18 +221,15 @@ class FoundPersonSerializer(serializers.ModelSerializer):
         res_match = match_with_lost_person(person.pk)
         print(res_match)
         matched = False
-
+        """
         if res_match != -1:
             matched = True
-            matched_person = LostPerson.objects.filter(id=res_match[1])
-            matched_person.is_matched = True
-            matched_person.save()
-            person_id.is_matched = True
-            person_id.save()
-            notify_l = Notification.objects.create(title="", description=f"", type=1, user_id=user)
-            notify_f = Notification.objects.create(title="", description=f"", type=2, user_id=matched_person.user_id)
-            matching = MatchedPerson.objects.create(id_fp=matched_person, id_lp=person_id, percent=1 - res_match[0],
-                                                    notify_id_fp=notify_f, notify_id_lp=notify_l)
+            matched_person = LostPerson.objects.filter(id=res_match[0])
+            #Notification.objects.create()
+            #Notification.objects.create()
+            #MatchedPerson.objects.create()
+            pass
+        """
 
         return validated_data
 

@@ -187,7 +187,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             startActivity(intent);
                             finish();
                         } catch (Exception e) {
-                            Log.e("TAG", "onResponse: "+e.getMessage());
+                            e.printStackTrace();
                         }
                     }
 

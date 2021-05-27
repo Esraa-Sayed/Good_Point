@@ -2,7 +2,6 @@ package com.helloworld.goodpoint.ui;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,8 +42,8 @@ public class HomeFragment extends Fragment {
     TextView Hi_msg;
     List<FoundItem> list;
     List<LostItem> list1;
-    String LossesObjects="";
-    String FindingsItems="";
+    String LossesObjects;
+    String FindingsItems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -123,8 +122,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
                 list = response.body();
-
-                if (list != null) {
+                if (!list.isEmpty()) {
                     for (int i = 0; i < list.size(); i++) {
                         FindingsItems += list.get(i).getType() + " " + list.get(i).getColor();
                     }
@@ -149,7 +147,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
                 list1 = response.body();
-                if (list1 != null) {
+                if (!list.isEmpty()) {
                     for (int i = 0; i < list1.size(); i++) {
                         LossesObjects += list1.get(i).getType() + " " + list1.get(i).getColor();
                     }
