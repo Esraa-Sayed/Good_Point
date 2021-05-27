@@ -2,6 +2,7 @@ package com.helloworld.goodpoint.ui;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +43,8 @@ public class HomeFragment extends Fragment {
     TextView Hi_msg;
     List<FoundItem> list;
     List<LostItem> list1;
-    String LossesObjects;
-    String FindingsItems;
+   // String LossesObjects[];
+    String FindingsItems[];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,9 +70,10 @@ public class HomeFragment extends Fragment {
 
         // Inflate the layout for this fragment
         FindingsItems=getHomeFounds();
-        LossesObjects=getHomeLosts();
+     //   LossesObjects=getHomeLosts();
+        Log.d("e","list="+FindingsItems);
         createGroupList();
-        createObjects(FindingsItems,LossesObjects);
+        createObjects(FindingsItems);
 
         expandableListView = v.findViewById(R.id.expanded_menu);
         expandableListAdapter = new MyExpandableListAdapter(getActivity(), groupList, objects); //getActivity
@@ -88,23 +90,28 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void createObjects(String itemsF,String itemsL) {
+    private void createObjects(String[] itemsF) {
 
-        //String[] LossesObjects = {"Mobile HUAWEI", "Black wallet", "Child", "ID card"};
+        String[] LossesObjects = {"Mobile HUAWEI", "Black wallet", "Child", "ID card"};
 
         objects = new HashMap<String, List<String>>();
         for (String group : groupList) {
             if (group.equals(getString(R.string.Losses))) {
-                loadChild(itemsL);
+                loadChild(LossesObjects);
             } else if (group.equals(getString(R.string.Founds)))
                 loadChild(itemsF);
             objects.put(group, childList);
         }
     }
 
-    private void loadChild(String AllObjects) {
+    private void loadChild(String[] AllObjects) {
         childList = new ArrayList<>();
-         childList.add(AllObjects);
+       if(AllObjects!=null) {
+           for (int i = 0; i < AllObjects.length; i++)
+               childList.add(AllObjects[i]);
+       }
+       else
+           childList.add("");
     }
 
 
@@ -114,7 +121,7 @@ public class HomeFragment extends Fragment {
         groupList.add(getString(R.string.Founds));
     }
 
-    public String getHomeFounds() {
+    public String[] getHomeFounds() {
 
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getContext()).getNGROKLink()).create(ApiInterface.class);
         Call<List<FoundItem>> call = apiInterface.getHomeFounds_i(User.getUser().getId());
@@ -122,13 +129,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
                 list = response.body();
-                if (!list.isEmpty()) {
+                if (list!=null) {
                     for (int i = 0; i < list.size(); i++) {
-                        FindingsItems += list.get(i).getType() + " " + list.get(i).getColor();
+                        FindingsItems[i] += list.get(i).getType() + " " + list.get(i).getColor();
                     }
                 } else {
                     Toast.makeText(getContext(), "There is no items !", Toast.LENGTH_SHORT).show();
-                     FindingsItems="";
+                     FindingsItems=null;
                 }
             }
             @Override
@@ -137,31 +144,8 @@ public class HomeFragment extends Fragment {
 
             }
         });
+        Log.d("e","message="+FindingsItems);
         return FindingsItems;
     }
-    public String getHomeLosts() {
 
-        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getContext()).getNGROKLink()).create(ApiInterface.class);
-        Call<List<LostItem>> call = apiInterface.getHomeLosts_i(User.getUser().getId());
-        call.enqueue(new Callback<List<LostItem>>() {
-            @Override
-            public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
-                list1 = response.body();
-                if (!list.isEmpty()) {
-                    for (int i = 0; i < list1.size(); i++) {
-                        LossesObjects += list1.get(i).getType() + " " + list1.get(i).getColor();
-                    }
-                } else {
-                    Toast.makeText(getContext(), "There is no items !", Toast.LENGTH_SHORT).show();
-                    LossesObjects="";
-                }
-            }
-            @Override
-            public void onFailure(Call<List<LostItem>> call, Throwable t) {
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-
-            }
-        });
-        return LossesObjects;
-    }
 }
