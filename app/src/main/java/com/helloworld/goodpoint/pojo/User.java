@@ -39,7 +39,7 @@ public class User {
     List<Integer>founds;
     private Bitmap profile_bitmap;
 
-
+    List<FoundItem> foundItem;
     private static User user;
     public static User getUser()
     {
@@ -47,6 +47,7 @@ public class User {
             user = new User();
             user.losts = new ArrayList<>();
             user.founds = new ArrayList<>();
+            user.foundItem = new ArrayList<>();
         }
         return user;
     }

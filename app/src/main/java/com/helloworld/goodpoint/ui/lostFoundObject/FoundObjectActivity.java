@@ -63,9 +63,6 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.FoundItem;
-import com.helloworld.goodpoint.pojo.FoundPerson;
-import com.helloworld.goodpoint.pojo.LostItem;
-import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
@@ -117,6 +114,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private FaceDetector faceDetector;
     FusedLocationProviderClient fusedLocationProviderClient;
     private boolean flagPerson, flagObject;
+    List<FoundItem> Flist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -734,5 +732,47 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
 
     }
+    public void getItems(FoundItem item, Context context) {
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
+        Call<List<FoundItem>> call = apiInterface.getFItem();
+        call.enqueue(new Callback<List<FoundItem>>() {
+            @Override
+            public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
+                Flist = response.body();
+                int percent[] = new int[Flist.size()];
+                if (!Flist.isEmpty()) {
+                    for (int i = 0; i < Flist.size(); i++) {
+                        percent[i] = MatchItems(item, Flist.get(i));
+//                     Log.d("e", "itemlist="+Llist.get(i).getColor()+" , "+Llist.get(i).getBrand()+" , "+Llist.get(i).getType());
+//                     Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
+//                     Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
+                    }
+                } else
+                    Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
+            }
+
+
+            @Override
+            public void onFailure(Call<java.util.List<FoundItem>> call, Throwable t) {
+                Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    public int MatchItems(FoundItem item1, FoundItem item2) {
+        int percentage = 0;
+
+        if (item1.getType().equals(item2.getType()))
+            percentage += 20;
+        if (item1.getBrand().equals(item2.getBrand()))
+            percentage += 20;
+        if (item1.getColor().equals(item2.getColor()))
+            percentage += 20;
+        if (item1.getSerial_number().equals(item2.getSerial_number()))
+            percentage += 20;
+        return percentage;
+    }
+
 
 }
