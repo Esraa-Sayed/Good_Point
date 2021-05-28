@@ -3,6 +3,7 @@ package com.helloworld.goodpoint.retrofit;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.pojo.FoundItem;
 import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.LostObject;
 import com.helloworld.goodpoint.pojo.NotificationItem;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
 import com.helloworld.goodpoint.pojo.RegUser;
@@ -102,20 +103,23 @@ public interface ApiInterface {
     Call<UserMap> getUserMap(@Path("id") int id);
     //---------------------------------------------------------------------------------------------
 
-    @GET("losts/founditem")
-    Call<List<FoundItem>> getFItem();
+    @GET("losts/FoundItemFilter/")
+    Call<List<FoundItem>> getFItem(@Query("type")String type);
 
-    @GET("losts/lostitem/")
-    Call<List<LostItem>> getLItem();
+    @GET("losts/LostItemFilter/")
+    Call<List<LostItem>> getLItem(@Query("type") String type);
+
+    @GET("losts/LostItemFilter/")
+    Call<LostItem> getLostItem(@Query("id") int id);
 
     @GET("losts/lostobject/")
     Call<List<LostItem>> getHomeLosts_obj(@Query("user_id") String id);
 
-    @GET("losts/lostobject/{user_id}/")
-    Call<List<LostItem>> getHomeLosts_i(@Path("user_id") String id);
+    @GET("losts/LostObjectFilter/")
+    Call<List<LostObject>> getHomeLosts_i(@Query("user_id") String id);
 
-    @GET("losts/foundobject/{user_id}/")
-    Call<List<FoundItem>> getHomeFounds_i(@Path("user_id") String id);
+    @GET("losts/FoundObjectFilter/")
+    Call<List<FoundItem>> getHomeFounds_i(@Query("user_id") String id);
 //------------------------------------------------------------------------------------
 
     @FormUrlEncoded

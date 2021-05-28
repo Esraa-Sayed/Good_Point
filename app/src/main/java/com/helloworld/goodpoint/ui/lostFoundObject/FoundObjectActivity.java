@@ -272,6 +272,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     checkFaces N = new checkFaces(this);
                     N.execute();
                 }
+                FoundItem item=new FoundItem(Type,Serial,brand,ObjectColor);
+                getItems(item,this);
                 break;
         }
     }
@@ -646,6 +648,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 if (response.isSuccessful()) {
 
                     try {
+                        Log.d("e","found="+response.body().toString());
                         JSONObject jsonObject = new JSONObject(response.body().toString());
                         String id = jsonObject.getString("id");
                         Toast.makeText(FoundObjectActivity.this, "Object is posted.", Toast.LENGTH_SHORT).show();
@@ -734,7 +737,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     }
     public void getItems(FoundItem item, Context context) {
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
-        Call<List<FoundItem>> call = apiInterface.getFItem();
+        Call<List<FoundItem>> call = apiInterface.getFItem(item.getType());
         call.enqueue(new Callback<List<FoundItem>>() {
             @Override
             public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
@@ -743,9 +746,9 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 if (!Flist.isEmpty()) {
                     for (int i = 0; i < Flist.size(); i++) {
                         percent[i] = MatchItems(item, Flist.get(i));
-//                     Log.d("e", "itemlist="+Llist.get(i).getColor()+" , "+Llist.get(i).getBrand()+" , "+Llist.get(i).getType());
-//                     Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
-//                     Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
+                     Log.d("e", "itemlist="+Flist.get(i).getColor()+" , "+Flist.get(i).getBrand()+" , "+Flist.get(i).getType());
+                     Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
+                     Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
                     }
                 } else
                     Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
@@ -761,8 +764,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     }
 
     public int MatchItems(FoundItem item1, FoundItem item2) {
-        int percentage = 0;
-
+        int percentage = 20;
         if (item1.getType().equals(item2.getType()))
             percentage += 20;
         if (item1.getBrand().equals(item2.getBrand()))
