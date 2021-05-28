@@ -144,7 +144,7 @@ public class HomeFragment extends Fragment {
                       });
 
                   } catch (JSONException e) {
-                      e.printStackTrace();
+                      Toast.makeText(getContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                   }
               }
 

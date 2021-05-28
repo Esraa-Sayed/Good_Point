@@ -108,12 +108,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         imgnavigator = view.findViewById(R.id.circuler_profile_img);
         namenavigator.setText(User.getUser().getUsername());
         mailnavigator.setText(User.getUser().getEmail());
-        if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
-            Log.e("Profile Pic", User.getUser().getProfile_pic());
-            String dnsLink = new PrefManager(this).getNGROKLink();
-            DownloadProfilePic download = new DownloadProfilePic();
-            download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
-        }
+        if(User.getUser().getProfile_bitmap() != null)
+            imgnavigator.setImageBitmap(User.getUser().getProfile_bitmap());
     }
 
     @Override
@@ -258,43 +254,4 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     return true;
                 }
             };
-
-    class DownloadProfilePic extends AsyncTask<String,Void, Bitmap> {
-
-        private Bitmap download(String urlLink) throws IOException {
-            Bitmap bitmap = null;
-            URL url = null;
-            HttpURLConnection httpConn;
-            InputStream is = null;
-            Log.e("ProfilePic", urlLink);
-            try {
-                url = new URL(urlLink);
-                httpConn = (HttpURLConnection) url.openConnection();
-                httpConn.connect();
-                is = httpConn.getInputStream();
-                bitmap = BitmapFactory.decodeStream(is);
-            }catch (MalformedURLException e){
-                Log.e("DownloadProfilePic", "download: "+e.getMessage());
-            }
-            return  bitmap;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            try {
-                return download(urls[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            if(bitmap==null)return;
-            User.getUser().setProfile_bitmap(bitmap);
-            imgnavigator.setImageBitmap(bitmap);
-        }
-    }
 }

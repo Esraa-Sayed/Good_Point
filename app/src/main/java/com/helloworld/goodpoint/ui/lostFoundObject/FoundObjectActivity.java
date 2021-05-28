@@ -223,9 +223,9 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                         startActivityForResult(intent, PLACE_PICKER_REQUEST);
                                         if (!flag) wifiManager.setWifiEnabled(true);
                                     } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-                                        e.printStackTrace();
+                                        Toast.makeText(FoundObjectActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
-                                        e.printStackTrace();
+                                        Toast.makeText(FoundObjectActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                     break;
                             }
@@ -522,7 +522,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 String area = addresses.get(0).getLocality();
                 Locate = area + "," + CityG + "," + Country + ".";
             } catch (IOException e) {
-                e.printStackTrace();
+                Toast.makeText(FoundObjectActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
             return Locate;
         }
@@ -660,6 +660,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                             public void onResponse(Call<FoundItem> call, Response<FoundItem> response) {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(FoundObjectActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
+                                    User.getUser().getFounds().add(Integer.parseInt(id));
                                 } else
                                     Toast.makeText(FoundObjectActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
                             }
@@ -672,7 +673,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Toast.makeText(FoundObjectActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 } else

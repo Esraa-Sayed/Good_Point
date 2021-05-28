@@ -440,6 +440,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(LostObjectDetailsActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
+                                    User.getUser().getLosts().add(Integer.parseInt(id));
                                 } else
                                     Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
                             }
@@ -451,7 +452,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                         });
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Toast.makeText(LostObjectDetailsActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 } else
