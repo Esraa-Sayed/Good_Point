@@ -506,19 +506,20 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
 
     public void getItems(LostItem item, Context context) {
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
-        Call<List<LostItem>> call = apiInterface.getLItem();
+        Call<List<LostItem>> call = apiInterface.getLItem(item.getType());
         call.enqueue(new Callback<List<LostItem>>() {
             @Override
             public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
                 Llist = response.body();
+                Log.d("e","list="+Llist+",type="+item.getType());
                 int percent[] = new int[Llist.size()];
                 if (!Llist.isEmpty()) {
                     for (int i = 0; i < Llist.size(); i++) {
                         percent[i] = MatchItems(item, Llist.get(i));
 
-//                        Log.d("e", "itemlist="+Llist.get(i).getColor()+" , "+Llist.get(i).getBrand()+" , "+Llist.get(i).getType());
-//                        Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
-//                        Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
+                     Log.d("e", "itemlist="+Llist.get(i).getColor()+" , "+Llist.get(i).getBrand()+" , "+Llist.get(i).getType());
+                        Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
+                        Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
                     }
                 } else
                     Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();

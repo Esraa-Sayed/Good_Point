@@ -1,6 +1,5 @@
 package com.helloworld.goodpoint.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +11,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
@@ -23,7 +25,9 @@ import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -159,6 +163,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                         try {
+                            Log.d("e","res="+response.body().toString());
                             JSONObject jsonObject = new JSONObject(response.body().toString()).getJSONObject("user");
                             String id = jsonObject.getString("id");
                             String name = jsonObject.getString("username");
