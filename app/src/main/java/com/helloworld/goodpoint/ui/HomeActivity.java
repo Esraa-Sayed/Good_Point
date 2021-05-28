@@ -54,6 +54,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     TextView namenavigator;
     TextView mailnavigator;
     CircleImageView imgnavigator;
+    Fragment selectedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +113,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             String dnsLink = new PrefManager(this).getNGROKLink();
             DownloadProfilePic download = new DownloadProfilePic();
             download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(selectedFragment instanceof HomeFragment) {
+            selectedFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
         }
     }
 
@@ -226,7 +236,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = getSupportFragmentManager().getFragments().get(0);
+                    selectedFragment = getSupportFragmentManager().getFragments().get(0);
                     switch (item.getItemId()) {
                         case R.id.miHome:
                             if(!(selectedFragment instanceof HomeFragment))
