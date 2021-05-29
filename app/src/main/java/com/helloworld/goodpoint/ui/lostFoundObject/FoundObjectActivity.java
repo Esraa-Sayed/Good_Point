@@ -63,9 +63,6 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.FoundItem;
-import com.helloworld.goodpoint.pojo.FoundPerson;
-import com.helloworld.goodpoint.pojo.LostItem;
-import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
@@ -117,6 +114,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private FaceDetector faceDetector;
     FusedLocationProviderClient fusedLocationProviderClient;
     private boolean flagPerson, flagObject;
+    List<FoundItem> Flist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,9 +223,9 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                         startActivityForResult(intent, PLACE_PICKER_REQUEST);
                                         if (!flag) wifiManager.setWifiEnabled(true);
                                     } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-                                        e.printStackTrace();
+                                        Toast.makeText(FoundObjectActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
-                                        e.printStackTrace();
+                                        Toast.makeText(FoundObjectActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                     break;
                             }
@@ -274,6 +272,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     checkFaces N = new checkFaces(this);
                     N.execute();
                 }
+                FoundItem item=new FoundItem(Type,Serial,brand,ObjectColor);
+                getItems(item,this);
                 break;
         }
     }
@@ -522,7 +522,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 String area = addresses.get(0).getLocality();
                 Locate = area + "," + CityG + "," + Country + ".";
             } catch (IOException e) {
-                e.printStackTrace();
+                Toast.makeText(FoundObjectActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
             return Locate;
         }
@@ -648,6 +648,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 if (response.isSuccessful()) {
 
                     try {
+                        Log.d("e","found="+response.body().toString());
                         JSONObject jsonObject = new JSONObject(response.body().toString());
                         String id = jsonObject.getString("id");
                         Toast.makeText(FoundObjectActivity.this, "Object is posted.", Toast.LENGTH_SHORT).show();
@@ -659,6 +660,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                             public void onResponse(Call<FoundItem> call, Response<FoundItem> response) {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(FoundObjectActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
+                                    User.getUser().getFounds().add(Integer.parseInt(id));
                                 } else
                                     Toast.makeText(FoundObjectActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
                             }
@@ -671,7 +673,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Toast.makeText(FoundObjectActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 } else
@@ -734,5 +736,46 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
 
     }
+    public void getItems(FoundItem item, Context context) {
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
+        Call<List<FoundItem>> call = apiInterface.getFItem(item.getType());
+        call.enqueue(new Callback<List<FoundItem>>() {
+            @Override
+            public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
+                Flist = response.body();
+                int percent[] = new int[Flist.size()];
+                if (!Flist.isEmpty()) {
+                    for (int i = 0; i < Flist.size(); i++) {
+                        percent[i] = MatchItems(item, Flist.get(i));
+                     Log.d("e", "itemlist="+Flist.get(i).getColor()+" , "+Flist.get(i).getBrand()+" , "+Flist.get(i).getType());
+                     Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
+                     Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
+                    }
+                } else
+                    Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
+            }
+
+
+            @Override
+            public void onFailure(Call<java.util.List<FoundItem>> call, Throwable t) {
+                Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    public int MatchItems(FoundItem item1, FoundItem item2) {
+        int percentage = 20;
+        if (item1.getType().equals(item2.getType()))
+            percentage += 20;
+        if (item1.getBrand().equals(item2.getBrand()))
+            percentage += 20;
+        if (item1.getColor().equals(item2.getColor()))
+            percentage += 20;
+        if (item1.getSerial_number().equals(item2.getSerial_number()))
+            percentage += 20;
+        return percentage;
+    }
+
 
 }

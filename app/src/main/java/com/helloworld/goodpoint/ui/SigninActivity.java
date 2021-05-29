@@ -1,7 +1,10 @@
 package com.helloworld.goodpoint.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -12,6 +15,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
@@ -23,7 +29,14 @@ import com.helloworld.goodpoint.ui.forgetPasswordScreens.MakeSelection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -159,6 +172,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                         try {
+                            Log.d("e","res="+response.body().toString());
                             JSONObject jsonObject = new JSONObject(response.body().toString()).getJSONObject("user");
                             String id = jsonObject.getString("id");
                             String name = jsonObject.getString("username");
@@ -175,7 +189,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             for(int i=0;i<jsonArray.length();i++)
                                 User.getUser().getFounds().add(jsonArray.getJSONObject(i).getInt("id"));
 
-                            Intent intent = new Intent(SigninActivity.this, HomeActivity.class);
                             User.getUser().setId(id);
                             User.getUser().setUsername(name);
                             User.getUser().setEmail(email);
@@ -183,11 +196,14 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             User.getUser().setCity(city);
                             User.getUser().setBirthdate(birthdate);
                             User.getUser().setProfile_pic(Userimage);
-
-                            startActivity(intent);
-                            finish();
+                            if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
+                                String dnsLink = new PrefManager(SigninActivity.this).getNGROKLink();
+                                DownloadProfilePic download = new DownloadProfilePic();
+                                download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
+                            }
                         } catch (Exception e) {
                             Log.e("TAG", "onResponse: "+e.getMessage());
+                            Toast.makeText(SigninActivity.this, "Error in entering", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -209,4 +225,58 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
+    class DownloadProfilePic extends AsyncTask<String,Void, Bitmap> {
+        AlertDialog.Builder builder;
+        AlertDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            builder = new AlertDialog.Builder(SigninActivity.this);
+            builder.setCancelable(false);
+            View view = getLayoutInflater().inflate(R.layout.progress_bar_alert, null);
+            builder.setView(view);
+            dialog = builder.create();
+            dialog.show();
+        }
+
+        private Bitmap download(String urlLink) throws IOException {
+            Bitmap bitmap = null;
+            URL url = null;
+            HttpURLConnection httpConn;
+            InputStream is = null;
+            Log.e("ProfilePic", urlLink);
+            try {
+                url = new URL(urlLink);
+                httpConn = (HttpURLConnection) url.openConnection();
+                httpConn.connect();
+                is = httpConn.getInputStream();
+                bitmap = BitmapFactory.decodeStream(is);
+            }catch (MalformedURLException e){
+                Log.e("DownloadProfilePic", "download: "+e.getMessage());
+            }
+            return  bitmap;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                return download(urls[0]);
+            } catch (IOException e) {
+                Log.e("TAG", "doInBackground: "+e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            dialog.dismiss();
+            if(bitmap!=null)
+                User.getUser().setProfile_bitmap(bitmap);
+            Intent intent = new Intent(SigninActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
 }

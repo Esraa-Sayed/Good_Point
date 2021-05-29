@@ -69,7 +69,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     private DatePickerDialog.OnDateSetListener DateSet;
     private AutoCompleteTextView autoCom;
     private int year, month, Day;
-    private prepareList List;
+    private prepareList pList;
     private List<String> list, listColor;
     private String City, ObjectColor, Serial, brand, textArea_information, Type;
     private String PName;
@@ -168,6 +168,9 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 } else if (flagObject && CheckMatchObject()) {
                     LostItems();
+                    LostItem item = new LostItem(Type, Serial, brand, ObjectColor);
+                    Toast.makeText(this, "Type= " + Type, Toast.LENGTH_SHORT).show();
+                    getItems(item, this);
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     finish();
@@ -182,9 +185,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     checkFaces N = new checkFaces(this);
                     N.execute();
                 }
-                LostItem item = new LostItem(Type, Serial, brand, ObjectColor);
-                Toast.makeText(this, "Type= " + Type, Toast.LENGTH_SHORT).show();
-                getItems(item, this);
                 break;
         }
     }
@@ -372,9 +372,9 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         DateT.setOnClickListener(this);
         PersonF = new PersonFragment();
         ObjectF = new ObjectFragment();
-        List = new prepareList();
-        list = List.prepareList(this);
-        listColor = List.prepareListColor(this);
+        pList = new prepareList();
+        list = pList.prepareList(this);
+        listColor = pList.prepareListColor(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         autoCom.setThreshold(1);//start working from first char
         autoCom.setAdapter(adapter);
@@ -396,7 +396,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
     public Uri getImageUri(Bitmap bitmap_Image) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap_Image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap_Image, "LostItem", null);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap_Image, System.currentTimeMillis()+"", null);
         return Uri.parse(path);
     }
 
@@ -440,6 +440,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(LostObjectDetailsActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
+                                    User.getUser().getLosts().add(Integer.parseInt(id));
                                 } else
                                     Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
                             }
@@ -451,7 +452,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                         });
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Toast.makeText(LostObjectDetailsActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 } else
@@ -506,19 +507,20 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
 
     public void getItems(LostItem item, Context context) {
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
-        Call<List<LostItem>> call = apiInterface.getLItem();
+        Call<List<LostItem>> call = apiInterface.getLItem(item.getType());
         call.enqueue(new Callback<List<LostItem>>() {
             @Override
             public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
                 Llist = response.body();
+                Log.d("e","list="+Llist+",type="+item.getType());
                 int percent[] = new int[Llist.size()];
                 if (!Llist.isEmpty()) {
                     for (int i = 0; i < Llist.size(); i++) {
                         percent[i] = MatchItems(item, Llist.get(i));
 
-//                        Log.d("e", "itemlist="+Llist.get(i).getColor()+" , "+Llist.get(i).getBrand()+" , "+Llist.get(i).getType());
-//                        Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
-//                        Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
+                     Log.d("e", "itemlist="+Llist.get(i).getColor()+" , "+Llist.get(i).getBrand()+" , "+Llist.get(i).getType());
+                        Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
+                        Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
                     }
                 } else
                     Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();

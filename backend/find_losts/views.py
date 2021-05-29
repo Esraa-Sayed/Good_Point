@@ -23,6 +23,12 @@ from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 
 # Create your views here.
+
+class LostItemView(generics.ListCreateAPIView):
+    queryset = LostItem.objects.all()
+    serializer_class = LostItemSerializer
+
+
 class LostObjectView(generics.ListCreateAPIView):
     queryset = LostObject.objects.all()
     serializer_class = LostObjectSerializer
@@ -51,27 +57,7 @@ class LostObjectDetailsView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = LostObjectSerializer
 
 
-class LostItemView(generics.GenericAPIView):
-    queryset = LostItem.objects.all()
-    serializer_class = LostItemSerializer
-    parser_classes = (MultiPartParser, FormParser)
 
-    def create(self, request):
-        print(request.data)
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-class LostItemFilter(ListAPIView):
-    queryset = LostItem.objects.all()
-    serializer_class = LostItemSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['type', 'serial_number', 'brand', 'color']
 
 
 class LostItemFilter(ListAPIView):
@@ -79,6 +65,24 @@ class LostItemFilter(ListAPIView):
     serializer_class = LostItemSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'type', 'serial_number', 'brand', 'color']
+
+
+
+
+class FoundObjectFilter(ListAPIView):
+    queryset = FoundObject.objects.all()
+    serializer_class = FoundObjectSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['longitude', 'latitude', 'city', 'user_id', 'is_matched']
+
+
+
+
+class FoundItemFilter(ListAPIView):
+    queryset = FoundItem.objects.all()
+    serializer_class = FoundItemSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['id', 'type', 'color', 'brand', 'serial_number']
 
 
 class LostItemDetailsView(generics.RetrieveUpdateDestroyAPIView):

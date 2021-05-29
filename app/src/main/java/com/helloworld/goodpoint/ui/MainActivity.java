@@ -1,8 +1,15 @@
 package com.helloworld.goodpoint.ui;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -16,9 +23,17 @@ import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
+import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -105,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                                         for(int i=0;i<jsonArray.length();i++)
                                             User.getUser().getFounds().add(jsonArray.getJSONObject(i).getInt("id"));
 
-                                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                                             User.getUser().setId(id);
                                             User.getUser().setUsername(name);
                                             User.getUser().setEmail(email);
@@ -113,9 +127,13 @@ public class MainActivity extends AppCompatActivity {
                                             User.getUser().setCity(city);
                                             User.getUser().setBirthdate(birthdate);
                                             User.getUser().setProfile_pic(Userimage);
+                                            if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
+                                                String dnsLink = new PrefManager(MainActivity.this).getNGROKLink();
+                                                DownloadProfilePic download = new DownloadProfilePic();
+                                                download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
+                                            }
 
-                                            startActivity(intent);
-                                            finish();
+
                                         } catch (Exception e) {
                                             Log.e("Error: ", e.getMessage());
                                         }
@@ -147,5 +165,46 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    class DownloadProfilePic extends AsyncTask<String,Void, Bitmap> {
+
+        private Bitmap download(String urlLink) throws IOException {
+            Bitmap bitmap = null;
+            URL url = null;
+            HttpURLConnection httpConn;
+            InputStream is = null;
+            Log.e("ProfilePic", urlLink);
+            try {
+                url = new URL(urlLink);
+                httpConn = (HttpURLConnection) url.openConnection();
+                httpConn.connect();
+                is = httpConn.getInputStream();
+                bitmap = BitmapFactory.decodeStream(is);
+            }catch (MalformedURLException e){
+                Log.e("DownloadProfilePic", "download: "+e.getMessage());
+            }
+            return  bitmap;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                return download(urls[0]);
+            } catch (IOException e) {
+                Log.e("TAG", "doInBackground: "+e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            if(bitmap!=null)
+                User.getUser().setProfile_bitmap(bitmap);
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

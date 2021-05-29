@@ -125,4 +125,3 @@ class MatchedPerson(models.Model):
 
     class Meta:
         db_table = 'matched_Person'
-#id_fp id_lp date_of_receiving percent notify_id_fp notify_id_lp
