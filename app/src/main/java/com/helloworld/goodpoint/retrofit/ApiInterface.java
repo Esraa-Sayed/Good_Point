@@ -20,6 +20,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -127,6 +128,17 @@ public interface ApiInterface {
     Call<NotificationItem> storeNotification(@Field("user_id") String id, @Field("title") String title
             , @Field("description") String description
             , @Field("type") String type);
+
+    @GET("notification/user_id={id}/")
+    Call<List<NotificationItem>> getNotification(@Path("id") String id);
+
+    @FormUrlEncoded
+    @PUT("notification/read/{id}/")
+    Call<JsonObject> updateRead(@Path("id") String id, @Field("is_read") Boolean read);
+
+    @FormUrlEncoded
+    @PUT("notification/sent/{id}/")
+    Call<JsonObject> updateSent(@Path("id") String id, @Field("is_sent") Boolean sent);
 
 }
 

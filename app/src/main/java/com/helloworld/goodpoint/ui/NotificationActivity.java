@@ -10,14 +10,22 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.adapter.NotificationListAdapter;
 import com.helloworld.goodpoint.pojo.NotificationItem;
+import com.helloworld.goodpoint.pojo.User;
+import com.helloworld.goodpoint.retrofit.ApiClient;
+import com.helloworld.goodpoint.retrofit.ApiInterface;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotificationActivity extends AppCompatActivity {
 
@@ -32,25 +40,25 @@ public class NotificationActivity extends AppCompatActivity {
 
         init();
         createList();
-        showView();
     }
 
     private void createList() {
-        ///*
-        NotificationItem item = new NotificationItem("item matched", new Date(2019-1900,12-1,25,10,55), "your laptop is found by Ahmed Mostafa",null);
-        item.setRead(true);
-        list.add(item);
-        item = new NotificationItem("person matched", new Date(2020-1900,2-1,1,0,0), "Abdelrahman Mamdouh is found by Walid Mohamed",null);
-        list.add(item);
-        item = new NotificationItem("item matched", new Date(2020-1900,3-1,25,10,55), "your wallet is found by Dina Mishahed",null);
-        item.setRead(true);
-        list.add(item);
-        item = new NotificationItem("item matched", new Date(2020-1900,4-1,17,15,0), "your money is found by Esraa Sayed",null);
-        list.add(item);
-        item = new NotificationItem("person matched", new Date(2020-1900,12-1,25,10,55), "a relative of Folan Elfolany was found",null);
-        list.add(item);
-        item = new NotificationItem("candidate item", Calendar.getInstance().getTime(), "there are 3 candidate phones for matching",null);
-        list.add(item);//*/
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+        Call<List<NotificationItem>>call = apiInterface.getNotification(User.getUser().getId());
+        call.enqueue(new Callback<List<NotificationItem>>() {
+            @Override
+            public void onResponse(Call<List<NotificationItem>> call, Response<List<NotificationItem>> response) {
+                list = response.body();
+                if(list == null)
+                    list = new ArrayList<>();
+                showView();
+            }
+
+            @Override
+            public void onFailure(Call<List<NotificationItem>> call, Throwable t) {
+                Log.e("TAG", "onFailure: "+t.getMessage());
+            }
+        });
     }
 
     private void showView() {
@@ -62,10 +70,31 @@ public class NotificationActivity extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    startActivity(new Intent(NotificationActivity.this,DetailsActivity.class));
+                    int pos = list.size()-i-1;
+                    if(list.get(pos).getType()==3){
+                        //intent to candidate
+                        return;
+                    }
+                    Intent intent = new Intent(NotificationActivity.this,DetailsActivity.class);
+                    intent.putExtra("id",list.get(pos).getId());
+                    intent.putExtra("type",list.get(pos).getType());
+                    startActivity(intent);
                     NotificationListAdapter adapter = (NotificationListAdapter)listView.getAdapter();
-                    adapter.getItem(list.size()-i-1).setRead(true);
+                    adapter.getItem(pos).setRead(true);
                     adapter.notifyDataSetChanged();
+                    ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+                    Call<JsonObject>call = apiInterface.updateRead(list.get(pos).getId(), true);
+                    call.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            Log.e("TAG", "onResponse: "+response.body().toString());
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            Log.e("TAG", "onFailure: "+t.getMessage());
+                        }
+                    });
                 }
             });
 

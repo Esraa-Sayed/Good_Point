@@ -7,6 +7,10 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,6 +27,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -44,6 +49,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.loader.content.CursorLoader;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -68,6 +75,7 @@ import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.Alert;
 import com.helloworld.goodpoint.ui.GlobalVar;
+import com.helloworld.goodpoint.ui.NotificationActivity;
 import com.helloworld.goodpoint.ui.PrefManager;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -82,6 +90,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -723,6 +732,15 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if(response.isSuccessful()) {
                     Toast.makeText(FoundObjectActivity.this, "The object posted.", Toast.LENGTH_SHORT).show();
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().toString());
+                        int matched_id = jsonObject.getInt("matched_with");
+                        String name = jsonObject.getString("name");
+                        if(matched_id != 0)
+                            createNotification(name);
+                    } catch (JSONException e) {
+                        Log.e("TAG", "onResponse: "+e.getMessage());
+                    }
                 }else
                     Toast.makeText(FoundObjectActivity.this, "The object is not posted.", Toast.LENGTH_SHORT).show();
 
@@ -736,6 +754,32 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
 
     }
+
+    private void createNotification(String name) {
+        String description = (name.isEmpty())? "The family of the person that you found him/her is found"
+                : "The family of "+name+" is found";
+        NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent notifyIntent = new Intent(this, NotificationActivity.class);
+        PendingIntent pintent = PendingIntent.getActivity(this,0,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel nc = new NotificationChannel("Good Point","matched person", NotificationManager.IMPORTANCE_HIGH);
+            nc.setDescription("we found the family of person");
+            nm.createNotificationChannel(nc);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"Good Point");
+            builder.setContentTitle("Matched person").setContentText(description);
+            builder.setSmallIcon(R.drawable.application_icon2).setStyle(new NotificationCompat.BigTextStyle().bigText(description));
+            builder.setContentIntent(pintent).setAutoCancel(true);
+            NotificationManagerCompat nmc = NotificationManagerCompat.from(this);
+            nmc.notify(0,builder.build());
+        }else{
+            Notification.Builder builder = new Notification.Builder(this);
+            builder.setContentTitle("Matched person").setContentText(description);
+            builder.setSmallIcon(R.drawable.application_icon2).setStyle(new Notification.BigTextStyle().bigText(description));
+            builder.setContentIntent(pintent);
+            nm.notify(0,builder.build());
+        }
+    }
+
     public void getItems(FoundItem item, Context context) {
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
         Call<List<FoundItem>> call = apiInterface.getFItem(item.getType());

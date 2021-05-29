@@ -30,6 +30,8 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     LinearLayout subLayout,nameLayout,brandLayout,colorLayout,addrLayout,matchLayout;
     ImageView img;
     Button call,sendMail;
+    private int id;
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,25 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateTable() {
+        switch (type){
+            case 1:
+                subLayout.setVisibility(View.GONE);
+                brandLayout.setVisibility(View.GONE);
+                colorLayout.setVisibility(View.GONE);
+                
+                break;
+            case 2:
 
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            default:
+
+        }
     }
 
     private void init() {
@@ -69,6 +89,9 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         img = findViewById(R.id.img_detail);
         call = findViewById(R.id.call_btn);
         sendMail = findViewById(R.id.mail_btn);
+
+        id = getIntent().getIntExtra("id",0);
+        type = getIntent().getIntExtra("type",0);
     }
 
     private void marginOrientation() {

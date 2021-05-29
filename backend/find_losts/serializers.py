@@ -135,8 +135,11 @@ class LostPersonSerializer(serializers.ModelSerializer):
             matched_person.save()
             person_id.is_matched = True
             person_id.save()
-            notify_l = Notification.objects.create(title="", description=f"", type=1, user_id=user)
-            notify_f = Notification.objects.create(title="", description=f"", type=2, user_id=matched_person.user_id)
+            name = person.name
+            notify_l = Notification.objects.create(title="Matched person", description=f"{name} is found", type=1,
+                                                   user_id=user, is_sent=True)
+            notify_f = Notification.objects.create(title="Matched person", description=f"The family of {name} is found",
+                                                   type=2, user_id=matched_person.user_id)
             matching = MatchedPerson.objects.create(id_fp=matched_person, id_lp=person_id, percent=1.0 - res_match[0],
                                                     notify_id_fp=notify_f, notify_id_lp=notify_l)
 
@@ -244,9 +247,13 @@ class FoundPersonSerializer(serializers.ModelSerializer):
             matched_person.save()
             person_id.is_matched = True
             person_id.save()
-            notify_f = Notification.objects.create(title="", description=f"", type=1, user_id=user)
-            notify_l = Notification.objects.create(title="", description=f"", type=2, user_id=matched_person.user_id)
-            matching = MatchedPerson.objects.create(id_lp=matched_person, id_fp=person_id, percent=1.0 - res_match[0],
+            name = LostPerson.objects.get(id=res_match[1]).name
+            notify_f = Notification.objects.create(title="Matched person", description=f"The family of {name} is found",
+                                                   type=2, user_id=user, is_sent=True)
+            notify_l = Notification.objects.create(title="Matched person", description=f"{name} is found", type=1,
+                                                   user_id=matched_person.user_id)
+            matching = MatchedPerson.objects.create(id_lp=matched_person, id_fp=person_id,
+                                                    percent=100 - res_match[0]*100,
                                                     notify_id_fp=notify_f, notify_id_lp=notify_l)
         if matched:
             validated_data['matched_with'] = matching
