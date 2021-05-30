@@ -22,10 +22,13 @@ class LoginView(APIView):
     def post(self, request):
         user = request.user
         user_pic = ""
+        id_card_pic = ""
         losts = list(LostObject.objects.filter(user_id=user.pk).values('id'))
         founds = list(FoundObject.objects.filter(user_id=user.pk).values('id'))
         if user.profile_pic:
             user_pic = user.profile_pic.url
+        if user.id_card_pic:
+            user_pic = user.id_card_pic.url
         response = {
             'id': user.pk,
             'username': user.first_name,
@@ -34,6 +37,7 @@ class LoginView(APIView):
             'city': user.city,
             'birthdate': user.birthdate,
             'profile_pic': user_pic,
+            'id_card_pic': id_card_pic,
             'losts': losts,
             'founds': founds
         }

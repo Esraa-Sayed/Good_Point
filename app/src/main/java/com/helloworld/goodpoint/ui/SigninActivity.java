@@ -181,6 +181,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             String city = jsonObject.getString("city");
                             String birthdate = jsonObject.getString("birthdate");
                             String Userimage = jsonObject.getString("profile_pic");
+                            String idcardimage = jsonObject.getString("id_card_pic");
                             JSONArray jsonArray = jsonObject.getJSONArray("losts");
                             Log.e("blabla", jsonArray.length() + "");
                             for(int i=0;i<jsonArray.length();i++)
@@ -196,6 +197,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             User.getUser().setCity(city);
                             User.getUser().setBirthdate(birthdate);
                             User.getUser().setProfile_pic(Userimage);
+                            User.getUser().setId_card_pic(idcardimage);
                             if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
                                 String dnsLink = new PrefManager(SigninActivity.this).getNGROKLink();
                                 DownloadProfilePic download = new DownloadProfilePic();

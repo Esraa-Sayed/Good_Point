@@ -75,10 +75,6 @@ public class NotificationActivity extends AppCompatActivity {
                         //intent to candidate
                         return;
                     }
-                    Intent intent = new Intent(NotificationActivity.this,DetailsActivity.class);
-                    intent.putExtra("id",list.get(pos).getId());
-                    intent.putExtra("type",list.get(pos).getType());
-                    startActivity(intent);
                     NotificationListAdapter adapter = (NotificationListAdapter)listView.getAdapter();
                     adapter.getItem(pos).setRead(true);
                     adapter.notifyDataSetChanged();
@@ -95,6 +91,17 @@ public class NotificationActivity extends AppCompatActivity {
                             Log.e("TAG", "onFailure: "+t.getMessage());
                         }
                     });
+                    if(list.get(pos).getType() == 1 || list.get(pos).getType() == 4){
+                        //lost person and lost item
+                        if(User.getUser().getId_card_pic().isEmpty()){
+
+                            return;
+                        }
+                    }
+                    Intent intent = new Intent(NotificationActivity.this,DetailsActivity.class);
+                    intent.putExtra("id",list.get(pos).getId());
+                    intent.putExtra("type",list.get(pos).getType());
+                    startActivity(intent);
                 }
             });
 

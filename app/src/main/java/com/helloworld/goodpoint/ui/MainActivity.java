@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                                     try {
+                                        Log.d("e","res="+response.body().toString());
                                         JSONObject jsonObject = new JSONObject(response.body().toString()).getJSONObject("user");
                                         String id = jsonObject.getString("id");
                                         String name = jsonObject.getString("username");
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                                         String city = jsonObject.getString("city");
                                         String birthdate = jsonObject.getString("birthdate");
                                         String Userimage = jsonObject.getString("profile_pic");
+                                        String idcardimage = jsonObject.getString("id_card_pic");
                                         JSONArray jsonArray = jsonObject.getJSONArray("losts");
                                         Log.e("blabla", jsonArray.length() + "");
                                         for(int i=0;i<jsonArray.length();i++)
@@ -127,10 +129,15 @@ public class MainActivity extends AppCompatActivity {
                                             User.getUser().setCity(city);
                                             User.getUser().setBirthdate(birthdate);
                                             User.getUser().setProfile_pic(Userimage);
+                                            User.getUser().setId_card_pic(idcardimage);
                                             if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
                                                 String dnsLink = new PrefManager(MainActivity.this).getNGROKLink();
                                                 DownloadProfilePic download = new DownloadProfilePic();
                                                 download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
+                                            }else{
+                                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                                startActivity(intent);
+                                                finish();
                                             }
 
 

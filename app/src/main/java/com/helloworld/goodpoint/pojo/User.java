@@ -31,6 +31,9 @@ public class User {
     @SerializedName("profile_pic")
     @Expose
     private String profile_pic;
+    @SerializedName("id_card_pic")
+    @Expose
+    private String id_card_pic;
     @SerializedName("losts")
     @Expose
     List<Integer>losts;
@@ -118,4 +121,11 @@ public class User {
         this.profile_bitmap = profile_bitmap;
     }
 
+    public String getId_card_pic() {
+        return id_card_pic;
+    }
+
+    public void setId_card_pic(String id_card_pic) {
+        this.id_card_pic = id_card_pic;
+    }
 }
