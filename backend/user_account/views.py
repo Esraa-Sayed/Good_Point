@@ -4,7 +4,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import SignupSerializer, LogoutSerializer, WhoFoundItemSerializer
+from .serializers import SignupSerializer, LogoutSerializer, WhoFoundItemSerializer, IdCardSerializer
 from .models import User
 from find_losts.models import LostObject, FoundObject
 
@@ -61,3 +61,19 @@ class WhoFoundItemView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = WhoFoundItemSerializer
     lookup_field = 'id'
+
+
+class SetIdCard(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = IdCardSerializer
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, *args, **kwargs):
+        print(request.data)
+        user = request.user
+        serializer = self.serializer_class(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_202_ACCEPTED)
+
+        return Response(serializer.errors, status.HTTP_406_NOT_ACCEPTABLE)

@@ -57,3 +57,10 @@ class WhoFoundItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['name', 'email', 'phone']
+
+
+class IdCardSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id_card_pic']

@@ -32,10 +32,12 @@ import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.adapter.NotificationListAdapter;
 import com.helloworld.goodpoint.pojo.NotificationItem;
+import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,6 +57,8 @@ public class NotificationActivity extends AppCompatActivity {
     AlertDialog dialog;
     AlertDialog.Builder builder;
     View view;
+    Uri photoFromGallery;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,10 +97,6 @@ public class NotificationActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     int pos = list.size()-i-1;
-                    if(list.get(pos).getType()==3){
-                        //intent to candidate
-                        return;
-                    }
                     NotificationListAdapter adapter = (NotificationListAdapter)listView.getAdapter();
                     adapter.getItem(pos).setRead(true);
                     adapter.notifyDataSetChanged();
@@ -113,7 +113,11 @@ public class NotificationActivity extends AppCompatActivity {
                             Log.e("TAG", "onFailure: "+t.getMessage());
                         }
                     });
-                    if(list.get(pos).getType() == 1 || list.get(pos).getType() == 4){
+                    if(list.get(pos).getType()==3){
+                        //intent to candidate
+                        return;
+                    }
+                    else if(list.get(pos).getType() == 1 || list.get(pos).getType() == 4){
                         //lost person and lost item
                         if(User.getUser().getId_card_pic().isEmpty()){
                             Button Choose = view.findViewById(R.id.Id_card);
@@ -171,6 +175,14 @@ public class NotificationActivity extends AppCompatActivity {
 
         }
     }
+
+    public Uri getImageUri(Bitmap bitmap_Image) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap_Image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap_Image, "id card", null);
+        return Uri.parse(path);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -179,10 +191,11 @@ public class NotificationActivity extends AppCompatActivity {
             switch(requestCode) {
                 case 10: {
                     img =(Bitmap) data.getExtras().get("data");
+                    photoFromGallery = getImageUri(img);
                 }
                 break;
                 case 11:
-                    Uri photoFromGallery = data.getData();
+                    photoFromGallery = data.getData();
                     try {
                         img = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoFromGallery);
                     } catch (IOException e) {
@@ -241,7 +254,32 @@ public class NotificationActivity extends AppCompatActivity {
                 builder = new AlertDialog.Builder(NotificationActivity.this);
                 builder.setMessage("Your id_card has been successfully taken").setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {}});
+                    public void onClick(DialogInterface dialog, int which) {
+                        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+                        Call<Token> call = apiInterface.refresh(new PrefManager(getApplicationContext()).isLoginned());
+                        call.enqueue(new Callback<Token>() {
+                            @Override
+                            public void onResponse(Call<Token> call, Response<Token> response) {
+                                Call<JsonObject>idcardCall = apiInterface.setIdCard(response.body().getAccess());
+                                idcardCall.enqueue(new Callback<JsonObject>() {
+                                    @Override
+                                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                        Log.d("TAG", "onResponse: Success");
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                                        Log.e("TAG", "onFailure: "+t.getMessage());
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(Call<Token> call, Throwable t) {
+                                Log.e("TAG", "onFailure: "+t.getMessage());
+                            }
+                        });
+                    }});
                 dialog = builder.create();
                 dialog.show();
             }

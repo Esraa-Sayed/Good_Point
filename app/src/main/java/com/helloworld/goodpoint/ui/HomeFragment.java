@@ -173,7 +173,6 @@ public class HomeFragment extends Fragment {
                     id[i] = listObj.get(i).getId();
                     Log.d("e", "id=" + id[i]);
                 }
-                Log.d("e", "list=" + id[0]);
                 Call<LostItem> call2 = apiInterface.getLostItem(1);
                 call2.enqueue(new Callback<LostItem>() {
                     @Override
