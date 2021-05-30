@@ -200,6 +200,10 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                                 String dnsLink = new PrefManager(SigninActivity.this).getNGROKLink();
                                 DownloadProfilePic download = new DownloadProfilePic();
                                 download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
+                            }else{
+                                Intent intent = new Intent(SigninActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
                         } catch (Exception e) {
                             Log.e("TAG", "onResponse: "+e.getMessage());
