@@ -136,7 +136,7 @@ public interface ApiInterface {
             , @Field("type") String type);
 
     @GET("notification/user_id={id}/")
-    Call<List<NotificationItem>> getNotification(@Path("id") String id);
+    Call<List<NotificationItem>> getNotification(@Path("id") String user_id);
 
     @FormUrlEncoded
     @PUT("notification/read/{id}/")
@@ -145,6 +145,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @PUT("notification/sent/{id}/")
     Call<JsonObject> updateSent(@Path("id") String id, @Field("is_sent") Boolean sent);
+
+    @GET("notification/new/{user_id}/")
+    Call<List<NotificationItem>> getNewNotification(@Path("user_id") String user_id);
 
 }
 

@@ -34,6 +34,7 @@ import com.helloworld.goodpoint.pojo.RegUser;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.ui.lostFoundObject.FoundObjectActivity;
 import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
+import com.helloworld.goodpoint.ui.myService.NotificationService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,12 +65,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         init();
         setToolBarAndDrawer();
         setBottomNavigator();
+        startNotificationService();
 
         if(savedInstanceState == null) {
             //To make first fragment is home when opening the app
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fhome).commit();
+
         }
 
+    }
+
+    private void startNotificationService() {
+        if(!NotificationService.isSurviceRun){
+            NotificationService.isSurviceRun=true;
+            startService(new Intent(this, NotificationService.class));
+        }
     }
 
     private void setBottomNavigator() {

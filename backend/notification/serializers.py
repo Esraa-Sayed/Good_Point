@@ -23,3 +23,9 @@ class UpdateSentNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ['id', 'is_sent']
+
+class RetrieveNewNotificationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Notification
+        fields = '__all__'
