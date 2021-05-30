@@ -10,7 +10,7 @@ import numpy as np
 class LostObjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = LostObject
-        fields = ['date', 'city', 'user_id']
+        fields = ['id', 'date', 'city', 'user_id']
 
 
 class LostItemSerializer(serializers.ModelSerializer):
@@ -22,13 +22,6 @@ class LostItemSerializer(serializers.ModelSerializer):
         if LostPerson.objects.filter(id=attrs.get('id', '')).exists():
             raise serializers.ValidationError({'id': {'id already exists'}})
         return super().validate(attrs)
-
-
-class LostObjectSerializer(serializers.ModelSerializer):
-    # lost_item = LostItemSerializer(many=True, read_only=True)
-    class Meta:
-        model = LostObject
-        fields = ['id', 'date', 'city', 'is_matched', 'user_id']
 
 
 class LostPersonImageSerializer(serializers.ModelSerializer):

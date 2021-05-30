@@ -39,7 +39,7 @@ class LostObjectView(generics.ListCreateAPIView):
         date = serializer.validated_data['date']
         city = serializer.validated_data['city']
         user_id = serializer.validated_data['user_id']
-        is_matched = serializer.validated_data['is_matched']
+        #is_matched = serializer.validated_data['is_matched']
         #obj = Point(lat, long)
         #serializer.validated_data['geometry'] = geom
         serializer.save()
