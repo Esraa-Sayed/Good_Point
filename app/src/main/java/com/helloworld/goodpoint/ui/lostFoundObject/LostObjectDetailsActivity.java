@@ -178,7 +178,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     LostItems();
                     LostItem item = new LostItem(Type, Serial, brand, ObjectColor);
                     Toast.makeText(this, "Type= " + Type, Toast.LENGTH_SHORT).show();
-                    getItems(item, this);
+                    //getItems(item, this);
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     finish();

@@ -1,29 +1,26 @@
 package com.helloworld.goodpoint.ui;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.pojo.RegUser;
+import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.LostObject;
 import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
-import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,6 +30,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,10 +42,15 @@ public class MainActivity extends AppCompatActivity {
     PrefManager prefManager;
     ImageView splash;
     Thread t;
+    List<LostObject> listObj;
+    List<LostItem> list1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getHomeLosts();
         init();
         if (prefManager.isFirstTimeLaunch()) {
             prefManager.setFirstTimeLaunch(true);
@@ -213,5 +217,47 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+    }
+    public void getHomeLosts() {
+
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+        Call<List<LostObject>> call = apiInterface.getHomeLosts_i(User.getUser().getId());
+        call.enqueue(new Callback<List<LostObject>>() {
+            @Override
+            public void onResponse(Call<List<LostObject>> call, Response<List<LostObject>> response) {
+                listObj = response.body();
+                GlobalVar.losts = new ArrayList<String>();
+                if (listObj!=null) {
+                    for (int i = 0; i < listObj.size(); i++) {
+                //        Log.d("test", "id=" + listObj.get(i).getId());
+                        Call<List<LostItem>> call2 = apiInterface.getLostItem(listObj.get(i).getId());
+                        call2.enqueue(new Callback<List<LostItem>>() {
+                            @Override
+                            public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
+                                list1 = response.body();
+                                if (!list1.isEmpty()) {
+                                    String t = list1.get(0).getType() + " " + list1.get(0).getBrand() + "";
+                                    GlobalVar.losts.add(t);
+                                } else
+                                    Toast.makeText(getApplicationContext(), "There is no items of object !", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<LostItem>> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "There is no object", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<List<LostObject>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

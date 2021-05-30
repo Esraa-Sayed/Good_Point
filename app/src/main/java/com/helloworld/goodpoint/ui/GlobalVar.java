@@ -13,5 +13,7 @@ public class GlobalVar {
     public static  List<Bitmap> FinialFacesThatWillGoToDataBase = new ArrayList<>();
     public static  List<SubItemList> slist;
     public static  int position;
+    public static  List<String> losts;
+    public static  List<String> founds;
 
 }

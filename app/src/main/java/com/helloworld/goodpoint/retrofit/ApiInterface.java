@@ -117,7 +117,10 @@ public interface ApiInterface {
     Call<List<LostItem>> getLItem(@Query("type") String type);
 
     @GET("losts/LostItemFilter/")
-    Call<LostItem> getLostItem(@Query("id") int id);
+    Call<List<LostItem>> getLostItem(@Query("id") int id);
+
+    @GET("losts/LostItemFilter/")
+    Call<List<FoundItem>> getFoundItem(@Query("id") int id);
 
     @GET("losts/lostobject/")
     Call<List<LostItem>> getHomeLosts_obj(@Query("user_id") String id);

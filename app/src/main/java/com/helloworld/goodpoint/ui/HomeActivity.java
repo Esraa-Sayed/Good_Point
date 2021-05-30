@@ -1,4 +1,19 @@
 package com.helloworld.goodpoint.ui;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -7,41 +22,29 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.pojo.RegUser;
+import com.helloworld.goodpoint.pojo.FoundItem;
+import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.LostObject;
 import com.helloworld.goodpoint.pojo.User;
+import com.helloworld.goodpoint.retrofit.ApiClient;
+import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.lostFoundObject.FoundObjectActivity;
 import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
@@ -55,12 +58,30 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     TextView mailnavigator;
     CircleImageView imgnavigator;
     Fragment selectedFragment;
+    List<LostObject> listObj;
+    List<LostItem> list1;
+    List<FoundItem> list;
 
+    SwipeRefreshLayout refreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getHomeLosts();
+        getHomeFounds();
         setContentView(R.layout.activity_home);
+        refreshLayout=findViewById(R.id.swipe);
+            selectedFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                selectedFragment = new HomeFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                refreshLayout.setRefreshing(false);
+            }
+        });
         init();
         setToolBarAndDrawer();
         setBottomNavigator();
@@ -115,10 +136,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(selectedFragment instanceof HomeFragment) {
-            selectedFragment = new HomeFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-        }
+
     }
 
     @Override
@@ -254,4 +272,69 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     return true;
                 }
             };
+    public void getHomeLosts() {
+        List<Integer>losts=new ArrayList<>();
+        losts=User.getUser().getLosts();
+        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+
+        GlobalVar.losts = new ArrayList<String>();
+                if (losts!=null) {
+                    for (int i = 0; i < losts.size(); i++) {
+                               Log.d("test", "id=" + losts.get(i));
+                        Call<List<LostItem>> call2 = apiInterface.getLostItem(losts.get(i));
+                        call2.enqueue(new Callback<List<LostItem>>() {
+                            @Override
+                            public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
+                                list1 = response.body();
+                            if (list1!=null) {
+                                    String t = list1.get(0).getType() + " " + list1.get(0).getBrand() + "";
+                                    GlobalVar.losts.add(t);
+                                } else
+                                    Toast.makeText(getApplicationContext(), "There is no items of object !", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<LostItem>> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "There is no object", Toast.LENGTH_LONG).show();
+
+    }
+    public void getHomeFounds() {
+        List<Integer>founds=new ArrayList<>();
+        founds=User.getUser().getFounds();
+        GlobalVar.founds = new ArrayList<String>();
+                if (!founds.isEmpty()) {
+                    for (int i = 0; i < founds.size(); i++) {
+                        Log.d("test", "id=" + founds.get(i));
+                        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+                        Call<List<FoundItem>> call2 = apiInterface.getFoundItem(founds.get(i));
+                        call2.enqueue(new Callback<List<FoundItem>>() {
+                            @Override
+                            public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
+                                list = response.body();
+                                if (list!=null) {
+                                    String t = list.get(0).getType() + " " + list.get(0).getBrand() + "";
+                                    GlobalVar.founds.add(t);
+                                } else
+                                    Toast.makeText(getApplicationContext(), "There is no items of object !", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<FoundItem>> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "There is no object", Toast.LENGTH_LONG).show();
+            }
+
 }
