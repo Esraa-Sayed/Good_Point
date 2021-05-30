@@ -147,7 +147,7 @@ class LostPersonSerializer(serializers.ModelSerializer):
 class FoundObjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoundObject
-        fields = ['date', 'longitude', 'latitude', 'city', 'user_id', 'is_matched']
+        fields = ['id', 'date', 'longitude', 'latitude', 'city', 'user_id', 'is_matched']
 
 
 class FoundItemSerializer(serializers.ModelSerializer):

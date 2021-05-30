@@ -624,26 +624,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         outState.putBoolean("flagPerson", flagPerson);
         outState.putBoolean("flagObject", flagObject);
     }
-
-/*
-    public Uri getImageUri(Bitmap bitmap_Image) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap_Image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap_Image, "LostItem", null);
-        return Uri.parse(path);
-    }
-
-    private String getRealPathFromURI(Uri imageUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        CursorLoader loader = new CursorLoader(this, imageUri, proj, null, null, null);
-        Cursor cursor = loader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String result = cursor.getString(column_index);
-        cursor.close();
-        return result;
-    }
-*/
+    
 
     public void FoundItems() {
 
@@ -662,7 +643,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                         String id = jsonObject.getString("id");
                         Toast.makeText(FoundObjectActivity.this, "Object is posted.", Toast.LENGTH_SHORT).show();
 
-
                         Call<FoundItem> call2 = apiInterface.storeFoundItem(id, Type, Serial, brand, ObjectColor, textArea_information);
                         call2.enqueue(new Callback<FoundItem>() {
                             @Override
@@ -670,8 +650,10 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                 if (response.isSuccessful()) {
                                     Toast.makeText(FoundObjectActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
                                     User.getUser().getFounds().add(Integer.parseInt(id));
-                                } else
+                                } else {
                                     Toast.makeText(FoundObjectActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
+                                }
+
                             }
 
                             @Override
