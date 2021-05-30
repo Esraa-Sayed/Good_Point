@@ -96,9 +96,10 @@ public interface ApiInterface {
             , @Field("brand") String brand, @Field("color") String ObjectColor
             , @Field("description") String textArea_information);
 
-    @FormUrlEncoded
+    @Multipart
     @POST("losts/foundperson/")
-    Call<JsonObject> storeFoundPerson(String id, String datee, @Field("id") String obj_id, double longitude, double latitude, @Field("name") String name, MultipartBody.Part pimage);
+    Call<JsonObject> storeFoundPerson(@Part("user_id") String user_id, @Part("date") String Date, @Part("city") String city
+            , @Part("longitude") double longitude, @Part("latitude") double latitude, @Part("name") String name, @Part MultipartBody.Part pimage);
 
     //----------------------------------------------------------------------------------------------
 

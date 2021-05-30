@@ -281,8 +281,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     checkFaces N = new checkFaces(this);
                     N.execute();
                 }
-                FoundItem item=new FoundItem(Type,Serial,brand,ObjectColor);
-                getItems(item,this);
+                //FoundItem item=new FoundItem(Type,Serial,brand,ObjectColor);
+                //getItems(item,this);
                 break;
         }
     }
@@ -624,7 +624,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         outState.putBoolean("flagPerson", flagPerson);
         outState.putBoolean("flagObject", flagObject);
     }
-    
+
 
     public void FoundItems() {
 
