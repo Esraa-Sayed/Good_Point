@@ -30,8 +30,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.FoundItem;
+import com.helloworld.goodpoint.pojo.FoundPerson;
 import com.helloworld.goodpoint.pojo.LostItem;
 import com.helloworld.goodpoint.pojo.LostObject;
+import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
@@ -60,23 +62,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     Fragment selectedFragment;
     List<LostObject> listObj;
     List<LostItem> list1;
+    List<FoundPerson> list3;
+    List<LostPerson> list2;
     List<FoundItem> list;
 
     SwipeRefreshLayout refreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getHomeLosts();
         getHomeFounds();
         setContentView(R.layout.activity_home);
-        refreshLayout=findViewById(R.id.swipe);
-            selectedFragment = new HomeFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        refreshLayout = findViewById(R.id.swipe);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 selectedFragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                 refreshLayout.setRefreshing(false);
@@ -86,10 +88,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setToolBarAndDrawer();
         setBottomNavigator();
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             //To make first fragment is home when opening the app
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fhome).commit();
         }
+        selectedFragment = new HomeFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
     }
 
@@ -98,7 +102,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         //To Disable item under Fab
-        Menu menuNav=bottomNavigationView.getMenu();
+        Menu menuNav = bottomNavigationView.getMenu();
         MenuItem nav_item2 = menuNav.findItem(R.id.placeholder);
         nav_item2.setEnabled(false);
 
@@ -108,7 +112,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private void setToolBarAndDrawer() {
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.nav_drawer_open,R.string.nav_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(android.R.color.white));
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -129,7 +133,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         imgnavigator = view.findViewById(R.id.circuler_profile_img);
         namenavigator.setText(User.getUser().getUsername());
         mailnavigator.setText(User.getUser().getEmail());
-        if(User.getUser().getProfile_bitmap() != null)
+        if (User.getUser().getProfile_bitmap() != null)
             imgnavigator.setImageBitmap(User.getUser().getProfile_bitmap());
     }
 
@@ -148,14 +152,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.notification)
-            startActivity(new Intent(this,NotificationActivity.class));
+        if (item.getItemId() == R.id.notification)
+            startActivity(new Intent(this, NotificationActivity.class));
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.drawer_share:
 
                 break;
@@ -172,7 +176,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             case R.id.drawer_logout:
-                dialog = createDialog("Logout",R.drawable.ic_baseline_exit_to_app_24);
+                dialog = createDialog("Logout", R.drawable.ic_baseline_exit_to_app_24);
                 dialog.create().show();
                 break;
             default:
@@ -192,7 +196,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     public void onClick(DialogInterface dialog, int which) {
                         PrefManager prefManager = new PrefManager(getApplicationContext());
                         prefManager.setLogout();
-                        startActivity(new Intent(HomeActivity.this,SigninActivity.class));
+                        startActivity(new Intent(HomeActivity.this, SigninActivity.class));
                         finish();
                     }
                 }).setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
@@ -205,7 +209,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START))
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
             drawerLayout.closeDrawer(GravityCompat.START);
         else
             super.onBackPressed();
@@ -215,7 +219,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(HomeActivity.this, R.style.BottomSheetTheme);
         View bottomSheetView = LayoutInflater.from(getApplicationContext())
-                .inflate(R.layout.bottom_sheet_dialog, (LinearLayout)findViewById(R.id.bottom_sheet));
+                .inflate(R.layout.bottom_sheet_dialog, (LinearLayout) findViewById(R.id.bottom_sheet));
 
         bottomSheetView.findViewById(R.id.hide_sheet).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,15 +257,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     selectedFragment = getSupportFragmentManager().getFragments().get(0);
                     switch (item.getItemId()) {
                         case R.id.miHome:
-                            if(!(selectedFragment instanceof HomeFragment))
+                            if (!(selectedFragment instanceof HomeFragment))
                                 selectedFragment = fhome;
                             break;
                         case R.id.miMatch:
-                            if(!(selectedFragment instanceof MatchFragment))
+                            if (!(selectedFragment instanceof MatchFragment))
                                 selectedFragment = fmatch;
                             break;
                         case R.id.miProfile:
-                            if(!(selectedFragment instanceof ProfileFragment))
+                            if (!(selectedFragment instanceof ProfileFragment))
                                 selectedFragment = fprofile;
                             break;
                         case R.id.miLocation:
@@ -272,69 +276,108 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     return true;
                 }
             };
+
     public void getHomeLosts() {
-        List<Integer>losts=new ArrayList<>();
-        losts=User.getUser().getLosts();
+        List<Integer> losts = new ArrayList<>();
+        losts = User.getUser().getLosts();
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
 
         GlobalVar.losts = new ArrayList<String>();
-                if (losts!=null) {
-                    for (int i = 0; i < losts.size(); i++) {
-                               Log.d("test", "id=" + losts.get(i));
-                        Call<List<LostItem>> call2 = apiInterface.getLostItem(losts.get(i));
-                        call2.enqueue(new Callback<List<LostItem>>() {
-                            @Override
-                            public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
-                                list1 = response.body();
-                            if (list1!=null) {
-                                    String t = list1.get(0).getType() + " " + list1.get(0).getBrand() + "";
-                                    GlobalVar.losts.add(t);
-                                } else
-                                    Toast.makeText(getApplicationContext(), "There is no items of object !", Toast.LENGTH_SHORT).show();
-                            }
+        if (losts != null) {
+            for (int i = 0; i < losts.size(); i++) {
+                Log.d("test", "id=" + losts.get(i));
+                if (LostItem.getLostItem().isCheak()) {
+                    Call<List<LostItem>> call2 = apiInterface.getLostItem(losts.get(i));
+                    call2.enqueue(new Callback<List<LostItem>>() {
+                        @Override
+                        public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
+                            list1 = response.body();
+                            if (!list1.isEmpty()) {
+                                String t = list1.get(0).getType() + " " + list1.get(0).getBrand() + "";
+                                GlobalVar.losts.add(t);
+                            } else
+                                Toast.makeText(getApplicationContext(), "There is no items of lost object !", Toast.LENGTH_SHORT).show();
+                        }
 
-                            @Override
-                            public void onFailure(Call<List<LostItem>> call, Throwable t) {
-                                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
+                        @Override
+                        public void onFailure(Call<List<LostItem>> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    Call<List<LostPerson>> call3 = apiInterface.getLostPerson(losts.get(i));
+                    call3.enqueue(new Callback<List<LostPerson>>() {
+                        @Override
+                        public void onResponse(Call<List<LostPerson>> call, Response<List<LostPerson>> response) {
+                            list2 = response.body();
+                            if (list2 != null) {
+                                String t = list2.get(0).getName() + "missing";
+                                GlobalVar.losts.add(t);
+                            } else
+                                Toast.makeText(getApplicationContext(), "There is no persons of lost object !", Toast.LENGTH_SHORT).show();
+                        }
 
+                        @Override
+                        public void onFailure(Call<List<LostPerson>> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
-                else
-                    Toast.makeText(getApplicationContext(), "There is no object", Toast.LENGTH_LONG).show();
+            }
+        } else
+            Toast.makeText(getApplicationContext(), "There is no object", Toast.LENGTH_LONG).show();
 
     }
+
     public void getHomeFounds() {
-        List<Integer>founds=new ArrayList<>();
-        founds=User.getUser().getFounds();
+        List<Integer> founds = new ArrayList<>();
+        founds = User.getUser().getFounds();
         GlobalVar.founds = new ArrayList<String>();
-                if (!founds.isEmpty()) {
-                    for (int i = 0; i < founds.size(); i++) {
-                        Log.d("test", "id=" + founds.get(i));
-                        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
-                        Call<List<FoundItem>> call2 = apiInterface.getFoundItem(founds.get(i));
-                        call2.enqueue(new Callback<List<FoundItem>>() {
-                            @Override
-                            public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
-                                list = response.body();
-                                if (list!=null) {
-                                    String t = list.get(0).getType() + " " + list.get(0).getBrand() + "";
-                                    GlobalVar.founds.add(t);
-                                } else
-                                    Toast.makeText(getApplicationContext(), "There is no items of object !", Toast.LENGTH_SHORT).show();
-                            }
+        if (!founds.isEmpty()) {
+            for (int i = 0; i < founds.size(); i++) {
+                Log.d("test", "id=" + founds.get(i));
+                ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+                if (true) {
+                    Call<List<FoundItem>> call2 = apiInterface.getFoundItem(founds.get(i));
+                    call2.enqueue(new Callback<List<FoundItem>>() {
+                        @Override
+                        public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
+                            list = response.body();
+                            if (!list.isEmpty()) {
+                                String t = list.get(0).getType() + " " + list.get(0).getBrand() + "";
+                                GlobalVar.founds.add(t);
+                            } else
+                                Toast.makeText(getApplicationContext(), "There is no items of found object !", Toast.LENGTH_SHORT).show();
+                        }
 
-                            @Override
-                            public void onFailure(Call<List<FoundItem>> call, Throwable t) {
-                                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
+                        @Override
+                        public void onFailure(Call<List<FoundItem>> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
 
+                } else {
+                    Call<List<FoundPerson>> call3 = apiInterface.getFoundPerson(founds.get(i));
+                    call3.enqueue(new Callback<List<FoundPerson>>() {
+                        @Override
+                        public void onResponse(Call<List<FoundPerson>> call, Response<List<FoundPerson>> response) {
+                            list3 = response.body();
+                            if (list3 != null) {
+                                String t = list3.get(0).getName() + "missing";
+                                GlobalVar.founds.add(t);
+                            } else
+                                Toast.makeText(getApplicationContext(), "There is no persons of found object !", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<FoundPerson>> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
-                else
-                    Toast.makeText(getApplicationContext(), "There is no object", Toast.LENGTH_LONG).show();
             }
+        } else
+            Toast.makeText(getApplicationContext(), "There is no object", Toast.LENGTH_LONG).show();
+    }
 
 }

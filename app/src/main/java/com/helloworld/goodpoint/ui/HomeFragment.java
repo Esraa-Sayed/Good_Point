@@ -82,8 +82,6 @@ public class HomeFragment extends Fragment {
 
     private void createObjects(List<String> itemsL,List<String> itemsF) {
 
-        String[] FindingsItems = {"Mobile HUAWEI", "Black wallet", "Child", "ID card"};
-
         objects = new HashMap<String, List<String>>();
         for (String group : groupList) {
             if (group.equals(getString(R.string.Losses))) {

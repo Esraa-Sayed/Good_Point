@@ -2,8 +2,9 @@ package com.helloworld.goodpoint.retrofit;
 
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.pojo.FoundItem;
+import com.helloworld.goodpoint.pojo.FoundPerson;
 import com.helloworld.goodpoint.pojo.LostItem;
-import com.helloworld.goodpoint.pojo.LostObject;
+import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.NotificationItem;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
 import com.helloworld.goodpoint.pojo.RegUser;
@@ -119,17 +120,15 @@ public interface ApiInterface {
     @GET("losts/LostItemFilter/")
     Call<List<LostItem>> getLostItem(@Query("id") int id);
 
-    @GET("losts/LostItemFilter/")
+    @GET("losts/LostPersonFilter/")
+    Call<List<LostPerson>> getLostPerson(@Query("id") int id);
+
+    @GET("losts/FoundPersonFilter/")
+    Call<List<FoundPerson>> getFoundPerson(@Query("id") int id);
+
+    @GET("losts/FoundItemFilter/")
     Call<List<FoundItem>> getFoundItem(@Query("id") int id);
 
-    @GET("losts/lostobject/")
-    Call<List<LostItem>> getHomeLosts_obj(@Query("user_id") String id);
-
-    @GET("losts/LostObjectFilter/")
-    Call<List<LostObject>> getHomeLosts_i(@Query("user_id") String id);
-
-    @GET("losts/FoundObjectFilter/")
-    Call<List<FoundItem>> getHomeFounds_i(@Query("user_id") String id);
 //------------------------------------------------------------------------------------
 
     @FormUrlEncoded
