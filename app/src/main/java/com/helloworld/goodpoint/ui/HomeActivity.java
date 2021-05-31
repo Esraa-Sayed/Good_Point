@@ -286,44 +286,44 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (losts != null) {
             for (int i = 0; i < losts.size(); i++) {
                 Log.d("test", "id=" + losts.get(i));
-                if (LostItem.getLostItem().isCheak()) {
-                    Call<List<LostItem>> call2 = apiInterface.getLostItem(losts.get(i));
-                    call2.enqueue(new Callback<List<LostItem>>() {
-                        @Override
-                        public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
-                            list1 = response.body();
-                            if (!list1.isEmpty()) {
-                                String t = list1.get(0).getType() + " " + list1.get(0).getBrand() + "";
-                                GlobalVar.losts.add(t);
-                            } else
-                                Toast.makeText(getApplicationContext(), "There is no items of lost object !", Toast.LENGTH_SHORT).show();
+                Call<List<LostItem>> call2 = apiInterface.getLostItem(losts.get(i));
+                call2.enqueue(new Callback<List<LostItem>>() {
+                    @Override
+                    public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
+                        list1 = response.body();
+                        Log.d("e","bed="+response.body());
+                        if (!list1.isEmpty()) {
+                            String t = list1.get(0).getType() + " " + list1.get(0).getBrand() + "";
+                            GlobalVar.losts.add(t);
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<List<LostItem>> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    Call<List<LostPerson>> call3 = apiInterface.getLostPerson(losts.get(i));
-                    call3.enqueue(new Callback<List<LostPerson>>() {
-                        @Override
-                        public void onResponse(Call<List<LostPerson>> call, Response<List<LostPerson>> response) {
-                            list2 = response.body();
-                            if (list2 != null) {
-                                String t = list2.get(0).getName() + "missing";
-                                GlobalVar.losts.add(t);
-                            } else
-                                Toast.makeText(getApplicationContext(), "There is no persons of lost object !", Toast.LENGTH_SHORT).show();
-                        }
+                    @Override
+                    public void onFailure(Call<List<LostItem>> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
 
-                        @Override
-                        public void onFailure(Call<List<LostPerson>> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                Call<List<LostPerson>> call3 = apiInterface.getLostPerson(losts.get(i));
+                call3.enqueue(new Callback<List<LostPerson>>() {
+                    @Override
+                    public void onResponse(Call<List<LostPerson>> call, Response<List<LostPerson>> response) {
+                        list2=new ArrayList<>();
+                        list2 = response.body();
+                        Log.d("e","eee="+response.body());
+                        if (response.body()!=null) {
+                            String t = list2.get(0).getName() + "missing";
+                            GlobalVar.losts.add(t);
                         }
-                    });
-                }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<LostPerson>> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
+
         } else
             Toast.makeText(getApplicationContext(), "There is no object", Toast.LENGTH_LONG).show();
 
@@ -337,17 +337,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             for (int i = 0; i < founds.size(); i++) {
                 Log.d("test", "id=" + founds.get(i));
                 ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
-                if (true) {
+
                     Call<List<FoundItem>> call2 = apiInterface.getFoundItem(founds.get(i));
                     call2.enqueue(new Callback<List<FoundItem>>() {
                         @Override
                         public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
                             list = response.body();
-                            if (!list.isEmpty()) {
+                            if (response.body()!=null) {
                                 String t = list.get(0).getType() + " " + list.get(0).getBrand() + "";
                                 GlobalVar.founds.add(t);
-                            } else
-                                Toast.makeText(getApplicationContext(), "There is no items of found object !", Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -356,17 +355,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         }
                     });
 
-                } else {
                     Call<List<FoundPerson>> call3 = apiInterface.getFoundPerson(founds.get(i));
                     call3.enqueue(new Callback<List<FoundPerson>>() {
                         @Override
                         public void onResponse(Call<List<FoundPerson>> call, Response<List<FoundPerson>> response) {
                             list3 = response.body();
-                            if (list3 != null) {
+                            if (response.body() != null) {
                                 String t = list3.get(0).getName() + "missing";
                                 GlobalVar.founds.add(t);
-                            } else
-                                Toast.makeText(getApplicationContext(), "There is no persons of found object !", Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -374,7 +371,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
-                }
+
             }
         } else
             Toast.makeText(getApplicationContext(), "There is no object", Toast.LENGTH_LONG).show();

@@ -177,6 +177,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 } else if (flagObject && CheckMatchObject()) {
                     LostItems();
                     LostItem item = new LostItem(Type, Serial, brand, ObjectColor);
+
                     Toast.makeText(this, "Type= " + Type, Toast.LENGTH_SHORT).show();
                     //getItems(item, this);
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
