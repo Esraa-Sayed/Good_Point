@@ -1,29 +1,24 @@
 package com.helloworld.goodpoint.ui;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.pojo.RegUser;
 import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
-import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,10 +38,14 @@ public class MainActivity extends AppCompatActivity {
     PrefManager prefManager;
     ImageView splash;
     Thread t;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         init();
         if (prefManager.isFirstTimeLaunch()) {
             prefManager.setFirstTimeLaunch(true);
@@ -122,6 +121,26 @@ public class MainActivity extends AppCompatActivity {
                                         for(int i=0;i<jsonArray.length();i++)
                                             User.getUser().getFounds().add(jsonArray.getJSONObject(i).getInt("id"));
 
+                                            User.getUser().setId(id);
+                                            User.getUser().setUsername(name);
+                                            User.getUser().setEmail(email);
+                                            User.getUser().setPhone(phone);
+                                            User.getUser().setCity(city);
+                                            User.getUser().setBirthdate(birthdate);
+                                            User.getUser().setProfile_pic(Userimage);
+                                            User.getUser().setId_card_pic(idcardimage);
+
+
+                                        if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
+                                                String dnsLink = new PrefManager(MainActivity.this).getNGROKLink();
+                                                DownloadProfilePic download = new DownloadProfilePic();
+                                                download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
+                                            }else{
+                                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+
+                                                startActivity(intent);
+                                                finish();
+                                            }
                                         User.getUser().setId(id);
                                         User.getUser().setUsername(name);
                                         User.getUser().setEmail(email);
@@ -197,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Bitmap doInBackground(String... urls) {
             try {
+
                 return download(urls[0]);
             } catch (IOException e) {
                 Log.e("TAG", "doInBackground: "+e.getMessage());
@@ -214,4 +234,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
     }
+
+
+
 }

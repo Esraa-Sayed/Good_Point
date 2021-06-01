@@ -1,9 +1,5 @@
 package com.helloworld.goodpoint.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,6 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
@@ -36,12 +36,11 @@ import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
+import com.helloworld.goodpoint.ui.candidate.CandidatePage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -115,6 +114,7 @@ public class NotificationActivity extends AppCompatActivity {
                     });
                     if(list.get(pos).getType()==3){
                         //intent to candidate
+                        startActivity(new Intent(NotificationActivity.this, CandidatePage.class));
                         return;
                     }
                     else if(list.get(pos).getType() == 1 || list.get(pos).getType() == 4){

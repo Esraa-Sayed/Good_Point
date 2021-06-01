@@ -1,21 +1,12 @@
 package com.helloworld.goodpoint.ui.candidate;
 
 
-import android.graphics.Bitmap;
-
 import java.util.List;
 
 public class Item {
 
     private String itemTitle;
-    private Bitmap ItemImage;
-    private List<SubItem> subItemList;
-
-    public Item(String itemTitle, Bitmap ItemImage, List<SubItem> subItemList) {
-        this.itemTitle = itemTitle;
-        this.subItemList = subItemList;
-        this.ItemImage = ItemImage;
-    }
+    private List<SubItem> subItem;
 
     public String getItemTitle() {
         return itemTitle;
@@ -25,20 +16,16 @@ public class Item {
         this.itemTitle = itemTitle;
     }
 
-    public List<SubItem> getSubItemList() {
-        return subItemList;
+    public List<SubItem> getSubItem() {
+        return subItem;
     }
 
-    public void setSubItemList(List<SubItem> subItemList) {
-        this.subItemList = subItemList;
+    public void setSubItem(List<SubItem> subItem) {
+        this.subItem = subItem;
     }
 
-    public Bitmap getItemImage() {
-        return ItemImage;
+    public Item(String itemTitle, List<SubItem> subItem) {
+        this.itemTitle = itemTitle;
+        this.subItem = subItem;
     }
-
-    public void setItemImage(Bitmap itemImage) {
-        ItemImage = itemImage;
-    }
-
 }

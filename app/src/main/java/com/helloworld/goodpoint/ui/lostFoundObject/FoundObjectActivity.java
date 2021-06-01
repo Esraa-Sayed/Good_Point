@@ -70,6 +70,8 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.FoundItem;
+import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.NotificationItem;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
@@ -90,7 +92,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -123,7 +124,6 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     private FaceDetector faceDetector;
     FusedLocationProviderClient fusedLocationProviderClient;
     private boolean flagPerson, flagObject;
-    List<FoundItem> Flist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,6 +268,8 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 } else if (flagObject && CheckMatchObject()) {
                     FoundItems();
+                    LostItem item =new LostItem(Type,Serial,brand,ObjectColor);
+                    getItems(item,getApplicationContext());
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     finish();
                 } else if (flagPerson && CheckMatchPerson()) {
@@ -635,6 +637,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.d("e","responce="+response.body());
                 if (response.isSuccessful()) {
 
                     try {
@@ -653,16 +656,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                 } else {
                                     Toast.makeText(FoundObjectActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
                                 }
-
                             }
-
                             @Override
                             public void onFailure(Call<FoundItem> call, Throwable t) {
                                 Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
-
-
                     } catch (JSONException e) {
                         Toast.makeText(FoundObjectActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -730,18 +729,21 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
     public void getItems(FoundItem item, Context context) {
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
-        Call<List<FoundItem>> call = apiInterface.getFItem(item.getType());
-        call.enqueue(new Callback<List<FoundItem>>() {
+        Call<List<LostItem>> call = apiInterface.getLItem(item.getType());
+        GlobalVar.type=item.getType();
+        call.enqueue(new Callback<List<LostItem>>() {
             @Override
-            public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
-                Flist = response.body();
-                int percent[] = new int[Flist.size()];
-                if (!Flist.isEmpty()) {
-                    for (int i = 0; i < Flist.size(); i++) {
-                        percent[i] = MatchItems(item, Flist.get(i));
-                     Log.d("e", "itemlist="+Flist.get(i).getColor()+" , "+Flist.get(i).getBrand()+" , "+Flist.get(i).getType());
+            public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
+                GlobalVar.lostList=new ArrayList<>();
+                GlobalVar.lostList = response.body();
+                GlobalVar.percentList = new ArrayList<>(GlobalVar.lostList.size());
+                if (response.body()!=null&&GlobalVar.lostList.size()!=0) {
+                    storeCandidatesNotifictation() ;
+                    for (int i = 0; i < GlobalVar.lostList.size(); i++) {
+                        GlobalVar.percentList.add(MatchItems(item, GlobalVar.lostList.get(i)));
+                     Log.d("e", "itemlist="+GlobalVar.lostList.get(i).getColor()+" , "+GlobalVar.lostList.get(i).getBrand()+" , "+GlobalVar.lostList.get(i).getType());
                      Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
-                     Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
+                     Log.d("e", "Percent ["+(i+1)+"] ="+  GlobalVar.percentList.get(i)+"%");
                     }
                 } else
                     Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
@@ -749,25 +751,42 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
 
             @Override
-            public void onFailure(Call<java.util.List<FoundItem>> call, Throwable t) {
+            public void onFailure(Call<java.util.List<LostItem>> call, Throwable t) {
                 Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
     }
 
-    public int MatchItems(FoundItem item1, FoundItem item2) {
-        int percentage = 20;
-        if (item1.getType().equals(item2.getType()))
-            percentage += 20;
+    public String MatchItems(LostItem item1, LostItem item2) {
+        String percentage ="20%";
         if (item1.getBrand().equals(item2.getBrand()))
-            percentage += 20;
+            percentage += "20%";
         if (item1.getColor().equals(item2.getColor()))
-            percentage += 20;
+            percentage += "20%";
         if (item1.getSerial_number().equals(item2.getSerial_number()))
-            percentage += 20;
+            percentage += "20%";
         return percentage;
     }
 
+public void storeCandidatesNotifictation(){
+    ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
+    Call<NotificationItem> call = apiInterface.storeNotification(User.getUser().getId(),"Candidate Items","There are Candidates founded",3);
+    call.enqueue(new Callback<NotificationItem>() {
+        @Override
+        public void onResponse(Call<NotificationItem> call, Response<NotificationItem> response) {
+            if (response.isSuccessful()) {
+                Toast.makeText(FoundObjectActivity.this, "Notification is posted.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(FoundObjectActivity.this, "The Notification is not posted.", Toast.LENGTH_SHORT).show();
+            }
+        }
 
+        @Override
+        public void onFailure(Call<NotificationItem> call, Throwable t) {
+            Toast.makeText(FoundObjectActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
+        }
+        });
+}
 }

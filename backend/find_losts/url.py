@@ -18,7 +18,8 @@ urlpatterns = [
     path('lostperson/<int:pk>/', views.LostPersonDetailsView.as_view(), name='lost_item'),
     path('foundobject/<int:pk>/', views.FoundObjectDetalisView.as_view(), name='lost_item'),
     path('founditem/<int:pk>/', views.FoundItemDetailsView.as_view(), name='lost_item'),
-
+    path('lost_person/id=<int:id>/', views.Lost_PersonView.as_view()),
+    path('found_person/id=<int:id>/', views.Found_PersonView.as_view()),
 
     path('LostObjectFilter/', views.LostObjectFilter.as_view()),
     path('LostItemFilter/', views.LostItemFilter.as_view()),

@@ -177,8 +177,9 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 } else if (flagObject && CheckMatchObject()) {
                     LostItems();
                     LostItem item = new LostItem(Type, Serial, brand, ObjectColor);
+
                     Toast.makeText(this, "Type= " + Type, Toast.LENGTH_SHORT).show();
-                    getItems(item, this);
+
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     finish();
@@ -446,12 +447,16 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                         call2.enqueue(new Callback<LostItem>() {
                             @Override
                             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
+                                Log.d("e","responce="+response.body());
                                 if (response.isSuccessful()) {
                                     Toast.makeText(LostObjectDetailsActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
                                     User.getUser().getLosts().add(Integer.parseInt(id));
-                                } else
+                                } else {
                                     Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
-                            }
+
+                                }
+                                }
+
 
                             @Override
                             public void onFailure(Call<LostItem> call, Throwable t) {

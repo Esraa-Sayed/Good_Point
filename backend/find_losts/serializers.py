@@ -144,6 +144,13 @@ class LostPersonSerializer(serializers.ModelSerializer):
         return validated_data
 
 
+class Lost_PersonSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LostPerson
+        fields = ['id', 'name', 'image']
+
+
 class FoundObjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoundObject
@@ -254,6 +261,13 @@ class FoundPersonSerializer(serializers.ModelSerializer):
             validated_data['matched_with'] = 0
 
         return validated_data
+
+
+
+class Found_PersonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoundPerson
+        fields = [ 'name', 'image', 'id']
 
 
 class FoundPersonImageSerializer(serializers.ModelSerializer):

@@ -96,6 +96,19 @@ class LostPersonView(generics.ListCreateAPIView):
     serializer_class = LostPersonSerializer
 
 
+class Lost_PersonView2(generics.UpdateAPIView):
+    queryset = LostPerson.objects.all()
+    serializer_class = Lost_PersonSerializer
+    lookup_field = 'id'
+
+
+class Lost_PersonView(generics.RetrieveUpdateDestroyAPIView):
+    http_method_names = ['get']
+    queryset = LostPerson.objects.all()
+    serializer_class = Lost_PersonSerializer
+    lookup_field = 'id'
+
+
 class LostPersonDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = LostPerson.objects.all()
     serializer_class = LostPersonSerializer
@@ -132,6 +145,13 @@ class FoundPersonView(generics.ListCreateAPIView):
     http_method_names = ['post']
     queryset = FoundPerson.objects.all()
     serializer_class = FoundPersonSerializer
+
+
+class Found_PersonView(generics.RetrieveUpdateDestroyAPIView):
+    http_method_names = ['get']
+    queryset = FoundPerson.objects.all()
+    serializer_class = Found_PersonSerializer
+    lookup_field = 'id'
 
 
 class FoundPersonImageView(generics.ListCreateAPIView):
