@@ -94,7 +94,7 @@ public class NotificationActivity extends AppCompatActivity {
             listView.setAdapter(new NotificationListAdapter(this, 0, list));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                public void onItemClick(AdapterView<?> adapterView, View v, int i, long l) {
                     int pos = list.size()-i-1;
                     NotificationListAdapter adapter = (NotificationListAdapter)listView.getAdapter();
                     adapter.getItem(pos).setRead(true);
