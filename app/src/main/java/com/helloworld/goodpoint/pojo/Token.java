@@ -12,6 +12,13 @@ public class Token {
     @Expose
     private String access;
 
+    private static Token token;
+    public static Token getToken(){
+        if(token == null){
+            token = new Token();
+        }
+        return token;
+    }
 
     public Token( String refresh, String access) {
         this.refresh = refresh;

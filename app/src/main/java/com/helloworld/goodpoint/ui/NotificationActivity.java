@@ -255,7 +255,7 @@ public class NotificationActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
-                        Call<Token> call = apiInterface.refresh(new PrefManager(getApplicationContext()).isLoginned());
+                        Call<Token> call = apiInterface.refresh(Token.getToken().getRefresh());
                         call.enqueue(new Callback<Token>() {
                             @Override
                             public void onResponse(Call<Token> call, Response<Token> response) {
@@ -292,5 +292,7 @@ public class NotificationActivity extends AppCompatActivity {
         view = getLayoutInflater().inflate(R.layout.alert_id_card, null);
         if(User.getUser().getId() == null || User.getUser().getId().isEmpty())
             User.getUser().setId(getIntent().getExtras().getString("ID"));
+        if(Token.getToken().getRefresh() == null && Token.getToken().getRefresh().isEmpty())
+            Token.getToken().setRefresh(new PrefManager(this).isLoginned());
     }
 }

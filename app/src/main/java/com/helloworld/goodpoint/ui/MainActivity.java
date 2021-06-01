@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     //Thread.sleep(3000);
                     ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
                     Call<Token> call = apiInterface.refresh(new PrefManager(getApplicationContext()).isLoginned());
+                    Token.getToken().setRefresh(new PrefManager(getApplicationContext()).isLoginned());
                     call.enqueue(new Callback<Token>() {
                         @Override
                         public void onResponse(Call<Token> call, Response<Token> response) {

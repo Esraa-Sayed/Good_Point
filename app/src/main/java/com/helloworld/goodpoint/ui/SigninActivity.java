@@ -163,6 +163,8 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful()) {
                     String token = response.body().getAccess();
+                    Token.getToken().setAccess(response.body().getAccess());
+                    Token.getToken().setRefresh(response.body().getRefresh());
                     if (Remember) {
                         new PrefManager(getApplicationContext()).setLogin(response.body().getRefresh());
                     }
