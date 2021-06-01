@@ -430,7 +430,6 @@ public class SignupActivity extends AppCompatActivity {
             else {
 
                 try {
-                    Log.e("TAG", "onResponse: "+ response.errorBody().string());
                      JSONObject jsonObject = new JSONObject(response.errorBody().string()).getJSONObject("error");
                         String mail = jsonObject.getString("username");
                         String phone = jsonObject.getString("phone");
