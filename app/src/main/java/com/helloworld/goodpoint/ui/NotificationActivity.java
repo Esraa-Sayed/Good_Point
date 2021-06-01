@@ -37,6 +37,7 @@ import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.candidate.CandidatePage;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -141,8 +142,7 @@ public class NotificationActivity extends AppCompatActivity {
                                                         if (i.resolveActivity(NotificationActivity.this.getPackageManager()) != null) {
                                                             startActivityForResult(i, 10);
                                                         } else
-                                                            Toast.makeText(NotificationActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                                                        //FancyToast.makeText(getActivity().getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
+                                                              FancyToast.makeText(getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
                                                         break;
                                                     case R.id.Gallery:
                                                         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -158,7 +158,6 @@ public class NotificationActivity extends AppCompatActivity {
                             });
 
                             builder = new AlertDialog.Builder(NotificationActivity.this);
-                            builder.setCancelable(false);
                             builder.setMessage("Please , Upload an image of your id_card");
                             builder.setView(view);
                             dialog = builder.create();
@@ -203,8 +202,8 @@ public class NotificationActivity extends AppCompatActivity {
                     }
                     break;
             }
+            checkVaildIdcard();
         }
-        checkVaildIdcard();
     }
     private void checkVaildIdcard() {
         TextView messageforuser = view.findViewById(R.id.messageforuser);
