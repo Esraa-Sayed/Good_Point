@@ -28,7 +28,7 @@ class LoginView(APIView):
         if user.profile_pic:
             user_pic = user.profile_pic.url
         if user.id_card_pic:
-            user_pic = user.id_card_pic.url
+            id_card_pic = user.id_card_pic.url
         response = {
             'id': user.pk,
             'username': user.first_name,

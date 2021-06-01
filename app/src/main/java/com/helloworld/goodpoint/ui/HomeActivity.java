@@ -9,11 +9,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,12 +31,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.helloworld.goodpoint.App;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.RegUser;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.ui.lostFoundObject.FoundObjectActivity;
 import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
-import com.helloworld.goodpoint.ui.myService.NotificationService;
+import com.helloworld.goodpoint.ui.myService.NotificationBroadcast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,7 +68,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         init();
         setToolBarAndDrawer();
         setBottomNavigator();
-        startNotificationService();
 
         if(savedInstanceState == null) {
             //To make first fragment is home when opening the app
@@ -73,13 +75,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
-    }
-
-    private void startNotificationService() {
-        if(!NotificationService.isSurviceRun){
-            NotificationService.isSurviceRun=true;
-            startService(new Intent(this, NotificationService.class));
-        }
     }
 
     private void setBottomNavigator() {

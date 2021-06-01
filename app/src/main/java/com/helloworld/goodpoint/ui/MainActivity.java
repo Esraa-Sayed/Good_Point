@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
         return new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(3000);
+                //try {
+                    //Thread.sleep(3000);
                     ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
                     Call<Token> call = apiInterface.refresh(new PrefManager(getApplicationContext()).isLoginned());
                     call.enqueue(new Callback<Token>() {
@@ -122,23 +122,23 @@ public class MainActivity extends AppCompatActivity {
                                         for(int i=0;i<jsonArray.length();i++)
                                             User.getUser().getFounds().add(jsonArray.getJSONObject(i).getInt("id"));
 
-                                            User.getUser().setId(id);
-                                            User.getUser().setUsername(name);
-                                            User.getUser().setEmail(email);
-                                            User.getUser().setPhone(phone);
-                                            User.getUser().setCity(city);
-                                            User.getUser().setBirthdate(birthdate);
-                                            User.getUser().setProfile_pic(Userimage);
-                                            User.getUser().setId_card_pic(idcardimage);
-                                            if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
-                                                String dnsLink = new PrefManager(MainActivity.this).getNGROKLink();
-                                                DownloadProfilePic download = new DownloadProfilePic();
-                                                download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
-                                            }else{
-                                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            }
+                                        User.getUser().setId(id);
+                                        User.getUser().setUsername(name);
+                                        User.getUser().setEmail(email);
+                                        User.getUser().setPhone(phone);
+                                        User.getUser().setCity(city);
+                                        User.getUser().setBirthdate(birthdate);
+                                        User.getUser().setProfile_pic(Userimage);
+                                        User.getUser().setId_card_pic(idcardimage);
+                                        if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
+                                            String dnsLink = new PrefManager(MainActivity.this).getNGROKLink();
+                                            DownloadProfilePic download = new DownloadProfilePic();
+                                            download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
+                                        }else{
+                                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
 
 
                                         } catch (Exception e) {
@@ -167,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                } catch (InterruptedException e) {
-                    Log.e("InterruptedException: ", e.getMessage());
-                }
+                //} catch (InterruptedException e) {
+                  //  Log.e("InterruptedException: ", e.getMessage());
+                //}
             }
         });
     }

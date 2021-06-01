@@ -493,15 +493,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if(response.isSuccessful()) {
                     Toast.makeText(LostObjectDetailsActivity.this, "The object is  posted.", Toast.LENGTH_SHORT).show();
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.body().toString());
-                        int matched_id = jsonObject.getInt("matched_with");
-                        String name = jsonObject.getString("name");
-                        if(matched_id != 0)
-                            createNotification(name);
-                    } catch (JSONException e) {
-                        Log.e("TAG", "onResponse: "+e.getMessage());
-                    }
                 }else {
                     try {
                         Log.e("onResponse: ", response.errorBody().string());
@@ -519,29 +510,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             }
         });
 
-    }
-
-    private void createNotification(String name) {
-        NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent notifyIntent = new Intent(this, NotificationActivity.class);
-        PendingIntent pintent = PendingIntent.getActivity(this,0,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel nc = new NotificationChannel("Good Point","matched person", NotificationManager.IMPORTANCE_HIGH);
-            nc.setDescription("we found the family of person");
-            nm.createNotificationChannel(nc);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"Good Point");
-            builder.setContentTitle("Matched person").setContentText(name+" is found");
-            builder.setSmallIcon(R.drawable.application_icon2).setStyle(new NotificationCompat.BigTextStyle().bigText(name+" is found"));
-            builder.setContentIntent(pintent).setAutoCancel(true);
-            NotificationManagerCompat nmc = NotificationManagerCompat.from(this);
-            nmc.notify(0,builder.build());
-        }else{
-            Notification.Builder builder = new Notification.Builder(this);
-            builder.setContentTitle("Matched person").setContentText(name+" is found");
-            builder.setSmallIcon(R.drawable.application_icon2).setStyle(new Notification.BigTextStyle().bigText(name+" is found"));
-            builder.setContentIntent(pintent);
-            nm.notify(0,builder.build());
-        }
     }
 
     public void getItems(LostItem item, Context context) {

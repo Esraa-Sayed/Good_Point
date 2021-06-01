@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
+import com.helloworld.goodpoint.App;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
@@ -198,7 +199,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             User.getUser().setBirthdate(birthdate);
                             User.getUser().setProfile_pic(Userimage);
                             User.getUser().setId_card_pic(idcardimage);
-                            if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
+                            if(User.getUser().getProfile_pic() != null && !User.getUser().getProfile_pic().isEmpty()) {
                                 String dnsLink = new PrefManager(SigninActivity.this).getNGROKLink();
                                 DownloadProfilePic download = new DownloadProfilePic();
                                 download.execute(dnsLink+User.getUser().getProfile_pic()+"/");

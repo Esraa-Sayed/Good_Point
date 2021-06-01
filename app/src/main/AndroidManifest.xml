@@ -18,8 +18,12 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.INSTANT_APP_FOREGROUND_SERVICE"
+        tools:ignore="ProtectedPermissions" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@drawable/application_icon2"
         android:label="@string/app_name"
@@ -28,9 +32,6 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
-        <service
-            android:name=".ui.myService.NotificationService"
-            android:exported="false"/>
 
         <receiver
             android:name=".ui.myService.NotificationBroadcast"
@@ -44,7 +45,7 @@
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-
+                <action android:name="com.helloworld.goodpoint.ui.myService.NotificationBroadcast"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>

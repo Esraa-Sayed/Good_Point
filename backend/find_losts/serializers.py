@@ -47,7 +47,7 @@ def match_with_found_person(pk):
     if dist.size > 0:
         min_val = min(dist)
 
-    if 0 < min_val <= 0.52:
+    if 0 <= min_val <= 0.52:
         return min_val, ids[dist.argmin()]
     else:
         return -1, -1
@@ -179,7 +179,7 @@ def match_with_lost_person(pk):
     if dist.size > 0:
         min_val = min(dist)
 
-    if 0 < min_val <= 0.52:
+    if 0 <= min_val <= 0.52:
         return min_val, ids[dist.argmin()]
     else:
         return -1, -1

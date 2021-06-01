@@ -139,11 +139,11 @@ public interface ApiInterface {
     Call<List<NotificationItem>> getNotification(@Path("id") String user_id);
 
     @FormUrlEncoded
-    @PUT("notification/read/{id}/")
+    @PATCH("notification/read/{id}/")
     Call<JsonObject> updateRead(@Path("id") String id, @Field("is_read") Boolean read);
 
     @FormUrlEncoded
-    @PUT("notification/sent/{id}/")
+    @PATCH("notification/sent/{id}/")
     Call<JsonObject> updateSent(@Path("id") String id, @Field("is_sent") Boolean sent);
 
     @GET("notification/new/{user_id}/")
