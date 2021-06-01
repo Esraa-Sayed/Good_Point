@@ -7,10 +7,6 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,7 +23,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -49,8 +44,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.loader.content.CursorLoader;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -77,7 +70,6 @@ import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.Alert;
 import com.helloworld.goodpoint.ui.GlobalVar;
-import com.helloworld.goodpoint.ui.NotificationActivity;
 import com.helloworld.goodpoint.ui.PrefManager;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -268,7 +260,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 } else if (flagObject && CheckMatchObject()) {
                     FoundItems();
-                    LostItem item =new LostItem(Type,Serial,brand,ObjectColor);
+                    FoundItem item =new FoundItem(Type,Serial,brand,ObjectColor);
                     getItems(item,getApplicationContext());
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     finish();
@@ -727,24 +719,22 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public void getItems(LostItem item, Context context) {
+    public void getItems(FoundItem item, Context context) {
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
         Call<List<LostItem>> call = apiInterface.getLItem(item.getType());
-        GlobalVar.type=item.getType();
+        GlobalVar.type="";
+        GlobalVar.type+=item.getType()+"";
         call.enqueue(new Callback<List<LostItem>>() {
             @Override
             public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
                 GlobalVar.lostList=new ArrayList<>();
                 GlobalVar.lostList = response.body();
-                GlobalVar.percentList = new ArrayList<>(GlobalVar.lostList.size());
+                GlobalVar.percentList = new ArrayList<>();
                 if (response.body()!=null&&GlobalVar.lostList.size()!=0) {
                     storeCandidatesNotifictation() ;
                     for (int i = 0; i < GlobalVar.lostList.size(); i++) {
                         GlobalVar.percentList.add(MatchItems(item, GlobalVar.lostList.get(i)));
-                     Log.d("e", "itemlist="+GlobalVar.lostList.get(i).getColor()+" , "+GlobalVar.lostList.get(i).getBrand()+" , "+GlobalVar.lostList.get(i).getType());
-                     Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
-                     Log.d("e", "Percent ["+(i+1)+"] ="+  GlobalVar.percentList.get(i)+"%");
-                    }
+                   }
                 } else
                     Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
             }
@@ -758,15 +748,17 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public String MatchItems(LostItem item1, LostItem item2) {
-        String percentage ="20%";
+    public String MatchItems(FoundItem item1, LostItem item2) {
+        int percentage =20;
         if (item1.getBrand().equals(item2.getBrand()))
-            percentage += "20%";
+            percentage += 20;
         if (item1.getColor().equals(item2.getColor()))
-            percentage += "20%";
-        if (item1.getSerial_number().equals(item2.getSerial_number()))
-            percentage += "20%";
-        return percentage;
+            percentage +=20;
+        if (item1.getSerial_number().equals(item2.getSerial_number())) {
+         return "100%";
+        }
+        String p=percentage+"%";
+        return p;
     }
 
 public void storeCandidatesNotifictation(){
