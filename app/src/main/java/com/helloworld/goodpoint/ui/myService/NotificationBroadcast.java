@@ -26,6 +26,7 @@ import com.helloworld.goodpoint.App;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.NotificationItem;
 import com.helloworld.goodpoint.pojo.Token;
+import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.retrofit.Decode;
@@ -50,14 +51,18 @@ public class NotificationBroadcast extends BroadcastReceiver {
         String refresh = new PrefManager(context).isLoginned();
         Log.e("TAG", "onReceive: Token: "+refresh);
         newNotification(context);
-        if(refresh.isEmpty())
-            return;
-        try {
-            String bodyToken = Decode.decoded(refresh);
-            JSONObject jsonObject = new JSONObject(bodyToken);
-            user_id = jsonObject.getString("user_id");
-        } catch (Exception e) {
-            Log.e("TAG", "onReceive: "+e.getMessage());
+        if(refresh.isEmpty()) {
+            if(User.getUser() != null && User.getUser().getId() != null && !User.getUser().getId().isEmpty())
+                user_id = User.getUser().getId();
+            else return;
+        }else{
+            try {
+                String bodyToken = Decode.decoded(refresh);
+                JSONObject jsonObject = new JSONObject(bodyToken);
+                user_id = jsonObject.getString("user_id");
+            } catch (Exception e) {
+                Log.e("TAG", "onReceive: "+e.getMessage());
+            }
         }
 
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);

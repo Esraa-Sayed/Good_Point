@@ -171,7 +171,7 @@ def match_with_lost_person(pk):
         ids.append(id_l[0])
 
     dist = face_recognition.face_distance(encodings, source_encoding)
-    min_val = min(dist)
+    min_val = -1
 
     if dist.size > 0:
         min_val = min(dist)

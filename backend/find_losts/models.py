@@ -117,7 +117,7 @@ class MatchedPerson(models.Model):
     id_lp = models.OneToOneField(LostObject, unique=True, related_name='match', on_delete=models.CASCADE,
                                  db_column='lost_person_id')
     date_of_receiving = models.DateTimeField(auto_now_add=True)
-    percent = models.DecimalField(max_digits=5, decimal_places=4)
+    percent = models.DecimalField(max_digits=7, decimal_places=4)
     notify_id_fp = models.ForeignKey(Notification, related_name='reach_match_to_who_found', on_delete=models.CASCADE,
                                      db_column='notify_id_fp')
     notify_id_lp = models.ForeignKey(Notification, related_name='reach_match_to_who_lost', on_delete=models.CASCADE,
