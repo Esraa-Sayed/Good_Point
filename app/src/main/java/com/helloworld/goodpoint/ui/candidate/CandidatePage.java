@@ -50,10 +50,8 @@ public class CandidatePage extends AppCompatActivity implements AdapterView.OnIt
 
 
         LostItem item = new LostItem("Phone", "123456788", "Lenove", "White", "details");
-        item.setType("Phone");
 
-
-        if (GlobalVar.lostList == null && GlobalVar.percentList == null) {
+        if (GlobalVar.lostList == null && GlobalVar.percentList == null&&GlobalVar.type=="") {
             GlobalVar.lostList = new ArrayList<>();
             GlobalVar.percentList = new ArrayList<>();
             GlobalVar.lostList.add(item);
@@ -62,10 +60,8 @@ public class CandidatePage extends AppCompatActivity implements AdapterView.OnIt
             GlobalVar.percentList.add("60%");
             GlobalVar.percentList.add("50%");
             GlobalVar.percentList.add("40%");
+            GlobalVar.type="Phone";
 
-        }
-        if (GlobalVar.type != "") {
-            GlobalVar.type = "Phone";
         }
         type.setText(GlobalVar.type);
         LinearLayoutManager layoutManager = new LinearLayoutManager(

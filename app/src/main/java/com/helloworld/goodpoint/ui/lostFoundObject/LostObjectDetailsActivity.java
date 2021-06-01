@@ -5,10 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,7 +13,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -33,8 +28,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.loader.content.CursorLoader;
 
 import com.google.android.gms.vision.Frame;
@@ -47,7 +40,6 @@ import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.GlobalVar;
-import com.helloworld.goodpoint.ui.NotificationActivity;
 import com.helloworld.goodpoint.ui.PrefManager;
 import com.helloworld.goodpoint.ui.prepareList;
 import com.helloworld.goodpoint.ui.select_multiple_faces.Selection;
@@ -176,10 +168,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     FancyToast.makeText(this, "Specify the type of the missing object", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 } else if (flagObject && CheckMatchObject()) {
                     LostItems();
-                    LostItem item = new LostItem(Type, Serial, brand, ObjectColor);
-
-                    Toast.makeText(this, "Type= " + Type, Toast.LENGTH_SHORT).show();
-
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     finish();
@@ -519,47 +507,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             }
         });
 
-    }
-
-    public void getItems(LostItem item, Context context) {
-        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
-        Call<List<LostItem>> call = apiInterface.getLItem(item.getType());
-        call.enqueue(new Callback<List<LostItem>>() {
-            @Override
-            public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
-                Llist = response.body();
-                Log.d("e","list="+Llist+",type="+item.getType());
-                int percent[] = new int[Llist.size()];
-                if (!Llist.isEmpty()) {
-                    for (int i = 0; i < Llist.size(); i++) {
-                        percent[i] = MatchItems(item, Llist.get(i));
-
-                     Log.d("e", "itemlist="+Llist.get(i).getColor()+" , "+Llist.get(i).getBrand()+" , "+Llist.get(i).getType());
-                        Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
-                        Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
-                    }
-                } else
-                    Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
-            }
-
-
-            @Override
-            public void onFailure(Call<java.util.List<LostItem>> call, Throwable t) {
-                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
-
-    public int MatchItems(LostItem item1, LostItem item2) {
-        int percentage = 20;
-        if (item1.getBrand().equals(item2.getBrand()))
-            percentage += 20;
-        if (item1.getColor().equals(item2.getColor()))
-            percentage += 20;
-        if (item1.getSerial_number().equals(item2.getSerial_number()))
-            percentage += 20;
-        return percentage;
     }
 
 
