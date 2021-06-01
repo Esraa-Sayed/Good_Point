@@ -79,8 +79,6 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         viewHolder.getDescription().setText(list.get(revposition).getDescription());
         switch (list.get(revposition).getType()){
             case 1:
-                viewHolder.getImageView().setImageResource(R.drawable.ic_account_circle);
-                break;
             case 2:
                 viewHolder.getImageView().setImageResource(R.drawable.ic_account_circle);
                 break;
@@ -88,6 +86,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
                 viewHolder.getImageView().setImageResource(R.drawable.ic_baseline_fact_check_24);
                 break;
             case 4:
+            case 5:
                 viewHolder.getImageView().setImageResource(R.drawable.ic_baseline_assignment_turned_in_24);
                 break;
         }
