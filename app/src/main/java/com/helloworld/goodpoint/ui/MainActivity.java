@@ -102,24 +102,24 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-                                    try {
-                                        Log.d("e","res="+response.body().toString());
-                                        JSONObject jsonObject = new JSONObject(response.body().toString()).getJSONObject("user");
-                                        String id = jsonObject.getString("id");
-                                        String name = jsonObject.getString("username");
-                                        String email = jsonObject.getString("email");
-                                        String phone = jsonObject.getString("phone");
-                                        String city = jsonObject.getString("city");
-                                        String birthdate = jsonObject.getString("birthdate");
-                                        String Userimage = jsonObject.getString("profile_pic");
-                                        String idcardimage = jsonObject.getString("id_card_pic");
-                                        JSONArray jsonArray = jsonObject.getJSONArray("losts");
-                                        Log.e("blabla", jsonArray.length() + "");
-                                        for(int i=0;i<jsonArray.length();i++)
-                                            User.getUser().getLosts().add(jsonArray.getJSONObject(i).getInt("id"));
-                                        jsonArray = jsonObject.getJSONArray("founds");
-                                        for(int i=0;i<jsonArray.length();i++)
-                                            User.getUser().getFounds().add(jsonArray.getJSONObject(i).getInt("id"));
+                                        try {
+                                            Log.d("e","res="+response.body().toString());
+                                            JSONObject jsonObject = new JSONObject(response.body().toString()).getJSONObject("user");
+                                            String id = jsonObject.getString("id");
+                                            String name = jsonObject.getString("username");
+                                            String email = jsonObject.getString("email");
+                                            String phone = jsonObject.getString("phone");
+                                            String city = jsonObject.getString("city");
+                                            String birthdate = jsonObject.getString("birthdate");
+                                            String Userimage = jsonObject.getString("profile_pic");
+                                            String idcardimage = jsonObject.getString("id_card_pic");
+                                            JSONArray jsonArray = jsonObject.getJSONArray("losts");
+                                            Log.e("blabla", jsonArray.length() + "");
+                                            for(int i=0;i<jsonArray.length();i++)
+                                                User.getUser().getLosts().add(jsonArray.getJSONObject(i).getInt("id"));
+                                            jsonArray = jsonObject.getJSONArray("founds");
+                                            for(int i=0;i<jsonArray.length();i++)
+                                                User.getUser().getFounds().add(jsonArray.getJSONObject(i).getInt("id"));
 
                                             User.getUser().setId(id);
                                             User.getUser().setUsername(name);
@@ -129,35 +129,15 @@ public class MainActivity extends AppCompatActivity {
                                             User.getUser().setBirthdate(birthdate);
                                             User.getUser().setProfile_pic(Userimage);
                                             User.getUser().setId_card_pic(idcardimage);
-
-
-                                        if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
+                                            if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
                                                 String dnsLink = new PrefManager(MainActivity.this).getNGROKLink();
                                                 DownloadProfilePic download = new DownloadProfilePic();
                                                 download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
                                             }else{
                                                 Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-
                                                 startActivity(intent);
                                                 finish();
                                             }
-                                        User.getUser().setId(id);
-                                        User.getUser().setUsername(name);
-                                        User.getUser().setEmail(email);
-                                        User.getUser().setPhone(phone);
-                                        User.getUser().setCity(city);
-                                        User.getUser().setBirthdate(birthdate);
-                                        User.getUser().setProfile_pic(Userimage);
-                                        User.getUser().setId_card_pic(idcardimage);
-                                        if(User.getUser().getProfile_pic() != null &&!User.getUser().getProfile_pic().isEmpty() && User.getUser().getProfile_bitmap() == null) {
-                                            String dnsLink = new PrefManager(MainActivity.this).getNGROKLink();
-                                            DownloadProfilePic download = new DownloadProfilePic();
-                                            download.execute(dnsLink+User.getUser().getProfile_pic()+"/");
-                                        }else{
-                                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        }
 
 
                                         } catch (Exception e) {
@@ -165,18 +145,18 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
 
-                                    @Override
-                                    public void onFailure(Call<JsonObject> call, Throwable t) {
-                                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                        startActivity(new Intent(MainActivity.this, SigninActivity.class));
-                                        finish();
-                                    }
-                                });
-                            }else{
-                                startActivity(new Intent(MainActivity.this, SigninActivity.class));
-                                finish();
-                            }
+                                @Override
+                                public void onFailure(Call<JsonObject> call, Throwable t) {
+                                    Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                    startActivity(new Intent(MainActivity.this, SigninActivity.class));
+                                    finish();
+                                }
+                            });
+                        }else{
+                            startActivity(new Intent(MainActivity.this, SigninActivity.class));
+                            finish();
                         }
+                    }
 
                         @Override
                         public void onFailure(Call<Token> call, Throwable t) {
