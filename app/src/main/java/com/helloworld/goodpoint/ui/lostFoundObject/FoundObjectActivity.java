@@ -659,7 +659,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     }
 
                 } else
-                        Toast.makeText(FoundObjectActivity.this, "Objec is not posted.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FoundObjectActivity.this, "Object is not posted.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -722,12 +722,12 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     public void getItems(FoundItem item, Context context) {
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
         Call<List<LostItem>> call = apiInterface.getLItem(item.getType());
-        GlobalVar.type="";
-        GlobalVar.type+=item.getType()+"";
+        Log.d("tes=",Type);
+        GlobalVar.type=Type;
         call.enqueue(new Callback<List<LostItem>>() {
             @Override
             public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
-                GlobalVar.lostList=new ArrayList<>();
+                GlobalVar.lostList = new ArrayList<>();
                 GlobalVar.lostList = response.body();
                 GlobalVar.percentList = new ArrayList<>();
                 if (response.body()!=null&&GlobalVar.lostList.size()!=0) {

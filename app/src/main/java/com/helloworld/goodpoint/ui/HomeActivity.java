@@ -4,9 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +28,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.helloworld.goodpoint.App;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.FoundItem;
 import com.helloworld.goodpoint.pojo.FoundPerson;
@@ -41,7 +39,6 @@ import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
 import com.helloworld.goodpoint.ui.lostFoundObject.FoundObjectActivity;
 import com.helloworld.goodpoint.ui.lostFoundObject.LostObjectDetailsActivity;
-import com.helloworld.goodpoint.ui.myService.NotificationBroadcast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +62,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     Fragment selectedFragment;
     List<LostObject> listObj;
     List<LostItem> list1;
-    List<FoundPerson> list3;
-    List<LostPerson> list2;
+    FoundPerson list3;
+    LostPerson list2;
     List<FoundItem> list;
 
     SwipeRefreshLayout refreshLayout;
@@ -309,20 +306,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
-                Call<List<LostPerson>> call3 = apiInterface.getLostPerson(losts.get(i));
-                call3.enqueue(new Callback<List<LostPerson>>() {
+                Call<LostPerson> call3 = apiInterface.getLostPerson(losts.get(i));
+                call3.enqueue(new Callback<LostPerson>() {
                     @Override
-                    public void onResponse(Call<List<LostPerson>> call, Response<List<LostPerson>> response) {
-                        list2=new ArrayList<>();
+                    public void onResponse(Call<LostPerson> call, Response<LostPerson> response) {
                         list2 = response.body();
-                        if (response.body()!=null&&list2.size()!=0) {
-                            String t = list2.get(0).getName() + "missing";
+                        Log.e("TAG", "onResponse: "+response.body());
+                        if (response.body()!=null) {
+                            String t = list2.getName() + " is Missing";
                             GlobalVar.losts.add(t);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<LostPerson>> call, Throwable t) {
+                    public void onFailure(Call<LostPerson> call, Throwable t) {
                         Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
@@ -356,19 +353,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
-                    Call<List<FoundPerson>> call3 = apiInterface.getFoundPerson(founds.get(i));
-                    call3.enqueue(new Callback<List<FoundPerson>>() {
+                    Call<FoundPerson> call3 = apiInterface.getFoundPerson(founds.get(i));
+                    call3.enqueue(new Callback<FoundPerson>() {
                         @Override
-                        public void onResponse(Call<List<FoundPerson>> call, Response<List<FoundPerson>> response) {
+                        public void onResponse(Call<FoundPerson> call, Response<FoundPerson> response) {
                             list3 = response.body();
-                            if (response.body() != null&&list3.size()!=0) {
-                                String t = list3.get(0).getName() + "missing";
+                            Log.e("TAG", "onResponse: "+response.body());
+                            if (response.body() != null) {
+                               String t = list3.getName() + " is Founds";
                                 GlobalVar.founds.add(t);
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<List<FoundPerson>> call, Throwable t) {
+                        public void onFailure(Call<FoundPerson> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });

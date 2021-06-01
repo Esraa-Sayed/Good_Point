@@ -23,7 +23,6 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -121,10 +120,10 @@ public interface ApiInterface {
     Call<List<LostItem>> getLostItem(@Query("id") int id);
 
     @GET("losts/lost_person/id={id}/")
-    Call<List<LostPerson>> getLostPerson(@Path("id") int id);
+    Call<LostPerson> getLostPerson(@Path("id") int id);
 
-    @GET("losts/found_person/id={id}")
-    Call<List<FoundPerson>> getFoundPerson(@Path("id") int id);
+    @GET("losts/found_person/id={id}/")
+    Call<FoundPerson> getFoundPerson(@Path("id") int id);
 
     @GET("losts/FoundItemFilter/")
     Call<List<FoundItem>> getFoundItem(@Query("id") int id);
