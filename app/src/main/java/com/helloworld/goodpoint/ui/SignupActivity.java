@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -429,6 +430,7 @@ public class SignupActivity extends AppCompatActivity {
             else {
 
                 try {
+                    Log.e("TAG", "onResponse: "+ response.errorBody().string());
                      JSONObject jsonObject = new JSONObject(response.errorBody().string()).getJSONObject("error");
                         String mail = jsonObject.getString("username");
                         String phone = jsonObject.getString("phone");
@@ -443,7 +445,7 @@ public class SignupActivity extends AppCompatActivity {
                         Phone.setError(phone);
 
                 } catch (IOException | JSONException e) {
-                    Toast.makeText(SignupActivity.this, "There is an error!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }

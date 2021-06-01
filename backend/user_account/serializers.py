@@ -4,7 +4,8 @@ from .models import User
 
 
 class SignupSerializer(serializers.ModelSerializer):
-
+    username = serializers.CharField(max_length=150)
+    phone = serializers.CharField(max_length=20, min_length=5)
     class Meta:
         model = User
         fields = ['username', 'password', 'first_name', 'phone', 'city', 'birthdate', 'profile_pic']

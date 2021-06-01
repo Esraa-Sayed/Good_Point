@@ -121,6 +121,7 @@ public class NotificationActivity extends AppCompatActivity {
                     else if(list.get(pos).getType() == 1 || list.get(pos).getType() == 4){
                         //lost person and lost item
                         if(User.getUser().getId_card_pic().isEmpty()){
+                            view = getLayoutInflater().inflate(R.layout.alert_id_card, null);
                             Button Choose = view.findViewById(R.id.Id_card);
                             Choose.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -237,7 +238,7 @@ public class NotificationActivity extends AppCompatActivity {
                 }
                 else if(sparseArraytext.size()>=1) {
                     item = sparseArraytext.valueAt(sparseArraytext.size() - 1);
-                    if(item.getValue().length()>9)
+                    if(item.getValue().length() != 9)
                         flag_not_idCard = true;
                 }
 
@@ -289,7 +290,6 @@ public class NotificationActivity extends AppCompatActivity {
         list = new ArrayList<>();
         listView = findViewById(R.id.notification_listview);
         noNotification = findViewById(R.id.no_notification);
-        view = getLayoutInflater().inflate(R.layout.alert_id_card, null);
         if(User.getUser().getId() == null || User.getUser().getId().isEmpty())
             User.getUser().setId(getIntent().getExtras().getString("ID"));
         if(Token.getToken().getRefresh() == null && Token.getToken().getRefresh().isEmpty())
