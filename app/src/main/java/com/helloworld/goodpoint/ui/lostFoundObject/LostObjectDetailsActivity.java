@@ -485,7 +485,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     FancyToast.makeText(LostObjectDetailsActivity.this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     try {
                         String id = new JSONObject(response.body().toString()).getString("id");
-                        User.getUser().getFounds().add(Integer.parseInt(id));
                     } catch (JSONException e) {
                         Log.e("TAG", "onResponse: "+e.getMessage());
                     }

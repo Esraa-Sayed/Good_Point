@@ -705,8 +705,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     FancyToast.makeText(FoundObjectActivity.this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     try {
                         String id = new JSONObject(response.body().toString()).getString("id");
-                        User.getUser().getFounds().add(Integer.parseInt(id));
-                    } catch (JSONException e) {
+                        } catch (JSONException e) {
                         Log.e("TAG", "onResponse: "+e.getMessage());
                     }
                     finish();
