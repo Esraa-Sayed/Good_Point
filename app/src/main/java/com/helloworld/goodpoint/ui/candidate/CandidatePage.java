@@ -120,25 +120,23 @@ public class CandidatePage extends AppCompatActivity implements AdapterView.OnIt
             @Override
             public void onResponse(Call<LostObject> call, Response<LostObject> response) {
                 LostObject obj = response.body();
-                if(response.body()!=null) {
-                    Call<NotificationItem> call2 = apiInterface.storeNotification(obj.getUser_id(), "Item matched", "Your " + item.getSubItemTitle() + " is Found ", 4);
-                    call2.enqueue(new Callback<NotificationItem>() {
-                        @Override
-                        public void onResponse(Call<NotificationItem> call, Response<NotificationItem> response) {
-                            if (response.isSuccessful()) {
-                                Toast.makeText(CandidatePage.this, "Notification is posted.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(CandidatePage.this, "The Notification is not posted.", Toast.LENGTH_SHORT).show();
-                            }
+                Call<NotificationItem> call2 = apiInterface.storeNotification(obj.getUser_id(), "Item matched", "Your " + item.getSubItemTitle() + " is Found ", 3);
+                call2.enqueue(new Callback<NotificationItem>() {
+                    @Override
+                    public void onResponse(Call<NotificationItem> call, Response<NotificationItem> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(CandidatePage.this, "Notification is posted.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(CandidatePage.this, "The Notification is not posted.", Toast.LENGTH_SHORT).show();
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<NotificationItem> call, Throwable t) {
-                            Toast.makeText(CandidatePage.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    @Override
+                    public void onFailure(Call<NotificationItem> call, Throwable t) {
+                        Toast.makeText(CandidatePage.this, t.getMessage(), Toast.LENGTH_LONG).show();
 
-                        }
-                    });
-                }
+                    }
+                });
             }
 
             @Override
