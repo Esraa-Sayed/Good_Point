@@ -74,7 +74,7 @@ public class NotificationBroadcast extends BroadcastReceiver {
                     return;
                 for(NotificationItem item: response.body()){
                     showNotification(context,item.getId(),item.getTitle(),item.getDescription(),item.getType());
-                    Call<JsonObject> sentCall = apiInterface.updateSent(user_id,true);
+                    Call<JsonObject> sentCall = apiInterface.updateSent(item.getId(),true);
                     sentCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
