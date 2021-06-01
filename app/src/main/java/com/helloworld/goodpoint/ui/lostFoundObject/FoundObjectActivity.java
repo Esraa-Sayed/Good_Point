@@ -727,7 +727,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public void getItems(FoundItem item, Context context) {
+    public void getItems(LostItem item, Context context) {
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
         Call<List<LostItem>> call = apiInterface.getLItem(item.getType());
         GlobalVar.type=item.getType();

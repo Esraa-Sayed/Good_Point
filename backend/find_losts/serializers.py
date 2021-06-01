@@ -80,16 +80,14 @@ class LostPersonSerializer(serializers.ModelSerializer):
     date = serializers.DateField()
     city = serializers.CharField(max_length=35)
     user_id = serializers.IntegerField()
-    matched_with = serializers.IntegerField(default=0)
 
     class Meta:
         model = LostPerson
-        fields = ['date', 'city', 'user_id', 'name', 'image', 'id', 'matched_with']
-        read_only_fields = ['id', 'matched_with']
+        fields = ['date', 'city', 'user_id', 'name', 'image', 'id']
+        read_only_fields = ['id']
 
     def create(self, validated_data):
         data = validated_data.copy()
-        data.pop('matched_with')
         # images_data = data.pop('images')
         # self.context.get('request').data.pop('images')
         user = User.objects.get(id=data.pop('user_id'))
@@ -119,10 +117,7 @@ class LostPersonSerializer(serializers.ModelSerializer):
         """
 
         res_match = match_with_found_person(person.pk)
-        print(res_match)
-        matched = False
         if res_match[1] != -1:
-            matched = True
             matched_person = FoundObject.objects.get(id=res_match[1])
             matched_person.is_matched = True
             matched_person.save()
@@ -133,13 +128,8 @@ class LostPersonSerializer(serializers.ModelSerializer):
                                                    user_id=user, is_sent=True)
             notify_f = Notification.objects.create(title="Matched person", description=f"The family of {name} is found",
                                                    type=2, user_id=matched_person.user_id)
-            matching = MatchedPerson.objects.create(id_fp=matched_person, id_lp=person_id, percent=1.0 - res_match[0],
-                                                    notify_id_fp=notify_f, notify_id_lp=notify_l)
-
-        if matched:
-            validated_data['matched_with'] = matching
-        else:
-            validated_data['matched_with'] = 0
+            MatchedPerson.objects.create(id_fp=matched_person, id_lp=person_id, percent=100 - res_match[0] * 100,
+                                         notify_id_fp=notify_f, notify_id_lp=notify_l)
 
         return validated_data
 
@@ -198,16 +188,14 @@ class FoundPersonSerializer(serializers.ModelSerializer):
     latitude = serializers.DecimalField(max_digits=14, decimal_places=10, default=0.0)
     city = serializers.CharField(max_length=35)
     user_id = serializers.IntegerField()
-    matched_with = serializers.IntegerField(default=0)
 
     class Meta:
         model = FoundPerson
-        fields = ['date', 'longitude', 'latitude', 'city', 'user_id', 'name', 'image', 'id', 'matched_with']
-        read_only_fields = ['id', 'matched_with']
+        fields = ['date', 'longitude', 'latitude', 'city', 'user_id', 'name', 'image', 'id']
+        read_only_fields = ['id']
 
     def create(self, validated_data):
         data = validated_data.copy()
-        data.pop('matched_with')
         # images_data = data.pop('images')
         # self.context.get('request').data.pop('images')
         user = User.objects.get(id=data.pop('user_id'))
@@ -238,10 +226,7 @@ class FoundPersonSerializer(serializers.ModelSerializer):
         """
 
         res_match = match_with_lost_person(person.pk)
-        print(res_match)
-        matched = False
         if res_match[1] != -1:
-            matched = True
             matched_person = LostObject.objects.get(id=res_match[1])
             matched_person.is_matched = True
             matched_person.save()
@@ -252,13 +237,9 @@ class FoundPersonSerializer(serializers.ModelSerializer):
                                                    type=2, user_id=user, is_sent=True)
             notify_l = Notification.objects.create(title="Matched person", description=f"{name} is found", type=1,
                                                    user_id=matched_person.user_id)
-            matching = MatchedPerson.objects.create(id_lp=matched_person, id_fp=person_id,
-                                                    percent=100 - res_match[0]*100,
-                                                    notify_id_fp=notify_f, notify_id_lp=notify_l)
-        if matched:
-            validated_data['matched_with'] = matching
-        else:
-            validated_data['matched_with'] = 0
+            MatchedPerson.objects.create(id_lp=matched_person, id_fp=person_id,
+                                         percent=100 - res_match[0] * 100,
+                                         notify_id_fp=notify_f, notify_id_lp=notify_l)
 
         return validated_data
 

@@ -1,0 +1,84 @@
+Index: backend/find_losts/serializers.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from rest_framework import serializers\r\nfrom rest_framework_simplejwt.tokens import RefreshToken, TokenError\r\nfrom .models import *\r\nfrom user_account.models import User\r\nfrom django.db.models import Count\r\nimport face_recognition\r\nimport numpy as np\r\n\r\n\r\nclass LostObjectSerializer(serializers.ModelSerializer):\r\n    class Meta:\r\n        model = LostObject\r\n        fields = ['id', 'date', 'city', 'user_id']\r\n\r\n\r\nclass LostItemSerializer(serializers.ModelSerializer):\r\n    class Meta:\r\n        model = LostItem\r\n        fields = ['id', 'type', 'serial_number', 'brand', 'color', 'description', 'image']\r\n\r\n    def validate(self, attrs):\r\n        if LostPerson.objects.filter(id=attrs.get('id', '')).exists():\r\n            raise serializers.ValidationError({'id': {'id already exists'}})\r\n        return super().validate(attrs)\r\n\r\n\r\nclass LostPersonImageSerializer(serializers.ModelSerializer):\r\n    class Meta:\r\n        model = LostPersonImage\r\n        fields = ['image']\r\n\r\n\r\ndef match_with_found_person(pk):\r\n    source_img = face_recognition.load_image_file(f'media/lostperson/{pk}.jpg')\r\n    source_encoding = face_recognition.face_encodings(source_img)[0]\r\n    founds = list(FoundPerson.objects.values_list('id'))\r\n\r\n    encodings = []\r\n    ids = []\r\n    min_val = -1\r\n    for id_f in founds:\r\n        face = face_recognition.load_image_file(f'media/foundperson/{id_f[0]}.jpg')\r\n        encodings.append(face_recognition.face_encodings(face)[0])\r\n        ids.append(id_f[0])\r\n\r\n    dist = face_recognition.face_distance(encodings, source_encoding)\r\n    if dist.size > 0:\r\n        min_val = min(dist)\r\n\r\n    if 0 <= min_val <= 0.52:\r\n        return min_val, ids[dist.argmin()]\r\n    else:\r\n        return -1, -1\r\n\r\n\r\n\"\"\"\r\n    mini = 1.0\r\n    minid = -1\r\n    for id in ids:\r\n        sum_dist = 0.0\r\n        for img_num in range(id.number_of_images):\r\n            face = face_recognition.load_image_file(f'media/foundperson/{source_id.pk}/{img_num + 1}.jpg')\r\n            encoding = face_recognition.face_encodings(face)[0]\r\n            dist = list(face_recognition.face_distance(source_encodings, encoding))\r\n            sum_dist = sum_dist + sum(dist)\r\n\r\n        avg = sum_dist/(source_id.number_of_images*id.number_of_images)\r\n        if avg < mini:\r\n            mini = avg\r\n            minid = id\r\n\r\n    if 0 < mini <= 0.52:\r\n        return mini, minid\r\n    else:\r\n        return -1, -1\r\n\"\"\"\r\n\r\n\r\nclass LostPersonSerializer(serializers.ModelSerializer):\r\n    date = serializers.DateField()\r\n    city = serializers.CharField(max_length=35)\r\n    user_id = serializers.IntegerField()\r\n    matched_with = serializers.IntegerField(default=0)\r\n\r\n    class Meta:\r\n        model = LostPerson\r\n        fields = ['date', 'city', 'user_id', 'name', 'image', 'id', 'matched_with']\r\n        read_only_fields = ['id', 'matched_with']\r\n\r\n    def create(self, validated_data):\r\n        data = validated_data.copy()\r\n        data.pop('matched_with')\r\n        # images_data = data.pop('images')\r\n        # self.context.get('request').data.pop('images')\r\n        user = User.objects.get(id=data.pop('user_id'))\r\n        person_id = LostObject.objects.create(date=data.pop('date'), city=data.pop('city'), user_id=user)\r\n        validated_data['id'] = person_id\r\n        print(validated_data)\r\n        person = None\r\n\r\n        try:\r\n            person = LostPerson.objects.create(id=person_id, **data)\r\n        except TypeError:\r\n            person_id.delete()\r\n            raise TypeError('TypeError: LostPerson.objects.create()')\r\n        \"\"\"\r\n        try:\r\n            cnt = 0\r\n            for img in images_data:\r\n                cnt = cnt + 1\r\n                image = LostPersonImage.objects.create(id_lp=person.pk, image_number=cnt, image=img)\r\n                person.person_image.add(image)\r\n        except TypeError:\r\n            person = LostPerson.objects.get(id=person.id)\r\n            obj = LostObject.objects.get(id=person.id)\r\n            person.delete()\r\n            obj.delete()\r\n            raise TypeError('TypeError: LostPersonImage.objects.create()')\r\n        \"\"\"\r\n\r\n        res_match = match_with_found_person(person.pk)\r\n        print(res_match)\r\n        matched = False\r\n        if res_match[1] != -1:\r\n            matched = True\r\n            matched_person = FoundObject.objects.get(id=res_match[1])\r\n            matched_person.is_matched = True\r\n            matched_person.save()\r\n            person_id.is_matched = True\r\n            person_id.save()\r\n            name = person.name\r\n            notify_l = Notification.objects.create(title=\"Matched person\", description=f\"{name} is found\", type=1,\r\n                                                   user_id=user, is_sent=True)\r\n            notify_f = Notification.objects.create(title=\"Matched person\", description=f\"The family of {name} is found\",\r\n                                                   type=2, user_id=matched_person.user_id)\r\n            matching = MatchedPerson.objects.create(id_fp=matched_person, id_lp=person_id, percent=1.0 - res_match[0],\r\n                                                    notify_id_fp=notify_f, notify_id_lp=notify_l)\r\n\r\n        if matched:\r\n            validated_data['matched_with'] = matching\r\n        else:\r\n            validated_data['matched_with'] = 0\r\n\r\n        return validated_data\r\n\r\n\r\nclass FoundObjectSerializer(serializers.ModelSerializer):\r\n    class Meta:\r\n        model = FoundObject\r\n        fields = ['id', 'date', 'longitude', 'latitude', 'city', 'user_id', 'is_matched']\r\n\r\n\r\nclass FoundItemSerializer(serializers.ModelSerializer):\r\n    class Meta:\r\n        model = FoundItem\r\n        fields = ['id', 'type', 'color', 'brand', 'description', 'serial_number', 'image']\r\n\r\n    def validate(self, attrs):\r\n        if FoundPerson.objects.filter(id=attrs.get('id', '')).exists():\r\n            raise serializers.ValidationError({'id': {'id already exists'}})\r\n        return super().validate(attrs)\r\n\r\n\r\ndef match_with_lost_person(pk):\r\n    source_img = face_recognition.load_image_file(f'media/foundperson/{pk}.jpg')\r\n    source_encoding = face_recognition.face_encodings(source_img)[0]\r\n    losts = list(LostPerson.objects.values_list('id'))\r\n    print(losts)\r\n    encodings = []\r\n    ids = []\r\n    for id_l in losts:\r\n        face = face_recognition.load_image_file(f'media/lostperson/{id_l[0]}.jpg')\r\n        encodings.append(face_recognition.face_encodings(face)[0])\r\n        ids.append(id_l[0])\r\n\r\n    dist = face_recognition.face_distance(encodings, source_encoding)\r\n    min_val = min(dist)\r\n\r\n    if dist.size > 0:\r\n        min_val = min(dist)\r\n\r\n    if 0 <= min_val <= 0.52:\r\n        return min_val, ids[dist.argmin()]\r\n    else:\r\n        return -1, -1\r\n\r\n\r\nclass FoundPersonSerializer(serializers.ModelSerializer):\r\n    date = serializers.DateField()\r\n    longitude = serializers.DecimalField(max_digits=14, decimal_places=10, default=0.0)\r\n    latitude = serializers.DecimalField(max_digits=14, decimal_places=10, default=0.0)\r\n    city = serializers.CharField(max_length=35)\r\n    user_id = serializers.IntegerField()\r\n    matched_with = serializers.IntegerField(default=0)\r\n\r\n    class Meta:\r\n        model = FoundPerson\r\n        fields = ['date', 'longitude', 'latitude', 'city', 'user_id', 'name', 'image', 'id', 'matched_with']\r\n        read_only_fields = ['id', 'matched_with']\r\n\r\n    def create(self, validated_data):\r\n        data = validated_data.copy()\r\n        data.pop('matched_with')\r\n        # images_data = data.pop('images')\r\n        # self.context.get('request').data.pop('images')\r\n        user = User.objects.get(id=data.pop('user_id'))\r\n        person_id = FoundObject.objects.create(date=data.pop('date'), longitude=data.pop('longitude'),\r\n                                               latitude=data.pop('latitude'), city=data.pop('city'), user_id=user)\r\n        validated_data['id'] = person_id\r\n        person = None\r\n\r\n        try:\r\n            person = FoundPerson.objects.create(id=person_id, **data)\r\n            print(person)\r\n        except TypeError:\r\n            person_id.delete()\r\n            raise TypeError('TypeError: FoundPerson.objects.create()')\r\n        \"\"\"\r\n        try:\r\n            cnt = 0\r\n            for img in images_data:\r\n                cnt = cnt + 1\r\n                image = LostPersonImage.objects.create(id_lp=person.pk, image_number=cnt, image=img)\r\n                person.person_image.add(image)\r\n        except TypeError:\r\n            person = LostPerson.objects.get(id=person.id)\r\n            obj = LostObject.objects.get(id=person.id)\r\n            person.delete()\r\n            obj.delete()\r\n            raise TypeError('TypeError: LostPersonImage.objects.create()')\r\n        \"\"\"\r\n\r\n        res_match = match_with_lost_person(person.pk)\r\n        print(res_match)\r\n        matched = False\r\n        if res_match[1] != -1:\r\n            matched = True\r\n            matched_person = LostObject.objects.get(id=res_match[1])\r\n            matched_person.is_matched = True\r\n            matched_person.save()\r\n            person_id.is_matched = True\r\n            person_id.save()\r\n            name = LostPerson.objects.get(id=res_match[1]).name\r\n            notify_f = Notification.objects.create(title=\"Matched person\", description=f\"The family of {name} is found\",\r\n                                                   type=2, user_id=user, is_sent=True)\r\n            notify_l = Notification.objects.create(title=\"Matched person\", description=f\"{name} is found\", type=1,\r\n                                                   user_id=matched_person.user_id)\r\n            matching = MatchedPerson.objects.create(id_lp=matched_person, id_fp=person_id,\r\n                                                    percent=100 - res_match[0]*100,\r\n                                                    notify_id_fp=notify_f, notify_id_lp=notify_l)\r\n        if matched:\r\n            validated_data['matched_with'] = matching\r\n        else:\r\n            validated_data['matched_with'] = 0\r\n\r\n        return validated_data\r\n\r\n\r\nclass FoundPersonImageSerializer(serializers.ModelSerializer):\r\n    class Meta:\r\n        model = FoundPersonImage\r\n        fields = ['id_image', 'image']\r\n\r\n\r\nclass MapSerializer(serializers.ModelSerializer):\r\n    longitude = serializers.DecimalField(max_digits=14, decimal_places=10, source='id.longitude')\r\n    latitude = serializers.DecimalField(max_digits=14, decimal_places=10, source='id.latitude')\r\n    user_id = serializers.IntegerField(source='id.user_id.id')\r\n\r\n    class Meta:\r\n        model = FoundItem\r\n        fields = ['longitude', 'latitude', 'user_id']\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- backend/find_losts/serializers.py	(revision ca56c89ae6bcc93b2eaa65931160412299611701)
++++ backend/find_losts/serializers.py	(date 1622518719476)
+@@ -80,16 +80,14 @@
+     date = serializers.DateField()
+     city = serializers.CharField(max_length=35)
+     user_id = serializers.IntegerField()
+-    matched_with = serializers.IntegerField(default=0)
+ 
+     class Meta:
+         model = LostPerson
+-        fields = ['date', 'city', 'user_id', 'name', 'image', 'id', 'matched_with']
+-        read_only_fields = ['id', 'matched_with']
++        fields = ['date', 'city', 'user_id', 'name', 'image', 'id']
++        read_only_fields = ['id']
+ 
+     def create(self, validated_data):
+         data = validated_data.copy()
+-        data.pop('matched_with')
+         # images_data = data.pop('images')
+         # self.context.get('request').data.pop('images')
+         user = User.objects.get(id=data.pop('user_id'))
+@@ -119,10 +117,7 @@
+         """
+ 
+         res_match = match_with_found_person(person.pk)
+-        print(res_match)
+-        matched = False
+         if res_match[1] != -1:
+-            matched = True
+             matched_person = FoundObject.objects.get(id=res_match[1])
+             matched_person.is_matched = True
+             matched_person.save()
+@@ -133,14 +128,9 @@
+                                                    user_id=user, is_sent=True)
+             notify_f = Notification.objects.create(title="Matched person", description=f"The family of {name} is found",
+                                                    type=2, user_id=matched_person.user_id)
+-            matching = MatchedPerson.objects.create(id_fp=matched_person, id_lp=person_id, percent=1.0 - res_match[0],
+-                                                    notify_id_fp=notify_f, notify_id_lp=notify_l)
++            MatchedPerson.objects.create(id_fp=matched_person, id_lp=person_id, percent=100 - res_match[0] * 100,
++                                         notify_id_fp=notify_f, notify_id_lp=notify_l)
+ 
+-        if matched:
+-            validated_data['matched_with'] = matching
+-        else:
+-            validated_data['matched_with'] = 0
+-
+         return validated_data
+ 
+ 
+@@ -231,10 +221,7 @@
+         """
+ 
+         res_match = match_with_lost_person(person.pk)
+-        print(res_match)
+-        matched = False
+         if res_match[1] != -1:
+-            matched = True
+             matched_person = LostObject.objects.get(id=res_match[1])
+             matched_person.is_matched = True
+             matched_person.save()
+@@ -245,13 +232,9 @@
+                                                    type=2, user_id=user, is_sent=True)
+             notify_l = Notification.objects.create(title="Matched person", description=f"{name} is found", type=1,
+                                                    user_id=matched_person.user_id)
+-            matching = MatchedPerson.objects.create(id_lp=matched_person, id_fp=person_id,
+-                                                    percent=100 - res_match[0]*100,
+-                                                    notify_id_fp=notify_f, notify_id_lp=notify_l)
+-        if matched:
+-            validated_data['matched_with'] = matching
+-        else:
+-            validated_data['matched_with'] = 0
++            MatchedPerson.objects.create(id_lp=matched_person, id_fp=person_id,
++                                         percent=100 - res_match[0] * 100,
++                                         notify_id_fp=notify_f, notify_id_lp=notify_l)
+ 
+         return validated_data
+ 
