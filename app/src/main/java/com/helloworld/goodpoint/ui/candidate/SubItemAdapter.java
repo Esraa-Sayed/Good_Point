@@ -42,6 +42,7 @@ public class SubItemAdapter extends RecyclerView.Adapter<SubItemAdapter.SubItemV
         com.helloworld.goodpoint.ui.candidate.SubItem subItem = subItemList.get(i);
         subItemViewHolder.tvItemType.setText(subItem.getSubItemTitle());
         subItemViewHolder.tvItemDes.setText(subItem.getSubItemDes());
+        subItemViewHolder.tvItemPercent.setText(subItem.getPersent());
 
         try {
             subItemViewHolder.bindData(subItem, i);
@@ -73,6 +74,7 @@ public class SubItemAdapter extends RecyclerView.Adapter<SubItemAdapter.SubItemV
         private SubItemAdapter mAdapter;
         private TextView tvItemType;
         private TextView tvItemDes;
+        private TextView tvItemPercent;
         private RadioButton rb;
 
         public SubItemViewHolder(View itemView, final SubItemAdapter mAdapter) {
@@ -80,6 +82,7 @@ public class SubItemAdapter extends RecyclerView.Adapter<SubItemAdapter.SubItemV
             this.mAdapter=mAdapter;
             tvItemType = itemView.findViewById(R.id.tv_sub_item_title);
             tvItemDes=itemView.findViewById(R.id.tv_sub_item_des);
+            tvItemPercent=itemView.findViewById(R.id.tv_sub_item_percent);
             rb = itemView.findViewById(R.id.radioButtonn);
             itemView.setOnClickListener(this);
             rb.setOnClickListener( this);

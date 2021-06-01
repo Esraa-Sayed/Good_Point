@@ -15,11 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.pojo.FoundItem;
-import com.helloworld.goodpoint.pojo.FoundPerson;
-import com.helloworld.goodpoint.pojo.LostItem;
-import com.helloworld.goodpoint.pojo.LostObject;
-import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
@@ -33,8 +28,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,12 +38,7 @@ public class MainActivity extends AppCompatActivity {
     PrefManager prefManager;
     ImageView splash;
     Thread t;
-    List<LostObject> listObj;
 
-    List<LostItem> list1;
-    List<FoundPerson> list3;
-    List<LostPerson> list2;
-    List<FoundItem> list;
 
 
     @Override
@@ -230,105 +218,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getHomeLosts() {
 
-        List<Integer> losts = User.getUser().getLosts();
-        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
-        Log.d("test", "id=" + losts.get(0));
-        Log.d("test", "id=" + losts);
-        GlobalVar.losts = new ArrayList<>(losts.size());
-            for (int i = 0; i < losts.size(); i++) {
-                Log.d("test", "id=" + losts.get(i));
-                if (true) {
-                    Call<List<LostItem>> call2 = apiInterface.getLostItem(losts.get(i));
-                    call2.enqueue(new Callback<List<LostItem>>() {
-                        @Override
-                        public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
-                            list1 = response.body();
-                            if (list1 != null) {
-                                String t = list1.get(0).getType() + " " + list1.get(0).getBrand() + "";
-                                GlobalVar.losts.add(t);
-                            } else
-                                Toast.makeText(getApplicationContext(), "There is no items of lost object !", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<LostItem>> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    Call<List<LostPerson>> call3 = apiInterface.getLostPerson(losts.get(i));
-                    call3.enqueue(new Callback<List<LostPerson>>() {
-                        @Override
-                        public void onResponse(Call<List<LostPerson>> call, Response<List<LostPerson>> response) {
-                            list2 = response.body();
-                            if (list2 != null) {
-                                String t = list2.get(0).getName() + "missing";
-                                GlobalVar.losts.add(t);
-                            } else
-                                Toast.makeText(getApplicationContext(), "There is no persons of lost object !", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<LostPerson>> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-
-    }
-
-    public void getHomeFounds() {
-        List<Integer> founds = new ArrayList<>();
-        founds = User.getUser().getFounds();
-        GlobalVar.founds = new ArrayList<String>();
-        if (!founds.isEmpty()) {
-            for (int i = 0; i < founds.size(); i++) {
-                Log.d("test", "id=" + founds.get(i));
-                ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
-                if (true) {
-                    Call<List<FoundItem>> call2 = apiInterface.getFoundItem(founds.get(i));
-                    call2.enqueue(new Callback<List<FoundItem>>() {
-                        @Override
-                        public void onResponse(Call<List<FoundItem>> call, Response<List<FoundItem>> response) {
-                            list = response.body();
-                            if (list != null) {
-                                String t = list.get(0).getType() + " " + list.get(0).getBrand() + "";
-                                GlobalVar.founds.add(t);
-                            } else
-                                Toast.makeText(getApplicationContext(), "There is no items of found object !", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<FoundItem>> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-                } else {
-                    Call<List<FoundPerson>> call3 = apiInterface.getFoundPerson(founds.get(i));
-                    call3.enqueue(new Callback<List<FoundPerson>>() {
-                        @Override
-                        public void onResponse(Call<List<FoundPerson>> call, Response<List<FoundPerson>> response) {
-                            list3 = response.body();
-                            if (list3 != null) {
-                                String t = list3.get(0).getName() + "missing";
-                                GlobalVar.founds.add(t);
-                            } else
-                                Toast.makeText(getApplicationContext(), "There is no persons of found object !", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<FoundPerson>> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        } else
-            Toast.makeText(getApplicationContext(), "There is no object", Toast.LENGTH_LONG).show();
-    }
 
 }

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.pojo.FoundItem;
 import com.helloworld.goodpoint.pojo.FoundPerson;
 import com.helloworld.goodpoint.pojo.LostItem;
+import com.helloworld.goodpoint.pojo.LostObject;
 import com.helloworld.goodpoint.pojo.LostPerson;
 import com.helloworld.goodpoint.pojo.NotificationItem;
 import com.helloworld.goodpoint.pojo.ObjectLocation;
@@ -110,21 +111,20 @@ public interface ApiInterface {
     @GET("losts/founder/{id}")
     Call<UserMap> getUserMap(@Path("id") int id);
     //---------------------------------------------------------------------------------------------
-
-    @GET("losts/FoundItemFilter/")
-    Call<List<FoundItem>> getFItem(@Query("type")String type);
+    @GET("losts/lostobject/{id}")
+    Call <LostObject> getObject(@Path("id") String id);
 
     @GET("losts/LostItemFilter/")
-    Call<List<LostItem>> getLItem(@Query("type") String type);
+    Call<List<LostItem>> getLItem(@Query("type")String type);
 
     @GET("losts/LostItemFilter/")
     Call<List<LostItem>> getLostItem(@Query("id") int id);
 
-    @GET("losts/LostPersonFilter/")
-    Call<List<LostPerson>> getLostPerson(@Query("id") int id);
+    @GET("losts/lost_person/id={id}/")
+    Call<List<LostPerson>> getLostPerson(@Path("id") int id);
 
-    @GET("losts/FoundPersonFilter/")
-    Call<List<FoundPerson>> getFoundPerson(@Query("id") int id);
+    @GET("losts/found_person/id={id}")
+    Call<List<FoundPerson>> getFoundPerson(@Path("id") int id);
 
     @GET("losts/FoundItemFilter/")
     Call<List<FoundItem>> getFoundItem(@Query("id") int id);
@@ -135,7 +135,7 @@ public interface ApiInterface {
     @POST("notification/")
     Call<NotificationItem> storeNotification(@Field("user_id") String id, @Field("title") String title
             , @Field("description") String description
-            , @Field("type") String type);
+            , @Field("type") int type);
 
     @GET("notification/user_id={id}/")
     Call<List<NotificationItem>> getNotification(@Path("id") String id);

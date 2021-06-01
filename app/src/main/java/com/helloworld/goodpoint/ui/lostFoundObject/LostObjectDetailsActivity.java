@@ -179,7 +179,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     LostItem item = new LostItem(Type, Serial, brand, ObjectColor);
 
                     Toast.makeText(this, "Type= " + Type, Toast.LENGTH_SHORT).show();
-                    //getItems(item, this);
+
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     finish();
@@ -447,12 +447,16 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                         call2.enqueue(new Callback<LostItem>() {
                             @Override
                             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
+                                Log.d("e","responce="+response.body());
                                 if (response.isSuccessful()) {
                                     Toast.makeText(LostObjectDetailsActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
                                     User.getUser().getLosts().add(Integer.parseInt(id));
-                                } else
+                                } else {
                                     Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
-                            }
+                      
+                                }
+                                }
+
 
                             @Override
                             public void onFailure(Call<LostItem> call, Throwable t) {
@@ -543,47 +547,6 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
             builder.setContentIntent(pintent);
             nm.notify(0,builder.build());
         }
-    }
-
-    public void getItems(LostItem item, Context context) {
-        ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(context).getNGROKLink()).create(ApiInterface.class);
-        Call<List<LostItem>> call = apiInterface.getLItem(item.getType());
-        call.enqueue(new Callback<List<LostItem>>() {
-            @Override
-            public void onResponse(Call<List<LostItem>> call, Response<List<LostItem>> response) {
-                Llist = response.body();
-                Log.d("e","list="+Llist+",type="+item.getType());
-                int percent[] = new int[Llist.size()];
-                if (!Llist.isEmpty()) {
-                    for (int i = 0; i < Llist.size(); i++) {
-                        percent[i] = MatchItems(item, Llist.get(i));
-
-                     Log.d("e", "itemlist="+Llist.get(i).getColor()+" , "+Llist.get(i).getBrand()+" , "+Llist.get(i).getType());
-                        Log.d("e", "item="+item.getColor()+" , "+item.getBrand()+" , "+item.getType());
-                        Log.d("e", "Percent ["+(i+1)+"] ="+percent[i]+"%");
-                    }
-                } else
-                    Toast.makeText(context, "There is no items can be candidates !", Toast.LENGTH_SHORT).show();
-            }
-
-
-            @Override
-            public void onFailure(Call<java.util.List<LostItem>> call, Throwable t) {
-                Toast.makeText(LostObjectDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
-
-    public int MatchItems(LostItem item1, LostItem item2) {
-        int percentage = 20;
-        if (item1.getBrand().equals(item2.getBrand()))
-            percentage += 20;
-        if (item1.getColor().equals(item2.getColor()))
-            percentage += 20;
-        if (item1.getSerial_number().equals(item2.getSerial_number()))
-            percentage += 20;
-        return percentage;
     }
 
 
