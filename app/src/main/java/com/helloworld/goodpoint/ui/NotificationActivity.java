@@ -291,5 +291,7 @@ public class NotificationActivity extends AppCompatActivity {
         listView = findViewById(R.id.notification_listview);
         noNotification = findViewById(R.id.no_notification);
         view = getLayoutInflater().inflate(R.layout.alert_id_card, null);
+        if(User.getUser().getId() == null || User.getUser().getId().isEmpty())
+            User.getUser().setId(getIntent().getExtras().getString("ID"));
     }
 }

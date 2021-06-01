@@ -148,6 +148,7 @@ public class NotificationBroadcast extends BroadcastReceiver {
         context.grantUriPermission("com.android.systemui", ringtoneUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         Intent notifyIntent = new Intent(context, NotificationActivity.class);
+        notifyIntent.putExtra("ID",id);
         PendingIntent pintent = PendingIntent.getActivity(context,type,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
