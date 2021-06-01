@@ -189,14 +189,11 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     break;
             }
             ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
-
+            if(BitMapSize != bitmap.size()) {
+                checkIfAllImagesContainFacesOrNot N = new checkIfAllImagesContainFacesOrNot();
+                N.execute(bitmap);
+            }
         }
-        if(BitMapSize != bitmap.size()) {
-            checkIfAllImagesContainFacesOrNot N = new checkIfAllImagesContainFacesOrNot();
-            N.execute(bitmap);
-        }
-
-
     }
     class checkIfAllImagesContainFacesOrNot extends AsyncTask<List<Bitmap>,Void, List<Bitmap>>
     {
