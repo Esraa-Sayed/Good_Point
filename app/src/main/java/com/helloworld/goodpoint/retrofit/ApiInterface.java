@@ -57,9 +57,9 @@ public interface ApiInterface {
     @POST("auth/signin/")
     Call<JsonObject> getData(@Header("Authorization") String token);
 
-    @FormUrlEncoded
+    @Multipart
     @PATCH("auth/setidcard/")
-    Call<JsonObject> setIdCard(@Header("Authorization") String token);
+    Call<JsonObject> setIdCard(@Header("Authorization") String token, @Part MultipartBody.Part image);
 
     //----------------------------------------------------------------------------------------------
 

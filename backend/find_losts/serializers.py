@@ -119,6 +119,8 @@ class LostPersonSerializer(serializers.ModelSerializer):
         res_match = match_with_found_person(person.pk)
         if res_match[1] != -1:
             matched_person = FoundObject.objects.get(id=res_match[1])
+            if matched_person.is_matched:
+                pass
             matched_person.is_matched = True
             matched_person.save()
             person_id.is_matched = True
@@ -228,6 +230,8 @@ class FoundPersonSerializer(serializers.ModelSerializer):
         res_match = match_with_lost_person(person.pk)
         if res_match[1] != -1:
             matched_person = LostObject.objects.get(id=res_match[1])
+            if matched_person.is_matched:
+                pass
             matched_person.is_matched = True
             matched_person.save()
             person_id.is_matched = True

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
+import androidx.loader.content.CursorLoader;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
@@ -40,10 +42,14 @@ import com.helloworld.goodpoint.ui.candidate.CandidatePage;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -183,6 +189,17 @@ public class NotificationActivity extends AppCompatActivity {
         return Uri.parse(path);
     }
 
+    private String getRealPathFromURI(Uri imageUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(this, imageUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -260,7 +277,10 @@ public class NotificationActivity extends AppCompatActivity {
                         call.enqueue(new Callback<Token>() {
                             @Override
                             public void onResponse(Call<Token> call, Response<Token> response) {
-                                Call<JsonObject>idcardCall = apiInterface.setIdCard(response.body().getAccess());
+                                File file = new File(getRealPathFromURI(photoFromGallery));
+                                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                                MultipartBody.Part Pimage = MultipartBody.Part.createFormData("id_card_pic", file.getName(), requestBody);
+                                Call<JsonObject>idcardCall = apiInterface.setIdCard(response.body().getAccess(), Pimage);
                                 idcardCall.enqueue(new Callback<JsonObject>() {
                                     @Override
                                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -292,7 +312,7 @@ public class NotificationActivity extends AppCompatActivity {
         noNotification = findViewById(R.id.no_notification);
         if(User.getUser().getId() == null || User.getUser().getId().isEmpty())
             User.getUser().setId(getIntent().getExtras().getString("ID"));
-        if(Token.getToken().getRefresh() == null && Token.getToken().getRefresh().isEmpty())
+        if(Token.getToken().getRefresh() == null || Token.getToken().getRefresh().isEmpty())
             Token.getToken().setRefresh(new PrefManager(this).isLoginned());
     }
 }

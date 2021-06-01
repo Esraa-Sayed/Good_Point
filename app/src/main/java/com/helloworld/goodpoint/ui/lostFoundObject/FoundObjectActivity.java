@@ -324,11 +324,9 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                 finish();
 
             } else {
-                FancyToast.makeText(FoundObjectActivity.this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
-                finish();
+                FoundPerson();
             }
             dialog.dismiss();
-            FoundPerson();
 
         }
 
@@ -673,7 +671,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
     public Uri getImageUri(Bitmap bitmap_Image) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap_Image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap_Image, "LostItem", null);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap_Image, (System.currentTimeMillis()%1000)+"", null);
         return Uri.parse(path);
     }
 
@@ -704,7 +702,14 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if(response.isSuccessful()) {
-                    Toast.makeText(FoundObjectActivity.this, "The object posted.", Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(FoundObjectActivity.this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                    try {
+                        String id = new JSONObject(response.body().toString()).getString("id");
+                        User.getUser().getFounds().add(Integer.parseInt(id));
+                    } catch (JSONException e) {
+                        Log.e("TAG", "onResponse: "+e.getMessage());
+                    }
+                    finish();
                 }else
                     Toast.makeText(FoundObjectActivity.this, "The object is not posted.", Toast.LENGTH_SHORT).show();
 
