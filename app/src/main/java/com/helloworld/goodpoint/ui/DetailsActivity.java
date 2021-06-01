@@ -39,7 +39,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_details);
         marginOrientation();
         init();
-        updateTable();
+       // updateTable();
         sendMail.setOnClickListener(this);
         call.setOnClickListener(this);
     }
@@ -90,8 +90,8 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         call = findViewById(R.id.call_btn);
         sendMail = findViewById(R.id.mail_btn);
 
-        id = getIntent().getIntExtra("id",0);
-        type = getIntent().getIntExtra("type",0);
+       // id = getIntent().getIntExtra("id",0);
+       // type = getIntent().getIntExtra("type",0);
     }
 
     private void marginOrientation() {
