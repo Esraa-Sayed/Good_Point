@@ -14,7 +14,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
 
@@ -25,7 +24,6 @@ import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.App;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.NotificationItem;
-import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
@@ -45,7 +43,7 @@ public class NotificationBroadcast extends BroadcastReceiver {
 
     String user_id;
 
-    //@SuppressLint("UnsafeProtectedBroadcastReceiver")
+    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
         String refresh = new PrefManager(context).isLoginned();
