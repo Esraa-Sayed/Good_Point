@@ -64,6 +64,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     FoundPerson list3;
     LostPerson list2;
     List<FoundItem> list;
+    boolean isGetLostItems=false, isGetFoundItems=false, isGetLostPersons=false, isGetFoundPersons=false;
 
     SwipeRefreshLayout refreshLayout;
 
@@ -93,7 +94,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }*/
         selectedFragment = new HomeFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
     }
 
@@ -137,16 +138,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(selectedFragment != null){
-            if(selectedFragment instanceof HomeFragment)
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-            else if(selectedFragment instanceof ProfileFragment)
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
-            else if(selectedFragment instanceof FoundMapFragment)
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FoundMapFragment()).commit();
-            else
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MatchFragment()).commit();
-        }
+        getHomeLosts();
+        getHomeFounds();
     }
 
     @Override
@@ -205,6 +198,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     public void onClick(DialogInterface dialog, int which) {
                         PrefManager prefManager = new PrefManager(getApplicationContext());
                         prefManager.setLogout();
+                        User.userLogout();
                         startActivity(new Intent(HomeActivity.this, SigninActivity.class));
                         finish();
                     }
@@ -300,11 +294,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             String t = list1.get(0).getType() + " " + list1.get(0).getBrand() + "";
                             GlobalVar.losts.add(t);
                         }
+                        isGetLostItems=true;
+                          dataIsReady();
                     }
 
                     @Override
                     public void onFailure(Call<List<LostItem>> call, Throwable t) {
                         Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                        isGetLostItems=true;
+                        dataIsReady();
                     }
                 });
 
@@ -318,11 +316,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             String t = list2.getName() + " is Missing";
                             GlobalVar.losts.add(t);
                         }
+                        isGetLostPersons=true;
+                        dataIsReady();
                     }
 
                     @Override
                     public void onFailure(Call<LostPerson> call, Throwable t) {
                         Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                        isGetLostPersons=true;
+                        dataIsReady();
                     }
                 });
             }
@@ -330,6 +332,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else
             Toast.makeText(getApplicationContext(), "There is no objects of Losses", Toast.LENGTH_LONG).show();
 
+    }
+
+    private void dataIsReady() {
+        if(isGetFoundItems && isGetFoundPersons && isGetLostItems && isGetLostPersons)
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
     }
 
     public void getHomeFounds() {
@@ -348,11 +355,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                 String t = list.get(0).getType() + " " + list.get(0).getBrand() + "";
                                 GlobalVar.founds.add(t);
                             }
-
+                            isGetFoundItems=true;
+                            dataIsReady();
                         }
                         @Override
                         public void onFailure(Call<List<FoundItem>> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                            isGetFoundItems=true;
+                            dataIsReady();
                         }
                     });
                     Call<FoundPerson> call3 = apiInterface.getFoundPerson(founds.get(i));
@@ -365,11 +375,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                String t = list3.getName() + " is Founds";
                                 GlobalVar.founds.add(t);
                             }
+                            isGetFoundPersons=true;
+                            dataIsReady();
                         }
 
                         @Override
                         public void onFailure(Call<FoundPerson> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                            isGetFoundPersons=true;
+                            dataIsReady();
                         }
                     });
 

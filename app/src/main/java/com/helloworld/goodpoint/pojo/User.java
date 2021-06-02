@@ -55,6 +55,10 @@ public class User {
         return user;
     }
 
+    public static void userLogout(){
+        user = null;
+    }
+
     public List<Integer> getLosts() {
         return losts;
     }
