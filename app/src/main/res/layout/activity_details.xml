@@ -217,6 +217,7 @@
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
                         android:text="01210087497"
+                        
                         android:gravity="end"/>
                 </LinearLayout>
             </LinearLayout>
