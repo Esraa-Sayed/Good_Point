@@ -170,7 +170,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                     LostItems();
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    finish();
+                    //finish();
                 } else if (flagPerson && CheckMatchPerson()) {
                     faceDetector = new FaceDetector.Builder(this)
                             .setTrackingEnabled(false)
@@ -436,6 +436,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                                 if (response.isSuccessful()) {
                                     Toast.makeText(LostObjectDetailsActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
                                     User.getUser().getLosts().add(Integer.parseInt(id));
+                                    finish();
                                 } else {
                                     Toast.makeText(LostObjectDetailsActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
 

@@ -263,7 +263,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                     FoundItem item =new FoundItem(Type,Serial,brand,ObjectColor);
                     getItems(item,getApplicationContext());
                     FancyToast.makeText(this, "The data has been saved successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
-                    finish();
+                    //finish();
                 } else if (flagPerson && CheckMatchPerson()) {
                     faceDetector = new FaceDetector.Builder(this)
                             .setTrackingEnabled(false)
@@ -643,6 +643,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
                                 if (response.isSuccessful()) {
                                     Toast.makeText(FoundObjectActivity.this, "Item is posted.", Toast.LENGTH_SHORT).show();
                                     User.getUser().getFounds().add(Integer.parseInt(id));
+                                    finish();
                                 } else {
                                     Toast.makeText(FoundObjectActivity.this, "The item is not posted.", Toast.LENGTH_SHORT).show();
                                 }

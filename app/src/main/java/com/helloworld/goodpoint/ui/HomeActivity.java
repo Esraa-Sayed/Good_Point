@@ -55,7 +55,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     AlertDialog.Builder dialog;
     BottomNavigationView bottomNavigationView;
     FloatingActionButton fab;
-    Fragment fhome, fmatch, fprofile;
     TextView namenavigator;
     TextView mailnavigator;
     CircleImageView imgnavigator;
@@ -74,7 +73,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         getHomeLosts();
         getHomeFounds();
         setContentView(R.layout.activity_home);
-        refreshLayout = findViewById(R.id.swipe);
+        /*refreshLayout = findViewById(R.id.swipe);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -83,16 +82,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                 refreshLayout.setRefreshing(false);
             }
-        });
+        });*/
         init();
         setToolBarAndDrawer();
         setBottomNavigator();
 
-        if (savedInstanceState == null) {
+        /*if (savedInstanceState == null) {
             //To make first fragment is home when opening the app
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fhome).commit();
 
-        }
+        }*/
         selectedFragment = new HomeFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
@@ -125,9 +124,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nv);
         navigationView.bringToFront();
-        fhome = new HomeFragment();
-        fmatch = new MatchFragment();
-        fprofile = new ProfileFragment();
         View view = navigationView.getHeaderView(0);
         namenavigator = (TextView) view.findViewById(R.id.namenav);
         mailnavigator = (TextView) view.findViewById(R.id.mailnav);
@@ -141,7 +137,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onRestart() {
         super.onRestart();
-
+        if(selectedFragment != null){
+            if(selectedFragment instanceof HomeFragment)
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            else if(selectedFragment instanceof ProfileFragment)
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+            else if(selectedFragment instanceof FoundMapFragment)
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FoundMapFragment()).commit();
+            else
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MatchFragment()).commit();
+        }
     }
 
     @Override
@@ -261,16 +266,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     selectedFragment = getSupportFragmentManager().getFragments().get(0);
                     switch (item.getItemId()) {
                         case R.id.miHome:
-                            if (!(selectedFragment instanceof HomeFragment))
-                                selectedFragment = fhome;
+                            selectedFragment = new HomeFragment();
                             break;
                         case R.id.miMatch:
-                            if (!(selectedFragment instanceof MatchFragment))
-                                selectedFragment = fmatch;
+                            selectedFragment = new MatchFragment();
                             break;
                         case R.id.miProfile:
-                            if (!(selectedFragment instanceof ProfileFragment))
-                                selectedFragment = fprofile;
+                            selectedFragment = new ProfileFragment();
                             break;
                         case R.id.miLocation:
                             selectedFragment = new FoundMapFragment();
