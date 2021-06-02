@@ -37,28 +37,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/_15ssp"
-                    android:text="@string/Item"
-                    android:gravity="end"/>
-            </LinearLayout>
-
-            <LinearLayout android:id="@+id/sub_cat"
-                android:orientation="horizontal" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:weightSum="2"
-                android:padding="@dimen/_15sdp" android:background="@drawable/details_background">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_15ssp"
-                    android:textColor="@color/black"
-                    android:text="Sub Category"/>
-                <TextView
-                    android:id="@+id/item_cat"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_15ssp"
-                    android:text="Bag"
+                    android:text="Person"
                     android:gravity="end"/>
             </LinearLayout>
 
@@ -79,49 +58,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/_15ssp"
-                    android:text="Mohamed"
-                    android:gravity="end"/>
-            </LinearLayout>
-
-            <LinearLayout android:id="@+id/brand_detail"
-                android:orientation="horizontal" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:weightSum="2"
-                android:padding="@dimen/_15sdp" android:background="@drawable/details_background">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_15ssp"
-                    android:textColor="@color/black"
-                    android:text="@string/TheBrand"/>
-                <TextView
-                    android:id="@+id/brand_name"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_15ssp"
-                    android:text="dejavu"
-                    android:gravity="end"/>
-            </LinearLayout>
-
-            <LinearLayout android:id="@+id/color_detail"
-                android:orientation="horizontal" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:weightSum="2"
-                android:padding="@dimen/_15sdp" android:background="@drawable/details_background">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_15ssp"
-                    android:textColor="@color/black"
-                    android:text="@string/ColorOfObject"/>
-                <TextView
-                    android:id="@+id/color_item"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_15ssp"
-                    android:text="@string/Brown"
+                    android:text="Adham"
                     android:gravity="end"/>
             </LinearLayout>
 
@@ -142,7 +79,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/_15ssp"
-                    android:text="Address,address,..."
+                    android:text="Cairo"
                     android:gravity="end"/>
             </LinearLayout>
 
@@ -166,7 +103,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
-                        android:text="2021-1-27"
+                        android:text="2021-6-3"
                         android:gravity="end"/>
                 </LinearLayout>
                 <LinearLayout
@@ -196,7 +133,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
-                        android:text="2021-1-27"
+                        android:text="2021-6-3"
                         android:gravity="end"/>
                 </LinearLayout>
             </LinearLayout>
@@ -221,7 +158,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
-                        android:text="Ahmed"
+                        android:text="Esraa"
                         android:gravity="end"/>
                 </LinearLayout>
                 <LinearLayout
@@ -250,7 +187,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
-                        android:text="ahmed22@gmail.com"
+                        android:text="Esrra@gmail.com"
                         android:gravity="end"/>
                 </LinearLayout>
                 <LinearLayout
@@ -279,7 +216,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
-                        android:text="01234567890"
+                        android:text="01210087497"
                         android:gravity="end"/>
                 </LinearLayout>
             </LinearLayout>
