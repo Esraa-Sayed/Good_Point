@@ -94,7 +94,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }*/
         selectedFragment = new HomeFragment();
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
     }
 
