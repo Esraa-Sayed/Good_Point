@@ -111,7 +111,17 @@ public class NotificationActivity extends AppCompatActivity {
                     call.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            Log.e("TAG", "onResponse: "+response.body().toString());
+                            if(response.isSuccessful())
+                            {
+                                Log.e("TAG", "onResponse: "+response.body().toString());
+                            }
+                           else {
+                                try {
+                                    Log.e("TAG", "onFailure2: "+response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
 
                         @Override
