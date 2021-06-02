@@ -1,9 +1,5 @@
 package com.helloworld.goodpoint.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -14,12 +10,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.helloworld.goodpoint.R;
 
@@ -41,6 +40,10 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         init();
        // updateTable();
         sendMail.setOnClickListener(this);
+        subLayout.setVisibility(View.GONE);
+        colorLayout.setVisibility(View.GONE);
+        brandLayout.setVisibility(View.GONE);
+
         call.setOnClickListener(this);
     }
 

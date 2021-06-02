@@ -41,6 +41,27 @@
                     android:gravity="end"/>
             </LinearLayout>
 
+            <LinearLayout android:id="@+id/sub_cat"
+                android:orientation="horizontal" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:weightSum="2"
+                android:padding="@dimen/_15sdp" android:background="@drawable/details_background">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_15ssp"
+                    android:textColor="@color/black"
+                    android:text="Sub Category"/>
+                <TextView
+                    android:id="@+id/item_cat"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_15ssp"
+                    android:text="Bag"
+                    android:gravity="end"/>
+            </LinearLayout>
+
             <LinearLayout android:id="@+id/person_name"
                 android:orientation="horizontal" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:weightSum="2"
@@ -62,6 +83,48 @@
                     android:gravity="end"/>
             </LinearLayout>
 
+            <LinearLayout android:id="@+id/brand_detail"
+                android:orientation="horizontal" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:weightSum="2"
+                android:padding="@dimen/_15sdp" android:background="@drawable/details_background">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_15ssp"
+                    android:textColor="@color/black"
+                    android:text="@string/TheBrand"/>
+                <TextView
+                    android:id="@+id/brand_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_15ssp"
+                    android:text="dejavu"
+                    android:gravity="end"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/color_detail"
+                android:orientation="horizontal" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:weightSum="2"
+                android:padding="@dimen/_15sdp" android:background="@drawable/details_background">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_15ssp"
+                    android:textColor="@color/black"
+                    android:text="@string/ColorOfObject"/>
+                <TextView
+                    android:id="@+id/color_item"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_15ssp"
+                    android:text="@string/Brown"
+                    android:gravity="end"/>
+            </LinearLayout>
+
             <LinearLayout android:id="@+id/addr_loc"
                 android:orientation="horizontal" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:weightSum="2"
@@ -79,7 +142,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/_15ssp"
-                    android:text="Cairo"
+                    android:text="Cairo,..."
                     android:gravity="end"/>
             </LinearLayout>
 
@@ -187,7 +250,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
-                        android:text="Esrra@gmail.com"
+                        android:text="Esraa@gmail.com"
                         android:gravity="end"/>
                 </LinearLayout>
                 <LinearLayout
@@ -217,7 +280,6 @@
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
                         android:text="01210087497"
-                        
                         android:gravity="end"/>
                 </LinearLayout>
             </LinearLayout>
