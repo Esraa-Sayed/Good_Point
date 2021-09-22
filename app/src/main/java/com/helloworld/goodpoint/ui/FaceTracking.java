@@ -11,23 +11,34 @@ import androidx.camera.core.PreviewConfig;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
+import android.util.SparseArray;
 import android.view.TextureView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.face.Face;
+import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FaceTracking extends AppCompatActivity {
     public static final int REQUEST_CODE_PERMISSION = 101;
     public static final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     private TextureView tv;
     private ImageView iv;
+    private ImageButton Crop;
     private static final String TAG = "FaceTrackingActivity";
 
     public static CameraX.LensFacing lens = CameraX.LensFacing.FRONT;
@@ -42,6 +53,15 @@ public class FaceTracking extends AppCompatActivity {
         } else {
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSION);
         }
+        Crop = findViewById(R.id.Crop);
+        Crop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent My = new Intent();
+                setResult(RESULT_OK,My);
+               finish();
+            }
+        });
     }
     @SuppressLint("RestrictedApi")
     private void startCamera() {

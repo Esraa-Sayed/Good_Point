@@ -14,6 +14,7 @@ import androidx.camera.core.CameraX;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 
+import com.google.android.gms.vision.face.Face;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
@@ -48,6 +49,7 @@ public class FaceTrackingAnalyzer implements ImageAnalysis.Analyzer {
         }
         int rotation = degreesToFirebaseRotation(rotationDegrees);
         fbImage = FirebaseVisionImage.fromMediaImage(image.getImage(), rotation);
+        GlobalVar.realcameraImage = fbImage.getBitmap();
         initDrawingUtils();
 
         initDetector();
@@ -82,7 +84,6 @@ public class FaceTrackingAnalyzer implements ImageAnalysis.Analyzer {
 
     private void processFaces(List<FirebaseVisionFace> faces) {
         for (FirebaseVisionFace face : faces) {
-
             Rect box = new Rect((int) translateX(face.getBoundingBox().left),
                     (int) translateY(face.getBoundingBox().top),
                     (int) translateX(face.getBoundingBox().right),
@@ -103,7 +104,10 @@ public class FaceTrackingAnalyzer implements ImageAnalysis.Analyzer {
 
             canvas.drawRect(box, linePaint);
         }
+
         iv.setImageBitmap(bitmap);
+
+
     }
 
     private float translateY(float y) {

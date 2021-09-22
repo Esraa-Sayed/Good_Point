@@ -35,6 +35,7 @@ import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.ui.FaceTracking;
+import com.helloworld.goodpoint.ui.GlobalVar;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +97,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                         switch (item.getItemId()) {
                             case R.id.TakePhoto:
                                 Intent i = new Intent(getActivity().getApplicationContext(), FaceTracking.class);
-                                startActivity(i);
+                                startActivityForResult(i,10);
                                /* Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 if (i.resolveActivity(getActivity().getPackageManager()) != null) {
                                     startActivityForResult(i, 10);
@@ -148,11 +149,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                         FancyToast.makeText(getActivity().getApplicationContext(), "You cannot choose more than 10 images", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                     }
                     else {
-                        bitmap.add((Bitmap) data.getExtras().get("data"));
-                        imageView.setImageBitmap(bitmap.get(bitmap.size() - 1));
-                        ((objectDataType) getActivity()).getBitmap_ImagePersonImages(bitmap);
+                        bitmap.add(GlobalVar.realcameraImage) ;
                     }
-
                 break;
                   }
                 case 1:
@@ -193,6 +191,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             }
             ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
             if(BitMapSize != bitmap.size()) {
+                Log.e("Camera", "onActivityResult: Esraa" );
                 checkIfAllImagesContainFacesOrNot N = new checkIfAllImagesContainFacesOrNot();
                 N.execute(bitmap);
             }

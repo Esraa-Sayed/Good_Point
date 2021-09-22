@@ -159,4 +159,5 @@
     <string name="item_easy">item easy</string>
     <string name="ImageItem">Do you have a picture for this item?</string>
     <string name="PersonName">Person name</string>
+    <string name="Crop">Crop</string>
 </resources>
