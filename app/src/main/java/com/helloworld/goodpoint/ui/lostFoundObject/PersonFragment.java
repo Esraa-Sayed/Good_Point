@@ -149,7 +149,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                         FancyToast.makeText(getActivity().getApplicationContext(), "You cannot choose more than 10 images", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                     }
                     else {
-                        bitmap.add(GlobalVar.realcameraImage) ;
+                        bitmap.add(GlobalVar.realcameraImage) ;  NumOfImgSelected = 1;
                     }
                 break;
                   }
@@ -191,7 +191,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             }
             ((objectDataType)getActivity()).getBitmap_ImagePersonImages(bitmap);
             if(BitMapSize != bitmap.size()) {
-                Log.e("Camera", "onActivityResult: Esraa" );
                 checkIfAllImagesContainFacesOrNot N = new checkIfAllImagesContainFacesOrNot();
                 N.execute(bitmap);
             }
@@ -283,7 +282,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 else {
                     Frame frame = new Frame.Builder().setBitmap(My).build();
                     SparseArray<Face> sparseArray = faceDetector.detect(frame);
+                    Log.e("Camera", "doInBackground22: Esraa " + sparseArray.size());
                     if(sparseArray.size()==0) {
+
                         ImgNotHaveFaces.add(bitmap[0].get(index));
                         bitmap[0].remove(index);
                         Log.e("img", "I removed Image number " + (index) );
