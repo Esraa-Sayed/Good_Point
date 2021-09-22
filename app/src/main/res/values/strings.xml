@@ -114,7 +114,8 @@
     <string name="Matched">Matched</string>
     <string name="Location">Location</string>
     <string name="Profile">Profile</string>
-    <string name="Add_point"><b>Put point</b></string>z
+    <string name="Add_point"><b>Put point</b></string>
+    z
     <string name="Lost">Lost objects</string>
     <string name="Found">Found objects</string>
     <string name="Hi_message"><b></b></string>

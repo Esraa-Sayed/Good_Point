@@ -43,7 +43,7 @@ public class NotificationBroadcast extends BroadcastReceiver {
 
     String user_id;
 
-    @SuppressLint("UnsafeProtectedBroadcastReceiver")
+    //@SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
         String refresh = new PrefManager(context).isLoginned();

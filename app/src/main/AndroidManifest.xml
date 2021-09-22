@@ -6,7 +6,10 @@
     <meta-data
         android:name="com.google.android.gms.vision.DEPENDENCIES"
         android:value="face" />
-
+    <meta-data
+        android:name="com.google.firebase:firebase-ml-vision.DEPENDENCIES"
+        android:value="face" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,8 +21,9 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.INSTANT_APP_FOREGROUND_SERVICE"
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission
+        android:name="android.permission.INSTANT_APP_FOREGROUND_SERVICE"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -32,20 +36,22 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
+        <activity android:name=".ui.FaceTracking"></activity>
 
         <receiver
             android:name=".ui.myService.NotificationBroadcast"
+            android:directBootAware="true"
             android:enabled="true"
             android:exported="true"
-            android:directBootAware="true"
             android:stopWithTask="false"
             tools:targetApi="n">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-                <action android:name="com.helloworld.goodpoint.ui.myService.NotificationBroadcast"/>
+                <action android:name="com.helloworld.goodpoint.ui.myService.NotificationBroadcast" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
