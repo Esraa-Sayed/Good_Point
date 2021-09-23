@@ -46,7 +46,7 @@ Explain the following in detail:
   ![Screenshot 2021-09-23 165529](https://user-images.githubusercontent.com/63111171/134538337-3451c5cb-f019-4b5e-9f38-5e9d975a4f6a.png)
 
   * Database: <b>PostgreSQL</b> SQLite.
-  * ML Kit for Firebase (For real-time detection)
+  * <b>ML Kit</b> for Firebase (For real-time detection)
   * [Face Detection and Recognition Algorithms.docx](https://github.com/abdelrhman-mamdouh/J6_Hackathon_Jefive/files/7219037/Face.Detection.and.Recognition.Algorithms.docx)
 
 
