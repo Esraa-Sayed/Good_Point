@@ -330,7 +330,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
 
         } else
-            Toast.makeText(getApplicationContext(), "There is no objects of Losses", Toast.LENGTH_LONG).show();
+            Log.e("lost", "There is no objects of Losses.");
+            //Toast.makeText(getApplicationContext(), "There is no objects of Losses", Toast.LENGTH_LONG).show();
 
     }
 
@@ -389,7 +390,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             }
         } else
-            Toast.makeText(getApplicationContext(), "There is no objects of Founds", Toast.LENGTH_LONG).show();
+            Log.e("found", "There is no objects of Founds.");
+            //Toast.makeText(getApplicationContext(), "There is no objects of Founds.", Toast.LENGTH_LONG).show();
     }
 
 }
