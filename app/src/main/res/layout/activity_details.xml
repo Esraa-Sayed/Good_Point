@@ -79,7 +79,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/_15ssp"
-                    android:text="Adham"
+                    android:text="Bill gates"
                     android:gravity="end"/>
             </LinearLayout>
 
@@ -166,7 +166,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
-                        android:text="2021-6-3"
+                        android:text="2021-9-22"
                         android:gravity="end"/>
                 </LinearLayout>
                 <LinearLayout
@@ -196,7 +196,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
-                        android:text="2021-6-3"
+                        android:text="2021-9-23"
                         android:gravity="end"/>
                 </LinearLayout>
             </LinearLayout>
