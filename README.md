@@ -24,7 +24,6 @@ We learned how to use <b>Open CV</b> to recognize the face of people and calcula
 The thought of a family member, a friend, or someone else you care about going missing can be terrifying. You don’t know where they are, if they’re hurt or if they need help. When this person lives with a mental health condition, the situation may be even more serious. Also, time required for finding lost person is may be long so, taking action quickly can make a difference.
 
 ## Solution
-Explain the following in detail:
 * Steps taken for solving the problem.
 <br>First, parents that lose their child will add his/her picture in the application
 then If anyone suspects that the child has been kidnapped or lost, he will open the application and the camera and point the camera at the child.
@@ -40,7 +39,6 @@ We used Android Studio:-<br>
 This project can be converted into an application that anyone can use easily.
 
 ## Methodology 
-Explain the following in detail:
   * Use Case:
  
   ![Screenshot 2021-09-23 165529](https://user-images.githubusercontent.com/63111171/134538337-3451c5cb-f019-4b5e-9f38-5e9d975a4f6a.png)
