@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
-import com.helloworld.goodpoint.App;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.Token;
 import com.helloworld.goodpoint.pojo.User;
@@ -93,12 +92,12 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signin:
-               /* if (validAccount() && validatePassword()) {
+                if (validAccount() && validatePassword()) {
                         loginUser(RememberMe.isChecked());
                         //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                 } else
                     Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
-                    //startActivity(new Intent(SigninActivity.this, HomeActivity.class));*/
+                    //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                startActivity(new Intent(SigninActivity.this, HomeActivity.class));
                 break;
 
