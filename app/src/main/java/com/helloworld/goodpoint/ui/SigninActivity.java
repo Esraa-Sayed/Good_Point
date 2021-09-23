@@ -87,7 +87,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -98,10 +97,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                 } else
                     Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
                     //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
-
                 break;
-
-
             case R.id.NewAccount:
                 startActivity(new Intent(this, SignupActivity.class));
                 break;
