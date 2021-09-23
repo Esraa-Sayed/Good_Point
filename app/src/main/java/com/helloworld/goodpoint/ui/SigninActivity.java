@@ -98,7 +98,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                 } else
                     Toast.makeText(this, "Invalid account", Toast.LENGTH_SHORT).show();
                     //startActivity(new Intent(SigninActivity.this, HomeActivity.class));
-               startActivity(new Intent(SigninActivity.this, HomeActivity.class));
+
                 break;
 
 
