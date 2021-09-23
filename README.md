@@ -31,7 +31,7 @@ then the application compare between the child's photo and all the lost children
 
 * Frameworks/Tools/Technologies stacks used.
 <br>We use Pycharm framework(<b>Django</b> framework), <b>face recognition tools</b>, <b>Android Studio</b>, <b>PostgreSQL</b> Database</br>
-We used <b>Django framework</b>:-<br>
+We used <b>Django</b>  framework:-<br>
 Where a lot of libraries are available to help us detect and recongize the faces.
 We used <b>PostgreSQL</b> Database:-<br>
 Where it is suitable for us to update the data easier than <b>MySQL</b>.
