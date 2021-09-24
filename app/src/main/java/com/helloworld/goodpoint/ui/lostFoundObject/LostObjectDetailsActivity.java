@@ -35,6 +35,7 @@ import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.pojo.FoundPerson;
 import com.helloworld.goodpoint.pojo.LostItem;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
@@ -280,6 +281,9 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         protected void onPostExecute(Void a) {
             super.onPostExecute(a);
             if (GlobalVar.allFaces.size() > 0) {
+                FoundPerson.getFoundPerson().setName(PName);
+                FoundPerson.getFoundPerson().setDate(DateT.getText().toString().trim());
+                FoundPerson.getFoundPerson().setCity(City);
                 startActivity(new Intent(LostObjectDetailsActivity.this, Alert.class));
                 GlobalVar.flag=2;
                 finish();

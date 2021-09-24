@@ -11,6 +11,43 @@ public class FoundPerson {
     @Expose
     private String name;
 
+    private double longitude;
+    private double latitude;
+    private String date;
+    private String city;
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
 
     private static FoundPerson FoundPerson;
     public static FoundPerson getFoundPerson()

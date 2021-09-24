@@ -63,6 +63,7 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.google.gson.JsonObject;
 import com.helloworld.goodpoint.R;
 import com.helloworld.goodpoint.pojo.FoundItem;
+import com.helloworld.goodpoint.pojo.FoundPerson;
 import com.helloworld.goodpoint.pojo.LostItem;
 import com.helloworld.goodpoint.pojo.NotificationItem;
 import com.helloworld.goodpoint.pojo.User;
@@ -320,8 +321,13 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             super.onPostExecute(a);
             Log.e("img", "onPostExecute: " + GlobalVar.ImgThatHaveMoreThanOneFace.size() + "  " + GlobalVar.FinialFacesThatWillGoToDataBase.size());
             if (GlobalVar.allFaces.size() > 0) {
-                startActivity(new Intent(FoundObjectActivity.this, Alert.class));
+                FoundPerson.getFoundPerson().setName(PName);
+                FoundPerson.getFoundPerson().setDate(DateFound.getText().toString().trim());
+                FoundPerson.getFoundPerson().setCity(City);
+                FoundPerson.getFoundPerson().setLongitude(Longitude);
+                FoundPerson.getFoundPerson().setLatitude(Latitude);
                 GlobalVar.flag=1;
+                startActivity(new Intent(FoundObjectActivity.this, Alert.class));
                 finish();
 
             } else {
