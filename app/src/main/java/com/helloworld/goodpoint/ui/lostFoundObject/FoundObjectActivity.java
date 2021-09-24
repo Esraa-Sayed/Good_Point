@@ -321,6 +321,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
             Log.e("img", "onPostExecute: " + GlobalVar.ImgThatHaveMoreThanOneFace.size() + "  " + GlobalVar.FinialFacesThatWillGoToDataBase.size());
             if (GlobalVar.allFaces.size() > 0) {
                 startActivity(new Intent(FoundObjectActivity.this, Alert.class));
+                GlobalVar.flag=1;
                 finish();
 
             } else {
@@ -693,7 +694,7 @@ public class FoundObjectActivity extends AppCompatActivity implements View.OnCli
         String Datee = DateFound.getText().toString().trim();
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
 
-        Uri imageURI = getImageUri(Person_Images.get(0));
+        Uri imageURI = getImageUri(GlobalVar.FinialFacesThatWillGoToDataBase.get(0));
         File file = new File(getRealPathFromURI(imageURI));
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part Pimage = MultipartBody.Part.createFormData("image", file.getName(), requestBody);

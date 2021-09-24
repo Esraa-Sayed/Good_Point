@@ -39,10 +39,10 @@ import com.helloworld.goodpoint.pojo.LostItem;
 import com.helloworld.goodpoint.pojo.User;
 import com.helloworld.goodpoint.retrofit.ApiClient;
 import com.helloworld.goodpoint.retrofit.ApiInterface;
+import com.helloworld.goodpoint.ui.Alert;
 import com.helloworld.goodpoint.ui.GlobalVar;
 import com.helloworld.goodpoint.ui.PrefManager;
 import com.helloworld.goodpoint.ui.prepareList;
-import com.helloworld.goodpoint.ui.select_multiple_faces.Selection;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.json.JSONException;
@@ -280,7 +280,8 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         protected void onPostExecute(Void a) {
             super.onPostExecute(a);
             if (GlobalVar.allFaces.size() > 0) {
-                startActivity(new Intent(LostObjectDetailsActivity.this, Selection.class));
+                startActivity(new Intent(LostObjectDetailsActivity.this, Alert.class));
+                GlobalVar.flag=2;
                 finish();
             } else {
                 LostPerson();
@@ -471,7 +472,7 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
         String Datee = DateT.getText().toString().trim();
         ApiInterface apiInterface = ApiClient.getApiClient(new PrefManager(getApplicationContext()).getNGROKLink()).create(ApiInterface.class);
 
-        imageURI = getImageUri(Person_Images.get(0));
+        imageURI = getImageUri(GlobalVar.FinialFacesThatWillGoToDataBase.get(0));
         File file = new File(getRealPathFromURI(imageURI));
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part Pimage = MultipartBody.Part.createFormData("image", file.getName(), requestBody);

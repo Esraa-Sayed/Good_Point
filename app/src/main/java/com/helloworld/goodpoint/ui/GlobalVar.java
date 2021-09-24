@@ -14,6 +14,7 @@ public class GlobalVar {
     public static  Bitmap realcameraImage;
     public static  List<Bitmap> ImgThatHaveMoreThanOneFace = new ArrayList<>();
     public static  List<Bitmap> FinialFacesThatWillGoToDataBase = new ArrayList<>();
+    public static  int flag;
     public static  List<SubItemList> slist;
     public static  List<SubItem> sublist;
     public static  int position;
