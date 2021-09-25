@@ -62,6 +62,11 @@ Explain the following in detail:
 * Attach relevant screenshots.
 
 ## Step to run the software
-* Install the APK.
+* Install <b>Python</b> 3.8.3
+* Install <b>Django</b> Framework
+* Install <b>face-recognition</b> library
+* Install <b>Android Studio</b>
+* Download <b>ngrok</b> tool to help you share a app running on your local machine with the world.
+* Run app by <b>Android studio</b> and copy <b>ngrok</b> code to good point app.
 
 
