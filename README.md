@@ -42,7 +42,7 @@ This project can be converted into an application that anyone can use easily.
   * Use Case:
  
   ![Screenshot 2021-09-23 165529](https://user-images.githubusercontent.com/63111171/134538337-3451c5cb-f019-4b5e-9f38-5e9d975a4f6a.png)
-
+  * Dataset: <b>TensorFlow</b>.
   * Database: <b>PostgreSQL</b> SQLite.
   * <b>ML Kit</b> for Firebase (For real-time detection)
   * [Face Detection and Recognition Algorithms.docx](https://github.com/abdelrhman-mamdouh/J6_Hackathon_Jefive/files/7219037/Face.Detection.and.Recognition.Algorithms.docx)
