@@ -34,6 +34,8 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
+import com.helloworld.goodpoint.detection.CameraActivity;
+import com.helloworld.goodpoint.detection.DetectorActivity;
 import com.helloworld.goodpoint.ui.FaceTracking;
 import com.helloworld.goodpoint.ui.GlobalVar;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -96,8 +98,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.TakePhoto:
-                                Intent i = new Intent(getActivity().getApplicationContext(), FaceTracking.class);
-                                startActivityForResult(i,10);
+                                Intent i = new Intent(getActivity().getApplicationContext(), DetectorActivity.class);
+                               startActivityForResult(i,10);
                                /* Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 if (i.resolveActivity(getActivity().getPackageManager()) != null) {
                                     startActivityForResult(i, 10);
