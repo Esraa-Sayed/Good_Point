@@ -37,7 +37,6 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
-        <activity android:name=".ui.FaceTracking"></activity>
 
         <receiver
             android:name=".ui.myService.NotificationBroadcast"

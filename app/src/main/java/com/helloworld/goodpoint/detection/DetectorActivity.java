@@ -64,7 +64,7 @@ import java.util.List;
  * An activity that uses a TensorFlowMultiBoxDetector and ObjectTracker to detect and then track
  * objects.
  */
-public class DetectorActivity extends CameraActivity implements OnImageAvailableListener , ImageAnalysis.Analyzer{
+public class DetectorActivity extends CameraActivity implements OnImageAvailableListener {
   private static final Logger LOGGER = new Logger();
 
   // Configuration values for the prepackaged SSD model.
@@ -72,7 +72,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
   private static final int TF_OD_API_INPUT_SIZE = 80;
   private static final boolean TF_OD_API_IS_QUANTIZED = false;
   private static final String TF_OD_API_MODEL_FILE = "face_model_v5.tflite";
-  private FirebaseVisionImage fbImage;
   private static final String TF_OD_API_LABELS_FILE = "labelmap.txt";
 
   private static final DetectorMode MODE = DetectorMode.TF_OD_API;
@@ -171,7 +170,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     LOGGER.i("Initializing at size %dx%d", previewWidth, previewHeight);
     rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Config.ARGB_8888);
 
-
     int targetW, targetH;
     if (sensorOrientation == 90 || sensorOrientation == 270) {
       targetH = previewWidth;
@@ -187,10 +185,9 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     LOGGER.i("CropW, cropH"+cropW+" "+cropH);
 
     croppedBitmap = Bitmap.createBitmap(cropW, cropH, Config.ARGB_8888);
-
+    GlobalVar.realcameraImage = croppedBitmap;
     portraitBmp = Bitmap.createBitmap(targetW, targetH, Config.ARGB_8888);
     faceBmp = Bitmap.createBitmap(TF_OD_API_INPUT_SIZE, TF_OD_API_INPUT_SIZE, Config.ARGB_8888);
-
     frameToCropTransform =
             ImageUtils.getTransformationMatrix(
                     previewWidth, previewHeight,
@@ -383,11 +380,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
         cvFace.drawBitmap(portraitBmp, matrix, null);
 
-
-        String label = "";
         float confidence = -1f;
-        Integer color = Color.BLUE;
-        Object extra = null;
+
         Bitmap crop = null;
 
         if ((int)faceBB.left > 0 && (int)faceBB.top > 0 && ((int)faceBB.left + (int)faceBB.width()) < portraitBmp.getWidth()
@@ -401,7 +395,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
           //}
 
           crop = Bitmap.createScaledBitmap(crop, TF_OD_API_INPUT_SIZE, TF_OD_API_INPUT_SIZE, true);
-          GlobalVar.realcameraImage = crop;
+
           final long startTime = SystemClock.uptimeMillis();
 
           // Passing the bitmap image into the TensorFlow Lite Object Detection API recognize image function
@@ -444,28 +438,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
   @Override
   protected Size getDesiredPreviewFrameSize() {
     return DESIRED_PREVIEW_SIZE;
-  }
-
-  @Override
-  public void analyze(ImageProxy image, int rotationDegrees) {
-    int rotation = degreesToFirebaseRotation(rotationDegrees);
-    fbImage = FirebaseVisionImage.fromMediaImage(image.getImage(), rotation);
-    GlobalVar.realcameraImage = fbImage.getBitmap();
-  }
-
-  private int degreesToFirebaseRotation(int degrees) {
-    switch (degrees) {
-      case 0:
-        return FirebaseVisionImageMetadata.ROTATION_0;
-      case 90:
-        return FirebaseVisionImageMetadata.ROTATION_90;
-      case 180:
-        return FirebaseVisionImageMetadata.ROTATION_180;
-      case 270:
-        return FirebaseVisionImageMetadata.ROTATION_270;
-      default:
-        throw new IllegalArgumentException("Rotation must be 0, 90, 180, or 270.");
-    }
   }
   // Which detection model to use: by default uses Tensorflow Object Detection API frozen
   // checkpoints.

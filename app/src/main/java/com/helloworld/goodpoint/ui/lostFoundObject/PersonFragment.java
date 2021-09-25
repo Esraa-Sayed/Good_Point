@@ -34,9 +34,7 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.helloworld.goodpoint.R;
-import com.helloworld.goodpoint.detection.CameraActivity;
 import com.helloworld.goodpoint.detection.DetectorActivity;
-import com.helloworld.goodpoint.ui.FaceTracking;
 import com.helloworld.goodpoint.ui.GlobalVar;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import java.util.ArrayList;
@@ -151,7 +149,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                         FancyToast.makeText(getActivity().getApplicationContext(), "You cannot choose more than 10 images", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                     }
                     else {
-                        bitmap.add(GlobalVar.realcameraImage) ;  NumOfImgSelected = 1;
+                        if(GlobalVar.realcameraImage != null)
+                        { bitmap.add(GlobalVar.realcameraImage) ;  NumOfImgSelected = 1;}
+
                     }
                 break;
                   }
