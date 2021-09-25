@@ -2,3 +2,4 @@ include ':lib_task_api'
 include ':mylibrary'
 include ':app'
 rootProject.name = "Good Point"
+/**GoodPoint */
