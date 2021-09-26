@@ -57,7 +57,7 @@ Explain the following in detail:
 
 ## Screenshots
 <img src="https://user-images.githubusercontent.com/63111171/134789100-9c32fcd6-00a8-4ad8-a47e-09eb638842b7.jpg" width="170" height="340"><img src="https://user-images.githubusercontent.com/63111171/134789278-b7cf13c5-efca-4abe-b5e8-f1ba46ad0825.png" width="50" height="50">
-<img src="https://user-images.githubusercontent.com/63111171/134789101-c31f7cf4-4113-40b2-9c28-40ada65c0661.jpg" width="170" height="340"><img src="https://user-images.githubusercontent.com/63111171/134789278-b7cf13c5-efca-4abe-b5e8-f1ba46ad0825.png" width="50" height="50"><img src="https://user-images.githubusercontent.com/63111171/134789101-c31f7cf4-4113-40b2-9c28-40ada65c0661.jpg" width="170" height="340">
+<img src="https://user-images.githubusercontent.com/63111171/134789278-b7cf13c5-efca-4abe-b5e8-f1ba46ad0825.png" width="50" height="50"><img src="https://user-images.githubusercontent.com/63111171/134789101-c31f7cf4-4113-40b2-9c28-40ada65c0661.jpg" width="170" height="340">
 <img src="https://user-images.githubusercontent.com/63111171/134789278-b7cf13c5-efca-4abe-b5e8-f1ba46ad0825.png" width="50" height="50">
 <img src="https://user-images.githubusercontent.com/63111171/134789102-c685bb38-4484-4543-afbf-e169387a00fe.jpg" width="170" height="340">
 <img src="https://user-images.githubusercontent.com/63111171/134789278-b7cf13c5-efca-4abe-b5e8-f1ba46ad0825.png" width="50" height="50">
