@@ -7,12 +7,10 @@
 * Team Member 2 : Abdelrahman Mamdouh Ismail
 * Team Member 3 : Ahmed Mostafa Abdelaziz
 * Team Member 4 : Walid Mohamed El-Sayed
-
-![photo5872933178585495644](https://user-images.githubusercontent.com/63111171/131846559-e5a3bbf8-69c1-4bff-b1dd-2e18ef862892.jpg )
-![photo5872933178585495618](https://user-images.githubusercontent.com/63111171/131846564-635999dc-df73-4a47-a571-76e5fdc2a082.jpg)
-![photo5875132296330327274](https://user-images.githubusercontent.com/63111171/131846565-5ea4b10e-fbec-4ecc-9fc9-cefe2ddf29d1.jpg)
-![IMG_20200821_221554](https://user-images.githubusercontent.com/63111171/131846567-81d8b676-3200-4d3b-abba-351e9a5fbd8e.jpg)
-
+<img src="https://user-images.githubusercontent.com/63111171/131846559-e5a3bbf8-69c1-4bff-b1dd-2e18ef862892.jpg " width="200" height="200">
+<img src="https://user-images.githubusercontent.com/63111171/131846564-635999dc-df73-4a47-a571-76e5fdc2a082.jpg" width="200" height="200">
+<img src="https://user-images.githubusercontent.com/63111171/131846565-5ea4b10e-fbec-4ecc-9fc9-cefe2ddf29d1.jpg" width="200" height="200">
+<img src="https://user-images.githubusercontent.com/63111171/131846567-81d8b676-3200-4d3b-abba-351e9a5fbd8e.jpg" width="200" height="200">
 # Toy Project
 ## Problem Statement
 It is widely used for the purposes of security on the health of individuals, as it is used in cafes to search for individuals located in the place and count the number of people to insure the health of individuals and to ensure the distance between them and that their number is the appropriate number to prevent the spread of the disease such as Corona disease at the present time.
@@ -60,7 +58,7 @@ Explain the following in detail:
 
 ## Screenshots
 <img src="https://user-images.githubusercontent.com/63111171/134789100-9c32fcd6-00a8-4ad8-a47e-09eb638842b7.jpg" width="170" height="340"><img src="https://user-images.githubusercontent.com/63111171/134789278-b7cf13c5-efca-4abe-b5e8-f1ba46ad0825.png" width="50" height="50">
-<img src="https://user-images.githubusercontent.com/63111171/134789101-c31f7cf4-4113-40b2-9c28-40ada65c0661.jpg" width="170" height="340"><img src="https://user-images.githubusercontent.com/63111171/134789101-c31f7cf4-4113-40b2-9c28-40ada65c0661.jpg" width="170" height="340">
+<img src="https://user-images.githubusercontent.com/63111171/134789101-c31f7cf4-4113-40b2-9c28-40ada65c0661.jpg" width="170" height="340"><img src="https://user-images.githubusercontent.com/63111171/134789278-b7cf13c5-efca-4abe-b5e8-f1ba46ad0825.png" width="50" height="50"><img src="https://user-images.githubusercontent.com/63111171/134789101-c31f7cf4-4113-40b2-9c28-40ada65c0661.jpg" width="170" height="340">
 <img src="https://user-images.githubusercontent.com/63111171/134789278-b7cf13c5-efca-4abe-b5e8-f1ba46ad0825.png" width="50" height="50">
 <img src="https://user-images.githubusercontent.com/63111171/134789102-c685bb38-4484-4543-afbf-e169387a00fe.jpg" width="170" height="340">
 <img src="https://user-images.githubusercontent.com/63111171/134789278-b7cf13c5-efca-4abe-b5e8-f1ba46ad0825.png" width="50" height="50">
