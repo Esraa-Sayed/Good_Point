@@ -21,11 +21,6 @@ import android.graphics.RectF;
 /** Generic interface for interacting with different recognition engines. */
 public interface Detector {
   String recognizeImage(Bitmap bitmap);
-
-  void enableStatLogging(final boolean debug);
-
-  String getStatString();
-
   void close();
 
   void setNumThreads(int numThreads);

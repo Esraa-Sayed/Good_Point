@@ -310,19 +310,10 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
   private void onFacesDetected(long currTimestamp, List<Face> faces) {
 
     cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
-    final Canvas canvas = new Canvas(cropCopyBitmap);
     final Paint paint = new Paint();
     paint.setColor(Color.RED);
     paint.setStyle(Style.STROKE);
     paint.setStrokeWidth(2.0f);
-
-    float minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
-    switch (MODE) {
-      case TF_OD_API:
-        minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
-        break;
-    }
-
     final List<Detector.Recognition> mappedRecognitions = new LinkedList<Detector.Recognition>();
 
 
@@ -345,11 +336,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     cv.drawBitmap(rgbFrameBitmap, transform, null);
 
     final Canvas cvFace = new Canvas(faceBmp);
-
-    boolean saved = false;
-
-
-    String loadedResults = "";
 
     for (Face face : faces) {
 

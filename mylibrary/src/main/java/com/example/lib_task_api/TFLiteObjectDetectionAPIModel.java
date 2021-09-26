@@ -283,7 +283,7 @@ public class TFLiteObjectDetectionAPIModel implements Detector {
     List<String> ageList = Arrays.asList("0-14yo", "15-40yo", "41-60yo", "61-100yo");
 
 
-    String label = "AGE: " + ageList.get(ageInd) + " | Gender: " + genderList.get(genderInd);
+    String label =ageList.get(ageInd) + " | " + genderList.get(genderInd);
 
 
     Trace.endSection();
@@ -298,15 +298,6 @@ public class TFLiteObjectDetectionAPIModel implements Detector {
     Trace.endSection();
     return label;
   }
-
-  @Override
-  public void enableStatLogging(final boolean logStats) {}
-
-  @Override
-  public String getStatString() {
-    return "";
-  }
-
   @Override
   public void close() {
     if (tfLite != null) {
