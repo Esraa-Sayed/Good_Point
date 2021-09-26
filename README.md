@@ -59,7 +59,7 @@ Explain the following in detail:
 * https://drive.google.com/file/d/1V95iY1RzzIKOoyXqgUrQLe4SMOdphYa9/view
 
 ## Screenshots
-<img src="https://user-images.githubusercontent.com/63111171/134789100-9c32fcd6-00a8-4ad8-a47e-09eb638842b7.jpg" width=60% height=80%>
+<img src="https://user-images.githubusercontent.com/63111171/134789100-9c32fcd6-00a8-4ad8-a47e-09eb638842b7.jpg" width=40% height=20%>
 
 
 ## Step to run the software
