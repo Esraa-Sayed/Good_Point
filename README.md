@@ -7,10 +7,7 @@
 * Team Member 2 : Abdelrahman Mamdouh Ismail
 * Team Member 3 : Ahmed Mostafa Abdelaziz
 * Team Member 4 : Walid Mohamed El-Sayed
-<img src="https://user-images.githubusercontent.com/63111171/131846559-e5a3bbf8-69c1-4bff-b1dd-2e18ef862892.jpg " width="200" height="200">
-<img src="https://user-images.githubusercontent.com/63111171/131846564-635999dc-df73-4a47-a571-76e5fdc2a082.jpg" width="200" height="200">
-<img src="https://user-images.githubusercontent.com/63111171/131846565-5ea4b10e-fbec-4ecc-9fc9-cefe2ddf29d1.jpg" width="200" height="200">
-<img src="https://user-images.githubusercontent.com/63111171/131846567-81d8b676-3200-4d3b-abba-351e9a5fbd8e.jpg" width="200" height="200">
+<img src="https://user-images.githubusercontent.com/63111171/131846559-e5a3bbf8-69c1-4bff-b1dd-2e18ef862892.jpg " width="200" height="200"><img src="https://user-images.githubusercontent.com/63111171/131846564-635999dc-df73-4a47-a571-76e5fdc2a082.jpg" width="200" height="200"><img src="https://user-images.githubusercontent.com/63111171/131846565-5ea4b10e-fbec-4ecc-9fc9-cefe2ddf29d1.jpg" width="200" height="200"><img src="https://user-images.githubusercontent.com/63111171/131846567-81d8b676-3200-4d3b-abba-351e9a5fbd8e.jpg" width="200" height="200">
 # Toy Project
 ## Problem Statement
 It is widely used for the purposes of security on the health of individuals, as it is used in cafes to search for individuals located in the place and count the number of people to insure the health of individuals and to ensure the distance between them and that their number is the appropriate number to prevent the spread of the disease such as Corona disease at the present time.
