@@ -23,14 +23,14 @@
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_400sdp" />
+        android:layout_height="@dimen/_450sdp" />
 
     <ImageButton
         android:id="@+id/Crop"
         android:layout_width="@dimen/_80sdp"
         android:layout_height="@dimen/_55sdp"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:background="#00FFFFFF"
         android:src="@drawable/ic_realcam"
         />
