@@ -284,8 +284,8 @@ public class LostObjectDetailsActivity extends AppCompatActivity implements View
                 LostPerson.getLostPerson().setName(PName);
                 LostPerson.getLostPerson().setDate(DateT.getText().toString().trim());
                 LostPerson.getLostPerson().setCity(City);
-                startActivity(new Intent(LostObjectDetailsActivity.this, Alert.class));
                 GlobalVar.flag=2;
+                startActivity(new Intent(LostObjectDetailsActivity.this, Alert.class));
                 finish();
             } else {
                 LostPerson();
