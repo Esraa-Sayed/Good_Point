@@ -12,6 +12,7 @@ import java.util.List;
 public class GlobalVar {
     public static  List<List<Bitmap>> allFaces = new ArrayList<>();
     public static  Bitmap realcameraImage ;
+    public static  Bitmap realcameraIdCard ;
     public static  List<Bitmap> ImgThatHaveMoreThanOneFace = new ArrayList<>();
     public static  List<Bitmap> FinialFacesThatWillGoToDataBase = new ArrayList<>();
     public static  int flag;

@@ -155,11 +155,8 @@ public class NotificationActivity extends AppCompatActivity {
                                             public boolean onMenuItemClick(MenuItem item) {
                                                 switch (item.getItemId()) {
                                                     case R.id.TakePhoto:
-                                                        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                                        if (i.resolveActivity(NotificationActivity.this.getPackageManager()) != null) {
-                                                            startActivityForResult(i, 10);
-                                                        } else
-                                                              FancyToast.makeText(getApplicationContext(),"Error",FancyToast.LENGTH_LONG, FancyToast.ERROR,false).show();
+                                                       Intent I = new Intent(NotificationActivity.this,ID_cardDetection.class);
+                                                        startActivityForResult(I, 10);
                                                         break;
                                                     case R.id.Gallery:
                                                         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -217,7 +214,7 @@ public class NotificationActivity extends AppCompatActivity {
         {
             switch(requestCode) {
                 case 10: {
-                    img =(Bitmap) data.getExtras().get("data");
+                    img =(Bitmap) GlobalVar.realcameraIdCard;
                     photoFromGallery = getImageUri(img);
                 }
                 break;
