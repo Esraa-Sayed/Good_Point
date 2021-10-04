@@ -142,9 +142,9 @@ public class NotificationActivity extends AppCompatActivity {
                             Choose.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    if (ActivityCompat.checkSelfPermission(getApplicationContext(),  Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                                            && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(NotificationActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 11);
+                                    if (ActivityCompat.checkSelfPermission(getApplicationContext(),  Manifest.permissionManifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                                            && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                        ActivityCompat.requestPermissions(NotificationActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 11);
                                     }
                                     else{
                                         PopupMenu popupMenu = new PopupMenu(NotificationActivity.this, view);
