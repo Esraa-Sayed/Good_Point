@@ -147,7 +147,9 @@ public class NotificationActivity extends AppCompatActivity {
                                         ActivityCompat.requestPermissions(NotificationActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 11);
                                     }
                                     else{
-                                        PopupMenu popupMenu = new PopupMenu(NotificationActivity.this, view);
+                                        Intent I = new Intent(NotificationActivity.this,ID_cardDetection.class);
+                                        startActivityForResult(I, 10);
+                                       /* PopupMenu popupMenu = new PopupMenu(NotificationActivity.this, view);
                                         popupMenu.getMenuInflater().inflate(R.menu.choose_photo, popupMenu.getMenu());
                                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -166,7 +168,7 @@ public class NotificationActivity extends AppCompatActivity {
                                                 return true;
                                             }
                                         });
-                                        popupMenu.show();
+                                        popupMenu.show();*/
                                     }
                                 }
                             });
@@ -218,14 +220,14 @@ public class NotificationActivity extends AppCompatActivity {
                     photoFromGallery = getImageUri(img);
                 }
                 break;
-                case 11:
+                /*case 11:
                     photoFromGallery = data.getData();
                     try {
                         img = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoFromGallery);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    break;
+                    break;*/
             }
             checkVaildIdcard();
         }
