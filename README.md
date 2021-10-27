@@ -1,4 +1,3 @@
-# J6_Hackathon_Jefive
 
 # The Team
 ### Team Members
