@@ -9,13 +9,6 @@
  
 <img src="https://user-images.githubusercontent.com/63111171/131846559-e5a3bbf8-69c1-4bff-b1dd-2e18ef862892.jpg " width="200" height="200"><img src="https://user-images.githubusercontent.com/63111171/131846564-635999dc-df73-4a47-a571-76e5fdc2a082.jpg" width="200" height="200"><img src="https://user-images.githubusercontent.com/63111171/131846565-5ea4b10e-fbec-4ecc-9fc9-cefe2ddf29d1.jpg" width="200" height="200"><img src="https://user-images.githubusercontent.com/63111171/131846567-81d8b676-3200-4d3b-abba-351e9a5fbd8e.jpg" width="200" height="200">
 
-# Toy Project
-## Problem Statement
-It is widely used for the purposes of security on the health of individuals, as it is used in cafes to search for individuals located in the place and count the number of people to insure the health of individuals and to ensure the distance between them and that their number is the appropriate number to prevent the spread of the disease such as Corona disease at the present time.
-## Learning Process
-We learned how to use <b>Open CV</b> to recognize the face of people and calculate their number  and also learned how to detected things from the picture as the coin or if a tree is found how to detect it and what is the things around it. we use pycharm as a tool to developed that.
- 
-# Coding Competition
 ## Problem Statement
 The thought of a family member, a friend, or someone else you care about going missing can be terrifying. You don’t know where they are, if they’re hurt or if they need help. When this person lives with a mental health condition, the situation may be even more serious. Also, time required for finding lost person is may be long so, taking action quickly can make a difference.
 
@@ -49,10 +42,6 @@ Explain the following in detail:
   * Mobile Phone device to test our project by <b>Android Studio</b>.
   * ![image](https://user-images.githubusercontent.com/63111171/134538831-76884e8e-fd1b-4ea3-b59b-e95fd5cc43df.png)
   * Before recognizing a face, it is first essential to detect and extract the faces from the original pictures. For recognizing a face, the algorithms compare only faces. Any       other element in the picture that is not part of a face deteriorates the recognition. 
-
-
-## Demo Video
-* https://drive.google.com/file/d/1V95iY1RzzIKOoyXqgUrQLe4SMOdphYa9/view
 
 ## Screenshots
 <img src="https://user-images.githubusercontent.com/63111171/134789100-9c32fcd6-00a8-4ad8-a47e-09eb638842b7.jpg" width="170" height="340"><img src="https://user-images.githubusercontent.com/63111171/134789278-b7cf13c5-efca-4abe-b5e8-f1ba46ad0825.png" width="50" height="50"><img src="https://user-images.githubusercontent.com/63111171/134789101-c31f7cf4-4113-40b2-9c28-40ada65c0661.jpg" width="170" height="340">
